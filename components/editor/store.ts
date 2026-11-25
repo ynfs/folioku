@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { canvasElements, createElement, newElementId } from "@/lib/canvas";
+import { HOME, createPage, findSection, getPages, mapAllSections, pageSections, setPageSections, uniquePageSlug } from "@/lib/pages";
 import { createSection, newId } from "@/lib/sections";
 import type { CanvasElement, CanvasElementType, PortfolioData, PropValue, SectionType, Theme } from "@/lib/types";
 
@@ -14,6 +15,8 @@ export type LayerMove = "front" | "forward" | "backward" | "back";
 
 interface EditorState {
   data: PortfolioData;
+  /** Halaman yang sedang diedit (HOME = beranda). */
+  page: string;
   past: PortfolioData[];
   future: PortfolioData[];
   selectedId: string | null;
@@ -40,6 +43,14 @@ interface EditorState {
   removeSection(id: string): void;
   moveSection(from: number, to: number): void;
 
+  // ---- halaman ----
+  openPage(id: string): void;
+  /** Membuat halaman baru dan mengembalikan id-nya. */
+  addPage(title: string): string;
+  renamePage(id: string, title: string): void;
+  setPageSlug(id: string, slug: string): void;
+  removePage(id: string): void;
+
   // ---- kanvas ----
   addElement(sectionId: string, type: CanvasElementType, frameHeight: number): void;
   /** mergeKey false = selalu jadi langkah undo tersendiri. */
@@ -53,10 +64,12 @@ interface EditorState {
 
 /** Mengubah daftar elemen di satu section kanvas. */
 export function mapElements(d: PortfolioData, sectionId: string, fn: (els: CanvasElement[]) => CanvasElement[]): PortfolioData {
-  return {
-    ...d,
-    sections: d.sections.map((s) => (s.id === sectionId ? { ...s, props: { ...s.props, elements: fn(canvasElements(s.props.elements)) } } : s)),
-  };
+  return mapAllSections(d, (s) => (s.id === sectionId ? { ...s, props: { ...s.props, elements: fn(canvasElements(s.props.elements)) } } : s));
+}
+
+/** Bagian di halaman yang sedang dibuka. */
+export function currentSections(st: { data: PortfolioData; page: string }) {
+  return pageSections(st.data, st.page);
 }
 
 export function patchElements(d: PortfolioData, sectionId: string, ids: string[], patch: ElementPatch): PortfolioData {
@@ -81,10 +94,13 @@ export const useEditor = create<EditorState>((set, get) => {
     });
   }
 
-  const elementsOf = (sectionId: string) => canvasElements(get().data.sections.find((s) => s.id === sectionId)?.props.elements);
+  const elementsOf = (sectionId: string) => canvasElements(findSection(get().data, sectionId)?.props.elements);
+  const cur = () => pageSections(get().data, get().page);
+  const onPage = (d: PortfolioData, fn: Parameters<typeof setPageSections>[2]) => setPageSections(d, get().page, fn);
 
   return {
     data: { theme: {} as Theme, sections: [] },
+    page: HOME,
     past: [],
     future: [],
     selectedId: null,
@@ -94,7 +110,7 @@ export const useEditor = create<EditorState>((set, get) => {
     lastAt: 0,
 
     init(data) {
-      set({ data, past: [], future: [], selectedId: data.sections[0]?.id ?? null, selectedEls: [], lastKey: null, lastAt: 0 });
+      set({ data, page: HOME, past: [], future: [], selectedId: data.sections[0]?.id ?? null, selectedEls: [], lastKey: null, lastAt: 0 });
     },
 
     select(id) {
@@ -109,13 +125,14 @@ export const useEditor = create<EditorState>((set, get) => {
     undo() {
       const { past, data, future } = get();
       if (!past.length) return;
-      set({ data: past[past.length - 1], past: past.slice(0, -1), future: [data, ...future], lastKey: null });
+      const prev = past[past.length - 1];
+      set({ data: prev, past: past.slice(0, -1), future: [data, ...future], lastKey: null, page: validPage(prev, get().page) });
     },
 
     redo() {
       const { past, data, future } = get();
       if (!future.length) return;
-      set({ data: future[0], past: [...past, data], future: future.slice(1), lastKey: null });
+      set({ data: future[0], past: [...past, data], future: future.slice(1), lastKey: null, page: validPage(future[0], get().page) });
     },
 
     beginGesture() {
@@ -129,10 +146,7 @@ export const useEditor = create<EditorState>((set, get) => {
 
     updateProp(sectionId, key, value) {
       apply(
-        (d) => ({
-          ...d,
-          sections: d.sections.map((s) => (s.id === sectionId ? { ...s, props: { ...s.props, [key]: value } } : s)),
-        }),
+        (d) => mapAllSections(d, (s) => (s.id === sectionId ? { ...s, props: { ...s.props, [key]: value } } : s)),
         `${sectionId}:${key}`,
       );
     },
@@ -143,55 +157,83 @@ export const useEditor = create<EditorState>((set, get) => {
 
     addSection(type) {
       const section = createSection(type);
-      const { selectedId, data } = get();
-      const idx = data.sections.findIndex((s) => s.id === selectedId);
+      const idx = cur().findIndex((s) => s.id === get().selectedId);
       apply(
-        (d) => {
-          const sections = [...d.sections];
-          sections.splice(idx === -1 ? sections.length : idx + 1, 0, section);
-          return { ...d, sections };
-        },
+        (d) =>
+          onPage(d, (list) => {
+            const sections = [...list];
+            sections.splice(idx === -1 ? sections.length : idx + 1, 0, section);
+            return sections;
+          }),
         undefined,
         { selectedId: section.id, selectedEls: [] },
       );
     },
 
     duplicateSection(id) {
-      const { data } = get();
-      const idx = data.sections.findIndex((s) => s.id === id);
+      const list = cur();
+      const idx = list.findIndex((s) => s.id === id);
       if (idx === -1) return;
-      const copy = { ...structuredClone(data.sections[idx]), id: newId() };
+      const copy = { ...structuredClone(list[idx]), id: newId() };
       if (copy.type === "canvas") {
         copy.props.elements = canvasElements(copy.props.elements).map((e) => ({ ...e, id: newElementId() }));
       }
       apply(
-        (d) => {
-          const sections = [...d.sections];
-          sections.splice(idx + 1, 0, copy);
-          return { ...d, sections };
-        },
+        (d) =>
+          onPage(d, (l) => {
+            const sections = [...l];
+            sections.splice(idx + 1, 0, copy);
+            return sections;
+          }),
         undefined,
         { selectedId: copy.id, selectedEls: [] },
       );
     },
 
     removeSection(id) {
-      const { data } = get();
-      const idx = data.sections.findIndex((s) => s.id === id);
-      const rest = data.sections.filter((s) => s.id !== id);
+      const list = cur();
+      const idx = list.findIndex((s) => s.id === id);
+      const rest = list.filter((s) => s.id !== id);
       const nextSel = rest[Math.min(idx, rest.length - 1)]?.id ?? null;
-      apply((d) => ({ ...d, sections: d.sections.filter((s) => s.id !== id) }), undefined, { selectedId: nextSel, selectedEls: [] });
+      apply((d) => onPage(d, (l) => l.filter((s) => s.id !== id)), undefined, { selectedId: nextSel, selectedEls: [] });
     },
 
     moveSection(from, to) {
-      const { data } = get();
-      if (from === to || to < 0 || to >= data.sections.length) return;
-      apply((d) => {
-        const sections = [...d.sections];
-        const [item] = sections.splice(from, 1);
-        sections.splice(to, 0, item);
-        return { ...d, sections };
-      });
+      if (from === to || to < 0 || to >= cur().length) return;
+      apply((d) =>
+        onPage(d, (l) => {
+          const sections = [...l];
+          const [item] = sections.splice(from, 1);
+          sections.splice(to, 0, item);
+          return sections;
+        }),
+      );
+    },
+
+    // ---------- halaman ----------
+
+    openPage(id) {
+      const page = validPage(get().data, id);
+      set({ page, selectedId: pageSections(get().data, page)[0]?.id ?? null, selectedEls: [] });
+    },
+
+    addPage(title) {
+      const p = createPage(get().data, title.trim() || "Halaman baru");
+      apply((d) => ({ ...d, pages: [...getPages(d), p] }));
+      return p.id;
+    },
+
+    renamePage(id, title) {
+      apply((d) => ({ ...d, pages: getPages(d).map((p) => (p.id === id ? { ...p, title } : p)) }), `page-title:${id}`);
+    },
+
+    setPageSlug(id, slug) {
+      apply((d) => ({ ...d, pages: getPages(d).map((p) => (p.id === id ? { ...p, slug: uniquePageSlug(d, slug, id) } : p)) }), `page-slug:${id}`);
+    },
+
+    removePage(id) {
+      const wasOpen = get().page === id;
+      apply((d) => ({ ...d, pages: getPages(d).filter((p) => p.id !== id) }), undefined, wasOpen ? { page: HOME, selectedId: null, selectedEls: [] } : {});
     },
 
     // ---------- kanvas ----------
@@ -247,3 +289,7 @@ export const useEditor = create<EditorState>((set, get) => {
     },
   };
 });
+
+function validPage(d: PortfolioData, id: string): string {
+  return id === HOME || getPages(d).some((p) => p.id === id) ? id : HOME;
+}

@@ -56,19 +56,25 @@ function mutate<T>(fn: (db: DB) => T | Promise<T>): Promise<T> {
   return run;
 }
 
-let secretCache: string | null = null;
+/**
+ * Kunci penanda tangan cookie sesi. Selalu dibaca dari file (tidak di-cache per modul)
+ * agar semua bagian server — server action dan route handler — memakai kunci yang sama.
+ */
 async function secret(): Promise<string> {
   if (process.env.SESSION_SECRET) return process.env.SESSION_SECRET;
-  if (secretCache) return secretCache;
   const file = path.join(DATA_DIR, ".secret");
   try {
-    secretCache = (await fs.readFile(file, "utf8")).trim();
+    return (await fs.readFile(file, "utf8")).trim();
   } catch {
-    secretCache = randomBytes(32).toString("hex");
     await fs.mkdir(DATA_DIR, { recursive: true });
-    await fs.writeFile(file, secretCache);
+    try {
+      // "wx": gagal jika file sudah dibuat proses lain, lalu kita baca milik mereka.
+      await fs.writeFile(file, randomBytes(32).toString("hex"), { flag: "wx" });
+    } catch {
+      /* sudah ada */
+    }
+    return (await fs.readFile(file, "utf8")).trim();
   }
-  return secretCache;
 }
 
 const sign = (value: string, key: string) => createHmac("sha256", key).update(value).digest("base64url");
@@ -286,6 +292,6 @@ export const localBackend: Backend = {
 };
 
 function toTemplate(t: StoredTemplate): Template {
-  const { id, name, category, description, tags, theme, sections, published, updatedAt } = t;
-  return { id, name, category, description, tags, theme, sections, published: !!published, builtin: false, updatedAt };
+  const { id, name, category, description, tags, theme, sections, pages, published, updatedAt } = t;
+  return { id, name, category, description, tags, theme, sections, pages: pages ?? [], published: !!published, builtin: false, updatedAt };
 }

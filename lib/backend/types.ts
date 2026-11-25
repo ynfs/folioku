@@ -1,6 +1,6 @@
 import type { PortfolioData, Project, Publication, Template, User } from "@/lib/types";
 
-export type TemplatePatch = Partial<Pick<Template, "name" | "category" | "description" | "tags" | "published" | "theme" | "sections">>;
+export type TemplatePatch = Partial<Pick<Template, "name" | "category" | "description" | "tags" | "published" | "theme" | "sections" | "pages">>;
 
 export interface AdminStats {
   users: number;

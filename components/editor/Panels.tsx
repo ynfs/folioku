@@ -9,7 +9,7 @@ import { SECTION_DEFS, SECTION_ORDER } from "@/lib/sections";
 import type { Section, Theme } from "@/lib/types";
 import { ElementPanel, LayersList } from "./ElementPanel";
 import { FieldInput, IconBtn } from "./fields";
-import { useEditor } from "./store";
+import { currentSections, useEditor } from "./store";
 
 // ---------- Panel kiri: daftar section ----------
 
@@ -60,7 +60,9 @@ function SortableRow({ section, index, total }: { section: Section; index: numbe
 }
 
 export function SectionsPanel() {
-  const sections = useEditor((s) => s.data.sections);
+  const data = useEditor((s) => s.data);
+  const page = useEditor((s) => s.page);
+  const sections = currentSections({ data, page });
   const moveSection = useEditor((s) => s.moveSection);
   const addSection = useEditor((s) => s.addSection);
   const [adding, setAdding] = useState(false);
@@ -130,7 +132,7 @@ export function SectionsPanel() {
 // ---------- Panel kanan: properti section ----------
 
 export function PropertiesPanel() {
-  const section = useEditor((s) => s.data.sections.find((x) => x.id === s.selectedId));
+  const section = useEditor((s) => currentSections(s).find((x) => x.id === s.selectedId));
   const hasElementSelection = useEditor((s) => s.selectedEls.length > 0);
   const updateProp = useEditor((s) => s.updateProp);
   const duplicateSection = useEditor((s) => s.duplicateSection);

@@ -11,10 +11,12 @@ import {
   updateTemplateMetaAction,
   type TemplateMeta,
 } from "@/app/actions";
+import { HOME, getPages, pageSections, resolvePageLinks } from "@/lib/pages";
 import { Portfolio } from "@/lib/renderer/Portfolio";
 import { CATEGORIES } from "@/lib/templates";
 import type { PortfolioData, Project, Template } from "@/lib/types";
 import { CanvasEditable, handleCanvasKey } from "./CanvasEditor";
+import { PagesPanel } from "./PagesPanel";
 import { PropertiesPanel, SectionsPanel, ThemePanel } from "./Panels";
 import { useEditor } from "./store";
 
@@ -28,6 +30,8 @@ const DEVICES: { id: Device; label: string; width: string }[] = [
 ];
 
 const AUTOSAVE_MS = 800;
+const MAX_WAIT_MS = 3000;
+const PREVIEW_BASE = "#folioku";
 
 export type EditorMode = { kind: "project"; project: Project } | { kind: "template"; template: Template };
 
@@ -41,6 +45,8 @@ export function Editor({ mode }: { mode: EditorMode }) {
 
 function EditorInner({ mode }: { mode: EditorMode }) {
   const data = useEditor((s) => s.data);
+  const page = useEditor((s) => s.page);
+  const openPage = useEditor((s) => s.openPage);
   const selectedId = useEditor((s) => s.selectedId);
   const select = useEditor((s) => s.select);
   const undo = useEditor((s) => s.undo);
@@ -57,18 +63,24 @@ function EditorInner({ mode }: { mode: EditorMode }) {
 
   // Simpan otomatis setelah pengguna berhenti mengedit sebentar.
   const firstRun = useRef(true);
+  const dirtySince = useRef<number | null>(null);
   useEffect(() => {
     if (firstRun.current) {
       firstRun.current = false;
       return;
     }
     setSave("dirty");
+    // Tunggu jeda mengetik, tapi jangan lebih dari MAX_WAIT_MS sejak perubahan pertama.
+    const now = Date.now();
+    dirtySince.current ??= now;
+    const delay = Math.max(0, Math.min(AUTOSAVE_MS, dirtySince.current + MAX_WAIT_MS - now));
     const t = setTimeout(async () => {
+      dirtySince.current = null;
       setSave("saving");
       const res = mode.kind === "project" ? await saveProjectAction(docId, data) : await saveTemplateAction(docId, data);
       setSave(res.ok ? "saved" : "error");
       setSaveError(res.error ?? "");
-    }, AUTOSAVE_MS);
+    }, delay);
     return () => clearTimeout(t);
   }, [data, docId, mode.kind]);
 
@@ -110,6 +122,11 @@ function EditorInner({ mode }: { mode: EditorMode }) {
   }, [selectedId]);
 
   const width = DEVICES.find((d) => d.id === device)!.width;
+  // Link halaman di pratinjau menjadi "#folioku/<slug>" agar bisa dibuka dengan Ctrl+klik.
+  const resolved = resolvePageLinks(data, PREVIEW_BASE);
+  const preview = { theme: data.theme, sections: pageSections(resolved, page) };
+  const pageTitle = page === HOME ? "Beranda" : getPages(data).find((p) => p.id === page)?.title;
+  const siteBase = mode.kind === "project" && mode.project.published && mode.project.slug ? `/p/${mode.project.slug}` : null;
 
   return (
     <div className="flex h-screen flex-col">
@@ -151,23 +168,41 @@ function EditorInner({ mode }: { mode: EditorMode }) {
 
       <div className="flex min-h-0 flex-1">
         {/* Kiri: daftar bagian & layer */}
-        <aside className="w-64 shrink-0 border-r border-app-line bg-app-bg">
-          <SectionsPanel />
+        <aside className="flex w-64 shrink-0 flex-col border-r border-app-line bg-app-bg">
+          <PagesPanel siteBase={siteBase} />
+          <div className="min-h-0 flex-1">
+            <SectionsPanel />
+          </div>
         </aside>
 
         {/* Tengah: pratinjau */}
         <main className="min-w-0 flex-1 overflow-y-auto bg-[#e9e7e2] p-4" onClick={() => select(null)}>
+          <p className="mx-auto mb-2 flex max-w-full items-center justify-between text-xs text-app-muted" style={{ width }}>
+            <span>
+              Halaman: <b className="text-app-fg">{pageTitle}</b>
+            </span>
+            <span>Ctrl+klik tombol untuk membuka halaman tujuannya</span>
+          </p>
           <div
             ref={previewRef}
             className="mx-auto rounded-md bg-white shadow-xl transition-[width] duration-300"
             style={{ width, maxWidth: "100%" }}
             onClickCapture={(e) => {
-              // Link di pratinjau tidak boleh berpindah halaman.
-              if ((e.target as HTMLElement).closest("a")) e.preventDefault();
+              // Link di pratinjau tidak boleh berpindah halaman situs.
+              const a = (e.target as HTMLElement).closest("a");
+              if (!a) return;
+              e.preventDefault();
+              const href = a.getAttribute("href") ?? "";
+              if ((e.ctrlKey || e.metaKey) && href.startsWith(PREVIEW_BASE)) {
+                e.stopPropagation();
+                const slug = href.slice(PREVIEW_BASE.length + 1);
+                openPage(slug ? (getPages(data).find((p) => p.slug === slug)?.id ?? HOME) : HOME);
+              }
             }}
           >
             <Portfolio
-              data={data}
+              key={page}
+              data={preview}
               className="overflow-hidden rounded-md"
               renderSection={(section, node) => (
                 <div
@@ -185,7 +220,7 @@ function EditorInner({ mode }: { mode: EditorMode }) {
                 </div>
               )}
             />
-            {data.sections.length === 0 && (
+            {preview.sections.length === 0 && (
               <div className="p-16 text-center text-app-muted">Halaman kosong. Tambahkan bagian dari panel kiri.</div>
             )}
           </div>
@@ -266,6 +301,13 @@ function ProjectPublish({ project }: { project: Project }) {
   async function publish() {
     setBusy(true);
     setError("");
+    // Simpan perubahan terbaru dulu agar yang terbit adalah versi terkini.
+    const saved = await saveProjectAction(project.id, useEditor.getState().data);
+    if (!saved.ok) {
+      setBusy(false);
+      setError(saved.error ?? "Gagal menyimpan sebelum publish.");
+      return;
+    }
     const res = await publishAction(project.id, slug);
     setBusy(false);
     if (res.error) setError(res.error);

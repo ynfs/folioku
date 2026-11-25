@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { CanvasView, ElementBody, canvasHeight, elementBoxStyle, textStyle } from "@/components/sections/canvas";
 import { CANVAS_WIDTH, canvasElements } from "@/lib/canvas";
 import type { CanvasElement, CanvasElementType, PortfolioData, Section } from "@/lib/types";
-import { patchElements, useEditor } from "./store";
+import { currentSections, patchElements, useEditor } from "./store";
 
 // Permukaan kanvas interaktif ala Figma: pilih, geser, ubah ukuran, putar,
 // seleksi kotak (marquee), garis bantu snap, dan edit teks dengan klik ganda.
@@ -421,7 +421,7 @@ function CanvasToolbar({ onAdd }: { onAdd: (t: CanvasElementType) => void }) {
 /** Pintasan keyboard kanvas. Mengembalikan true jika tombol ditangani. */
 export function handleCanvasKey(e: KeyboardEvent): boolean {
   const st = useEditor.getState();
-  const section = st.data.sections.find((s) => s.id === st.selectedId);
+  const section = currentSections(st).find((s) => s.id === st.selectedId);
   if (!section || section.type !== "canvas") return false;
   const ids = st.selectedEls;
   const mod = e.ctrlKey || e.metaKey;

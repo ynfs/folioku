@@ -60,9 +60,13 @@ export async function createProjectAction(form: FormData) {
   const project = await backend.createProject(user.id, {
     name: `Portofolio ${template.name}`,
     templateId: template.id,
-    data: { theme: structuredClone(template.theme), sections: structuredClone(template.sections) },
+    data: { theme: structuredClone(template.theme), sections: structuredClone(template.sections), pages: structuredClone(template.pages ?? []) },
   });
   redirect(`/editor/${project.id}`);
+}
+
+function validSections(list: unknown): boolean {
+  return Array.isArray(list) && list.every((s) => s && typeof s.id === "string" && typeof s.type === "string" && typeof s.props === "object");
 }
 
 function isPortfolioData(d: unknown): d is PortfolioData {
@@ -73,7 +77,11 @@ function isPortfolioData(d: unknown): d is PortfolioData {
     x.theme !== null &&
     typeof x.theme.fontHeading === "string" &&
     Array.isArray(x.sections) &&
-    x.sections.every((s) => s && typeof s.id === "string" && typeof s.type === "string" && typeof s.props === "object")
+    validSections(x.sections) &&
+    (x.pages === undefined ||
+      (Array.isArray(x.pages) &&
+        x.pages.length <= 30 &&
+        x.pages.every((p) => p && typeof p.id === "string" && typeof p.title === "string" && /^[a-z0-9-]{1,40}$/.test(p.slug) && validSections(p.sections))))
   );
 }
 
@@ -153,7 +161,7 @@ export async function createTemplateAction(form: FormData) {
   } else if (source !== "blank") {
     const t = await findTemplate(source, { allowDraft: true });
     if (!t) throw new Error("Template sumber tidak ditemukan");
-    base = { name: `${t.name} (salinan)`, category: t.category, description: t.description, tags: t.tags, data: { theme: t.theme, sections: t.sections } };
+    base = { name: `${t.name} (salinan)`, category: t.category, description: t.description, tags: t.tags, data: { theme: t.theme, sections: t.sections, pages: t.pages } };
   } else {
     base = { name: "Template baru", category: "kreatif", description: "", tags: [], data: { theme: DEFAULT_THEME, sections: [blankCanvas()] } };
   }
@@ -166,6 +174,7 @@ export async function createTemplateAction(form: FormData) {
     tags: base.tags,
     theme: structuredClone(base.data.theme),
     sections: structuredClone(base.data.sections),
+    pages: structuredClone(base.data.pages ?? []),
     published: false,
   };
   await backend.createTemplate(user.id, template);
@@ -178,7 +187,7 @@ export async function saveTemplateAction(id: string, data: PortfolioData): Promi
   if (!isPortfolioData(data)) return { ok: false, error: "Data tidak valid." };
   if (JSON.stringify(data).length > 500_000) return { ok: false, error: "Data terlalu besar." };
   try {
-    await backend.updateTemplate(id, { theme: data.theme, sections: data.sections });
+    await backend.updateTemplate(id, { theme: data.theme, sections: data.sections, pages: data.pages ?? [] });
     return { ok: true };
   } catch {
     return { ok: false, error: "Gagal menyimpan." };

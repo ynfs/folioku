@@ -76,9 +76,20 @@ export interface Section {
   props: Record<string, PropValue>;
 }
 
+/** Halaman tambahan. Halaman utama (beranda) memakai PortfolioData.sections. */
+export interface Page {
+  id: string;
+  title: string;
+  /** Bagian URL: /p/<slug-portofolio>/<slug-halaman> */
+  slug: string;
+  sections: Section[];
+}
+
 export interface PortfolioData {
   theme: Theme;
+  /** Bagian-bagian halaman beranda */
   sections: Section[];
+  pages?: Page[];
 }
 
 export type TemplateCategory =

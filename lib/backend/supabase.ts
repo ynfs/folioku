@@ -2,7 +2,7 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
-import type { PortfolioData, Project, Role, Section, Template, TemplateCategory, Theme } from "@/lib/types";
+import type { Page, PortfolioData, Project, Role, Section, Template, TemplateCategory, Theme } from "@/lib/types";
 import type { AuthResult, Backend } from "./types";
 
 interface TemplateRow {
@@ -11,7 +11,7 @@ interface TemplateRow {
   category: string;
   description: string | null;
   tags: string[] | null;
-  data: { theme: Theme; sections: Section[] };
+  data: { theme: Theme; sections: Section[]; pages?: Page[] };
   published: boolean;
   updated_at: string;
 }
@@ -27,6 +27,7 @@ function toTemplate(r: TemplateRow): Template {
     tags: r.tags ?? [],
     theme: r.data.theme,
     sections: r.data.sections,
+    pages: r.data.pages ?? [],
     published: r.published,
     builtin: false,
     updatedAt: r.updated_at,
@@ -240,7 +241,7 @@ export const supabaseBackend: Backend = {
         category: t.category,
         description: t.description,
         tags: t.tags,
-        data: { theme: t.theme, sections: t.sections },
+        data: { theme: t.theme, sections: t.sections, pages: t.pages ?? [] },
         published: !!t.published,
         created_by: userId,
       })
@@ -256,10 +257,10 @@ export const supabaseBackend: Backend = {
     for (const k of ["name", "category", "description", "tags", "published"] as const) {
       if (patch[k] !== undefined) row[k] = patch[k];
     }
-    if (patch.theme || patch.sections) {
+    if (patch.theme || patch.sections || patch.pages) {
       const current = await this.getTemplate(id);
       if (!current) throw new Error("Template tidak ditemukan");
-      row.data = { theme: patch.theme ?? current.theme, sections: patch.sections ?? current.sections };
+      row.data = { theme: patch.theme ?? current.theme, sections: patch.sections ?? current.sections, pages: patch.pages ?? current.pages ?? [] };
     }
     const { error } = await sb.from("templates").update(row).eq("id", id);
     if (error) throw error;

@@ -4,7 +4,7 @@ import { CANVAS_WIDTH, canvasElements, elementLabel } from "@/lib/canvas";
 import { FONTS } from "@/lib/fonts";
 import type { CanvasElement, Section } from "@/lib/types";
 import { canvasHeight } from "@/components/sections/canvas";
-import { ColorPicker, IconBtn, ImageInput, NumberInput } from "./fields";
+import { ColorPicker, IconBtn, ImageInput, LinkInput, NumberInput } from "./fields";
 import { useEditor, type LayerMove } from "./store";
 
 // Panel properti elemen kanvas (kanan) dan daftar layer (kiri), ala Figma.
@@ -201,8 +201,8 @@ export function ElementPanel({ section }: { section: Section }) {
       )}
 
       {!multi && el.type === "button" && (
-        <Group title="Link">
-          <input className="input" placeholder="https:// atau #kontak" value={el.link ?? ""} onChange={(e) => set({ link: e.target.value })} aria-label="Link tombol" />
+        <Group title="Aksi tombol">
+          <LinkInput id={`link-${el.id}`} label="Saat tombol ditekan, buka" value={el.link ?? ""} onChange={(v) => set({ link: v })} />
         </Group>
       )}
 

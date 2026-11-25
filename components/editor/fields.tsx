@@ -3,6 +3,7 @@
 
 import { useRef, useState } from "react";
 import { THEME_COLORS, resolveColor } from "@/lib/canvas";
+import { HOME, getPages, linkedPageId, pageLink } from "@/lib/pages";
 import { useEditor } from "./store";
 import type { Field } from "@/lib/sections";
 import type { PropValue } from "@/lib/types";
@@ -23,18 +24,13 @@ export function FieldInput({
 
   switch (field.kind) {
     case "text":
-    case "url":
       return (
         <Labeled id={id} label={field.label}>
-          <input
-            id={id}
-            className="input"
-            value={str}
-            placeholder={field.kind === "url" ? "https://" : ""}
-            onChange={(e) => onChange(e.target.value)}
-          />
+          <input id={id} className="input" value={str} onChange={(e) => onChange(e.target.value)} />
         </Labeled>
       );
+    case "url":
+      return <LinkInput id={id} label={field.label} value={str} onChange={onChange} />;
     case "textarea":
       return (
         <Labeled id={id} label={field.label}>
@@ -372,6 +368,92 @@ export function ColorPicker({ value, onChange, allowNone }: { value: string; onC
           }}
         />
       </div>
+    </div>
+  );
+}
+
+/** Tujuan link: URL bebas, beranda, halaman lain, atau buat halaman baru. */
+export function LinkInput({ id, label, value, onChange }: { id: string; label: string; value: string; onChange: (v: string) => void }) {
+  const data = useEditor((st) => st.data);
+  const addPage = useEditor((st) => st.addPage);
+  const openPage = useEditor((st) => st.openPage);
+  const pages = getPages(data);
+  const pid = linkedPageId(value);
+  const [creating, setCreating] = useState(false);
+  const [title, setTitle] = useState("");
+
+  const mode = creating ? "new" : pid ? pageLink(pid) : "url";
+  const target = pid === HOME ? "Beranda" : pages.find((p) => p.id === pid)?.title;
+
+  function create() {
+    const newId = addPage(title || "Halaman baru");
+    onChange(pageLink(newId));
+    setCreating(false);
+    setTitle("");
+  }
+
+  return (
+    <div>
+      <label htmlFor={id} className="label">
+        {label}
+      </label>
+      <select
+        id={id}
+        className="input mb-1.5"
+        value={mode}
+        onChange={(e) => {
+          const v = e.target.value;
+          if (v === "new") {
+            setCreating(true);
+            return;
+          }
+          setCreating(false);
+          onChange(v === "url" ? "" : v);
+        }}
+      >
+        <option value="url">Link / URL</option>
+        <option value={pageLink(HOME)}>Halaman: Beranda</option>
+        {pages.map((p) => (
+          <option key={p.id} value={pageLink(p.id)}>
+            Halaman: {p.title}
+          </option>
+        ))}
+        <option value="new">+ Buat halaman baru…</option>
+      </select>
+
+      {mode === "url" && (
+        <input className="input" value={value} placeholder="https://… atau #kontak" onChange={(e) => onChange(e.target.value)} aria-label={`${label} (URL)`} />
+      )}
+
+      {creating && (
+        <div className="flex gap-1.5">
+          <input
+            autoFocus
+            className="input"
+            placeholder="Nama halaman, mis. Tentang saya"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && create()}
+            aria-label="Nama halaman baru"
+          />
+          <button type="button" className="btn-brand shrink-0 px-3" onClick={create}>
+            Buat
+          </button>
+        </div>
+      )}
+
+      {pid && !creating && (
+        <div className="flex items-center justify-between gap-2 rounded-lg bg-[#0d99ff]/10 px-2.5 py-1.5 text-xs">
+          <span className="truncate text-[#0b6fb8]">
+            → {target ?? <span className="text-red-600">halaman sudah dihapus</span>}
+          </span>
+          {target && (
+            <button type="button" className="shrink-0 font-semibold text-[#0b6fb8] underline" onClick={() => openPage(pid)}>
+              Buka halaman
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

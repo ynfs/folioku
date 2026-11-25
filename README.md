@@ -51,6 +51,13 @@ Bagian **Desain Bebas** adalah kanvas tempat elemen bisa ditaruh di mana saja:
 
 Frame memakai lebar desain 1200px dan mengecil proporsional di layar yang lebih sempit.
 
+### Multi-halaman
+- Panel **Halaman** di kiri atas editor: tambah, ganti nama, ubah alamat, hapus halaman
+- Setiap tombol bisa diarahkan ke URL, Beranda, halaman lain, atau **"+ Buat halaman baru"** langsung dari pilihan link tombol
+- Ctrl+klik tombol di pratinjau untuk membuka halaman tujuannya
+- Halaman publik tampil di `/p/nama-portofolio/nama-halaman`
+- Link disimpan sebagai `page:<id>`, jadi tetap benar walau alamat halaman diganti
+
 ### Untuk Admin
 - **Pembuat template** di `/admin`: mulai dari kanvas kosong, salin template yang ada, atau jadikan proyek sebagai template
 - Edit template dengan editor yang sama (termasuk Desain Bebas), atur nama, kategori, deskripsi, tag
@@ -109,7 +116,8 @@ folioku/
 │   ├── (dashboard)/         # Dashboard klien
 │   ├── editor/[projectId]/  # Halaman editor
 │   ├── templates/           # Galeri template
-│   ├── p/[slug]/            # Halaman portofolio publik
+│   ├── p/[slug]/            # Portofolio publik (beranda)
+│   ├── p/[slug]/[page]/     # Halaman tambahan portofolio publik
 │   ├── admin/               # Panel admin & pembuat template
 │   ├── api/upload/          # Unggah gambar
 │   ├── api/files/[name]/    # Menyajikan gambar (mode lokal)
@@ -123,6 +131,7 @@ folioku/
 │   ├── renderer/            # Mengubah JSON menjadi halaman
 │   ├── sections.ts          # Skema field setiap jenis section
 │   ├── canvas.ts            # Utilitas Desain Bebas (elemen, warna tema)
+│   ├── pages.ts             # Multi-halaman dan link antarhalaman
 │   └── templates.ts         # Daftar template bawaan
 ├── supabase/schema.sql      # Tabel, RLS, dan bucket Storage
 ├── templates/               # File JSON template bawaan
@@ -268,6 +277,7 @@ Jangan pernah mengunggah `.env.local` ke repository publik.
 - [ ] Ekspor PDF
 - [ ] Custom domain
 - [x] Pembuat template dan editor Desain Bebas (ala Figma)
+- [x] Multi-halaman: tombol membuka halaman lain
 - [ ] Panel admin lengkap (kelola pengguna)
 - [ ] Tata letak khusus HP untuk Desain Bebas
 
