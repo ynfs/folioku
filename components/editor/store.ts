@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { canvasElements, createElement, newElementId } from "@/lib/canvas";
-import { HOME, createPage, findSection, getPages, mapAllSections, pageSections, setPageSections, uniquePageSlug } from "@/lib/pages";
+import { HOME, createPage, findSection, getPages, mapAllSections, pageSections, sectionPage, setPageSections, uniquePageSlug } from "@/lib/pages";
 import { createSection, newId } from "@/lib/sections";
 import type { CanvasElement, CanvasElementType, PortfolioData, PropValue, SectionType, Theme } from "@/lib/types";
 
@@ -45,6 +45,8 @@ interface EditorState {
 
   // ---- halaman ----
   openPage(id: string): void;
+  /** Pindah ke halaman yang memuat section lalu memilihnya. */
+  goToSection(sectionId: string): void;
   /** Membuat halaman baru dan mengembalikan id-nya. */
   addPage(title: string): string;
   renamePage(id: string, title: string): void;
@@ -215,6 +217,12 @@ export const useEditor = create<EditorState>((set, get) => {
     openPage(id) {
       const page = validPage(get().data, id);
       set({ page, selectedId: pageSections(get().data, page)[0]?.id ?? null, selectedEls: [] });
+    },
+
+    goToSection(sectionId) {
+      const page = sectionPage(get().data, sectionId);
+      if (page === null) return;
+      set({ page, selectedId: sectionId, selectedEls: [] });
     },
 
     addPage(title) {

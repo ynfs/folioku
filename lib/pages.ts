@@ -7,7 +7,22 @@ import type { Page, PortfolioData, PropValue, Section } from "./types";
 export const HOME = "home";
 export const PAGE_PREFIX = "page:";
 
+export const SECTION_PREFIX = "section:";
+
 export const pageLink = (id: string) => `${PAGE_PREFIX}${id}`;
+/** Link ke sebuah bagian (section); browser menggulir ke bagian itu. */
+export const sectionLink = (id: string) => `${SECTION_PREFIX}${id}`;
+export const linkedSectionId = (link: string | undefined): string | null =>
+  link && link.startsWith(SECTION_PREFIX) ? link.slice(SECTION_PREFIX.length) : null;
+
+/** Halaman yang memuat section tertentu, atau null jika tidak ada. */
+export function sectionPage(d: PortfolioData, sectionId: string): string | null {
+  if (d.sections.some((s) => s.id === sectionId)) return HOME;
+  return getPages(d).find((p) => p.sections.some((s) => s.id === sectionId))?.id ?? null;
+}
+
+/** ID elemen HTML untuk sebuah section (dipakai sebagai tujuan gulir). */
+export const sectionAnchor = (id: string) => id.replace(/[^A-Za-z0-9_-]/g, "");
 export const linkedPageId = (link: string | undefined): string | null =>
   link && link.startsWith(PAGE_PREFIX) ? link.slice(PAGE_PREFIX.length) : null;
 
@@ -71,15 +86,28 @@ export function createPage(d: PortfolioData, title: string): Page {
   return { id: newId("page"), title, slug: uniquePageSlug(d, title), sections: [canvas, createSection("contact")] };
 }
 
-/** Mengganti semua link "page:<id>" di props menjadi URL nyata. */
-export function resolvePageLinks(d: PortfolioData, base: string): PortfolioData {
+/**
+ * Mengganti link "page:<id>" dan "section:<id>" di props menjadi URL nyata.
+ * currentPage dipakai agar link ke bagian di halaman yang sama cukup "#bagian".
+ */
+export function resolvePageLinks(d: PortfolioData, base: string, currentPage: string = HOME): PortfolioData {
   const pages = getPages(d);
-  const url = (v: string) => {
-    const id = linkedPageId(v);
-    if (id === null) return v;
+  const pageUrl = (id: string) => {
     if (id === HOME) return base || "/";
     const p = pages.find((x) => x.id === id);
     return p ? `${base}/${p.slug}` : "#";
+  };
+  const url = (v: string) => {
+    const pid = linkedPageId(v);
+    if (pid !== null) return pageUrl(pid);
+    const sid = linkedSectionId(v);
+    if (sid !== null) {
+      const where = sectionPage(d, sid);
+      if (where === null) return "#";
+      const anchor = `#${sectionAnchor(sid)}`;
+      return where === currentPage ? anchor : `${pageUrl(where)}${anchor}`;
+    }
+    return v;
   };
   const walk = (v: PropValue): PropValue => {
     if (typeof v === "string") return url(v);

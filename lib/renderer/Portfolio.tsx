@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { SectionView } from "@/components/sections";
 import { canvasElements, canvasFonts } from "@/lib/canvas";
 import { fontStack, googleFontsHref } from "@/lib/fonts";
+import { sectionAnchor } from "@/lib/pages";
 import type { PortfolioData, Section, Theme } from "@/lib/types";
 
 // Mengubah JSON portofolio (theme + sections) menjadi halaman.
@@ -48,10 +49,11 @@ export function Portfolio({
       <FontLinks theme={data.theme} extra={usedFonts(data)} />
       {data.sections.map((section) => {
         const node = <SectionView section={section} />;
-        return renderSection ? (
-          <div key={section.id}>{renderSection(section, node)}</div>
-        ) : (
-          <div key={section.id}>{node}</div>
+        // id = tujuan gulir untuk tombol yang mengarah ke bagian ini.
+        return (
+          <div key={section.id} id={sectionAnchor(section.id)} className="scroll-mt-4">
+            {renderSection ? renderSection(section, node) : node}
+          </div>
         );
       })}
     </div>

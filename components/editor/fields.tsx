@@ -3,7 +3,8 @@
 
 import { useRef, useState } from "react";
 import { THEME_COLORS, resolveColor } from "@/lib/canvas";
-import { HOME, getPages, linkedPageId, pageLink } from "@/lib/pages";
+import { HOME, findSection, getPages, linkedPageId, linkedSectionId, pageLink, pageSections, sectionLink, sectionPage } from "@/lib/pages";
+import { sectionLabel } from "@/lib/sections";
 import { useEditor } from "./store";
 import type { Field } from "@/lib/sections";
 import type { PropValue } from "@/lib/types";
@@ -372,18 +373,33 @@ export function ColorPicker({ value, onChange, allowNone }: { value: string; onC
   );
 }
 
-/** Tujuan link: URL bebas, beranda, halaman lain, atau buat halaman baru. */
+/**
+ * Tujuan link tombol: URL bebas, halaman (atau buat halaman baru), atau bagian
+ * tertentu. Daftar bagian dideteksi otomatis dari isi setiap halaman.
+ */
 export function LinkInput({ id, label, value, onChange }: { id: string; label: string; value: string; onChange: (v: string) => void }) {
   const data = useEditor((st) => st.data);
+  const currentPage = useEditor((st) => st.page);
   const addPage = useEditor((st) => st.addPage);
   const openPage = useEditor((st) => st.openPage);
+  const goToSection = useEditor((st) => st.goToSection);
   const pages = getPages(data);
   const pid = linkedPageId(value);
+  const sid = linkedSectionId(value);
   const [creating, setCreating] = useState(false);
   const [title, setTitle] = useState("");
 
-  const mode = creating ? "new" : pid ? pageLink(pid) : "url";
-  const target = pid === HOME ? "Beranda" : pages.find((p) => p.id === pid)?.title;
+  const pageName = (p: string) => (p === HOME ? "Beranda" : (pages.find((x) => x.id === p)?.title ?? ""));
+  // Bagian di halaman yang sedang dibuka tampil paling atas.
+  const groups = [HOME, ...pages.map((p) => p.id)]
+    .sort((a, b) => Number(b === currentPage) - Number(a === currentPage))
+    .map((p) => ({ page: p, sections: pageSections(data, p) }))
+    .filter((g) => g.sections.length > 0);
+
+  const sidPage = sid ? sectionPage(data, sid) : null;
+  const sidSection = sid ? findSection(data, sid) : undefined;
+  const mode = creating ? "new" : pid ? pageLink(pid) : sid ? sectionLink(sid) : "url";
+  const pageTarget = pid ? pageName(pid) || null : null;
 
   function create() {
     const newId = addPage(title || "Halaman baru");
@@ -412,13 +428,26 @@ export function LinkInput({ id, label, value, onChange }: { id: string; label: s
         }}
       >
         <option value="url">Link / URL</option>
-        <option value={pageLink(HOME)}>Halaman: Beranda</option>
-        {pages.map((p) => (
-          <option key={p.id} value={pageLink(p.id)}>
-            Halaman: {p.title}
-          </option>
+        <optgroup label="Halaman">
+          <option value={pageLink(HOME)}>Beranda</option>
+          {pages.map((p) => (
+            <option key={p.id} value={pageLink(p.id)}>
+              {p.title || "Tanpa judul"}
+            </option>
+          ))}
+          <option value="new">+ Buat halaman baru…</option>
+        </optgroup>
+        {groups.map((g) => (
+          <optgroup key={g.page} label={g.page === currentPage ? "Gulir ke bagian di halaman ini" : `Bagian di halaman ${pageName(g.page)}`}>
+            {g.sections.map((sec) => (
+              <option key={sec.id} value={sectionLink(sec.id)}>
+                {sectionLabel(sec)}
+              </option>
+            ))}
+          </optgroup>
         ))}
-        <option value="new">+ Buat halaman baru…</option>
+        {sid && !sidSection && <option value={sectionLink(sid)}>(bagian sudah dihapus)</option>}
+        {pid && !pageTarget && <option value={pageLink(pid)}>(halaman sudah dihapus)</option>}
       </select>
 
       {mode === "url" && (
@@ -443,16 +472,40 @@ export function LinkInput({ id, label, value, onChange }: { id: string; label: s
       )}
 
       {pid && !creating && (
-        <div className="flex items-center justify-between gap-2 rounded-lg bg-[#0d99ff]/10 px-2.5 py-1.5 text-xs">
-          <span className="truncate text-[#0b6fb8]">
-            → {target ?? <span className="text-red-600">halaman sudah dihapus</span>}
-          </span>
-          {target && (
-            <button type="button" className="shrink-0 font-semibold text-[#0b6fb8] underline" onClick={() => openPage(pid)}>
-              Buka halaman
-            </button>
-          )}
-        </div>
+        <LinkInfo
+          text={pageTarget ? `→ Halaman ${pageTarget}` : null}
+          missing="halaman sudah dihapus"
+          action="Buka halaman"
+          onAction={() => openPage(pid)}
+        />
+      )}
+
+      {sid && !creating && (
+        <LinkInfo
+          text={
+            sidSection && sidPage
+              ? `↓ Gulir ke ${sectionLabel(sidSection)}${sidPage === currentPage ? "" : ` (halaman ${pageName(sidPage)})`}`
+              : null
+          }
+          missing="bagian sudah dihapus"
+          action="Lihat bagian"
+          onAction={() => goToSection(sid)}
+        />
+      )}
+    </div>
+  );
+}
+
+function LinkInfo({ text, missing, action, onAction }: { text: string | null; missing: string; action: string; onAction: () => void }) {
+  return (
+    <div className="flex items-center justify-between gap-2 rounded-lg bg-[#0d99ff]/10 px-2.5 py-1.5 text-xs">
+      <span className="min-w-0 truncate text-[#0b6fb8]" title={text ?? undefined}>
+        {text ?? <span className="text-red-600">{missing}</span>}
+      </span>
+      {text && (
+        <button type="button" className="shrink-0 font-semibold text-[#0b6fb8] underline" onClick={onAction}>
+          {action}
+        </button>
       )}
     </div>
   );

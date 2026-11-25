@@ -54,9 +54,10 @@ Frame memakai lebar desain 1200px dan mengecil proporsional di layar yang lebih 
 ### Multi-halaman
 - Panel **Halaman** di kiri atas editor: tambah, ganti nama, ubah alamat, hapus halaman
 - Setiap tombol bisa diarahkan ke URL, Beranda, halaman lain, atau **"+ Buat halaman baru"** langsung dari pilihan link tombol
-- Ctrl+klik tombol di pratinjau untuk membuka halaman tujuannya
+- Tombol juga bisa diarahkan ke **bagian tertentu** (mis. Kontak atau Galeri). Daftar bagian di setiap halaman dideteksi otomatis; saat ditekan, halaman menggulir ke bagian itu, termasuk bagian di halaman lain
+- Ctrl+klik tombol di pratinjau untuk menuju halaman atau bagian tujuannya
 - Halaman publik tampil di `/p/nama-portofolio/nama-halaman`
-- Link disimpan sebagai `page:<id>`, jadi tetap benar walau alamat halaman diganti
+- Link disimpan sebagai `page:<id>` atau `section:<id>`, jadi tetap benar walau alamat halaman diganti atau bagian dipindah
 
 ### Untuk Admin
 - **Pembuat template** di `/admin`: mulai dari kanvas kosong, salin template yang ada, atau jadikan proyek sebagai template

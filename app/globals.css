@@ -20,6 +20,11 @@
   --font-sans: var(--font-app), ui-sans-serif, system-ui, sans-serif;
 }
 
+html {
+  /* Tombol yang mengarah ke sebuah bagian menggulir dengan halus. */
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--app-bg);
   color: var(--app-fg);

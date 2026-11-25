@@ -11,7 +11,7 @@ import {
   updateTemplateMetaAction,
   type TemplateMeta,
 } from "@/app/actions";
-import { HOME, getPages, pageSections, resolvePageLinks } from "@/lib/pages";
+import { HOME, findSection, getPages, pageSections, resolvePageLinks } from "@/lib/pages";
 import { Portfolio } from "@/lib/renderer/Portfolio";
 import { CATEGORIES } from "@/lib/templates";
 import type { PortfolioData, Project, Template } from "@/lib/types";
@@ -47,6 +47,7 @@ function EditorInner({ mode }: { mode: EditorMode }) {
   const data = useEditor((s) => s.data);
   const page = useEditor((s) => s.page);
   const openPage = useEditor((s) => s.openPage);
+  const goToSection = useEditor((s) => s.goToSection);
   const selectedId = useEditor((s) => s.selectedId);
   const select = useEditor((s) => s.select);
   const undo = useEditor((s) => s.undo);
@@ -119,11 +120,31 @@ function EditorInner({ mode }: { mode: EditorMode }) {
   useEffect(() => {
     if (!selectedId) return;
     previewRef.current?.querySelector(`[data-section="${selectedId}"]`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }, [selectedId]);
+  }, [selectedId, page]);
+
+  /** Ctrl+klik di pratinjau: ikuti link ke halaman dan/atau bagian tujuannya. */
+  function followLink(href: string) {
+    let anchor = "";
+    if (href.startsWith(PREVIEW_BASE)) {
+      const [path, hash = ""] = href.slice(PREVIEW_BASE.length).split("#");
+      const slug = path.replace(/^\//, "");
+      openPage(slug ? (getPages(data).find((p) => p.slug === slug)?.id ?? HOME) : HOME);
+      anchor = hash;
+    } else if (href.startsWith("#")) {
+      anchor = href.slice(1);
+    }
+    if (!anchor) return;
+    if (findSection(data, anchor)) {
+      goToSection(anchor);
+    } else {
+      // Anchor bawaan template (mis. #kontak) di dalam sebuah bagian.
+      previewRef.current?.querySelector(`[id="${anchor.replace(/["\\]/g, "")}"]`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
 
   const width = DEVICES.find((d) => d.id === device)!.width;
   // Link halaman di pratinjau menjadi "#folioku/<slug>" agar bisa dibuka dengan Ctrl+klik.
-  const resolved = resolvePageLinks(data, PREVIEW_BASE);
+  const resolved = resolvePageLinks(data, PREVIEW_BASE, page);
   const preview = { theme: data.theme, sections: pageSections(resolved, page) };
   const pageTitle = page === HOME ? "Beranda" : getPages(data).find((p) => p.id === page)?.title;
   const siteBase = mode.kind === "project" && mode.project.published && mode.project.slug ? `/p/${mode.project.slug}` : null;
@@ -181,7 +202,7 @@ function EditorInner({ mode }: { mode: EditorMode }) {
             <span>
               Halaman: <b className="text-app-fg">{pageTitle}</b>
             </span>
-            <span>Ctrl+klik tombol untuk membuka halaman tujuannya</span>
+            <span>Ctrl+klik tombol untuk menuju halaman atau bagian tujuannya</span>
           </p>
           <div
             ref={previewRef}
@@ -193,11 +214,9 @@ function EditorInner({ mode }: { mode: EditorMode }) {
               if (!a) return;
               e.preventDefault();
               const href = a.getAttribute("href") ?? "";
-              if ((e.ctrlKey || e.metaKey) && href.startsWith(PREVIEW_BASE)) {
-                e.stopPropagation();
-                const slug = href.slice(PREVIEW_BASE.length + 1);
-                openPage(slug ? (getPages(data).find((p) => p.slug === slug)?.id ?? HOME) : HOME);
-              }
+              if (!(e.ctrlKey || e.metaKey)) return;
+              e.stopPropagation();
+              followLink(href);
             }}
           >
             <Portfolio

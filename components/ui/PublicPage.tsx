@@ -5,7 +5,7 @@ import type { Publication } from "@/lib/types";
 
 /** Merender satu halaman portofolio publik; link "page:<id>" diubah menjadi URL nyata. */
 export function PublicPage({ pub, pageId = HOME }: { pub: Publication; pageId?: string }) {
-  const resolved = resolvePageLinks(pub.data, `/p/${pub.slug}`);
+  const resolved = resolvePageLinks(pub.data, `/p/${pub.slug}`, pageId);
   const data = { theme: resolved.theme, sections: pageSections(resolved, pageId) };
   return (
     <main className="flex-1" style={{ background: data.theme.colorBackground }}>

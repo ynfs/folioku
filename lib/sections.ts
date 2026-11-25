@@ -284,3 +284,12 @@ export function blankCanvas(height = 720): Section {
 }
 
 export { CANVAS_WIDTH };
+
+/** Nama yang mudah dibaca untuk sebuah section, mis. "Kontak · Mari bekerja sama". */
+export function sectionLabel(s: Section): string {
+  const def = SECTION_DEFS[s.type];
+  const p = s.props;
+  const t = p.title ?? p.heading ?? p.quote ?? p.author;
+  const text = typeof t === "string" ? t.trim() : "";
+  return text ? `${def.label} · ${text.length > 32 ? text.slice(0, 32) + "…" : text}` : def.label;
+}
