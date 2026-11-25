@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PublicPage } from "@/components/ui/PublicPage";
+import { PublicPage, guestFrom } from "@/components/ui/PublicPage";
 import { backend } from "@/lib/backend";
 import { getPages } from "@/lib/pages";
 
@@ -16,9 +16,10 @@ export async function generateMetadata(props: PageProps<"/p/[slug]/[page]">): Pr
 
 export default async function PublicSubPage(props: PageProps<"/p/[slug]/[page]">) {
   const { slug, page } = await props.params;
+  const { to } = await props.searchParams;
   const pub = await backend.getPublication(slug);
   if (!pub) notFound();
   const p = getPages(pub.data).find((x) => x.slug === page);
   if (!p) notFound();
-  return <PublicPage pub={pub} pageId={p.id} />;
+  return <PublicPage pub={pub} pageId={p.id} guest={guestFrom(to)} />;
 }

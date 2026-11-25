@@ -32,6 +32,14 @@ export function FieldInput({
       );
     case "url":
       return <LinkInput id={id} label={field.label} value={str} onChange={onChange} />;
+    case "datetime":
+      return (
+        <Labeled id={id} label={field.label}>
+          <input id={id} type="datetime-local" className="input" value={str} onChange={(e) => onChange(e.target.value)} />
+        </Labeled>
+      );
+    case "audio":
+      return <ImageInput id={id} label={field.label} value={str} onChange={onChange} accept="audio/mpeg" />;
     case "textarea":
       return (
         <Labeled id={id} label={field.label}>
@@ -105,12 +113,16 @@ export function ImageInput({
   label,
   value,
   onChange,
+  accept = "image/png,image/jpeg,image/webp,image/gif",
 }: {
   id: string;
   label: string;
   value: string;
   onChange: (v: string) => void;
+  /** "audio/mpeg" untuk lagu mp3 */
+  accept?: string;
 }) {
+  const isAudio = accept.startsWith("audio");
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -140,10 +152,11 @@ export function ImageInput({
       </label>
       <div className="flex gap-2">
         <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-app-line bg-app-bg">
-          {value && <img src={value} alt="" className="h-full w-full object-cover" />}
+          {value && !isAudio && <img src={value} alt="" className="h-full w-full object-cover" />}
+          {isAudio && <span className="grid h-full w-full place-items-center text-2xl">{value ? "♫" : "♪"}</span>}
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <input id={id} className="input py-1.5 text-xs" value={value} placeholder="URL gambar" onChange={(e) => onChange(e.target.value)} />
+          <input id={id} className="input py-1.5 text-xs" value={value} placeholder={isAudio ? "URL file mp3" : "URL gambar"} onChange={(e) => onChange(e.target.value)} />
           <div className="flex gap-1.5">
             <button type="button" className="btn-ghost flex-1 px-2 py-1 text-xs" disabled={busy} onClick={() => fileRef.current?.click()}>
               {busy ? "Mengunggah…" : "Unggah"}
@@ -160,7 +173,7 @@ export function ImageInput({
       <input
         ref={fileRef}
         type="file"
-        accept="image/png,image/jpeg,image/webp,image/gif"
+        accept={accept}
         className="hidden"
         onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])}
       />

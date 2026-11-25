@@ -3,8 +3,10 @@ import type { PropValue, Section, SectionType } from "./types";
 
 // Skema field yang dipakai panel properti editor untuk setiap jenis section.
 
+type ItemKind = "text" | "textarea" | "image" | "url" | "datetime";
+
 export type Field =
-  | { key: string; label: string; kind: "text" | "textarea" | "image" | "url" }
+  | { key: string; label: string; kind: "text" | "textarea" | "image" | "url" | "datetime" | "audio" }
   | { key: string; label: string; kind: "select"; options: { value: string; label: string }[] }
   | { key: string; label: string; kind: "number"; min: number; max: number }
   | { key: string; label: string; kind: "size"; min: number; max: number; step?: number; unit?: string }
@@ -14,20 +16,224 @@ export type Field =
       label: string;
       kind: "list";
       itemLabel: string;
-      itemFields: { key: string; label: string; kind: "text" | "textarea" | "image" | "url" }[];
+      itemFields: { key: string; label: string; kind: ItemKind }[];
     };
 
 export interface SectionDef {
   type: SectionType;
   label: string;
   description: string;
+  /** Produk yang paling cocok (dipakai untuk mengurutkan daftar "Tambah bagian"). */
+  for?: "portfolio" | "invitation";
   fields: Field[];
   defaults: Record<string, PropValue>;
 }
 
 const IMG = (n: number) => `/placeholder/img-${n}.svg`;
 
+const ZONES = [
+  { value: "WIB", label: "WIB" },
+  { value: "WITA", label: "WITA" },
+  { value: "WIT", label: "WIT" },
+];
+
 export const SECTION_DEFS: Record<SectionType, SectionDef> = {
+  // ================= Undangan digital =================
+  cover: {
+    type: "cover",
+    for: "invitation",
+    label: "Sampul",
+    description: "Pembuka dengan nama tamu & tombol Buka Undangan",
+    fields: [
+      { key: "eyebrow", label: "Teks kecil", kind: "text" },
+      { key: "title", label: "Judul (mis. nama mempelai)", kind: "text" },
+      { key: "subtitle", label: "Tanggal / keterangan", kind: "text" },
+      { key: "greeting", label: "Sapaan tamu", kind: "text" },
+      { key: "image", label: "Foto latar", kind: "image" },
+      { key: "buttonText", label: "Teks tombol", kind: "text" },
+      { key: "buttonLink", label: "Tombol menuju (kosong = bagian berikutnya)", kind: "url" },
+    ],
+    defaults: {
+      eyebrow: "The Wedding of",
+      title: "Rina & Dimas",
+      subtitle: "Sabtu, 20 Desember 2026",
+      greeting: "Kepada Yth. Bapak/Ibu/Saudara/i",
+      image: "/placeholder/cover.svg",
+      buttonText: "Buka Undangan",
+      buttonLink: "",
+    },
+  },
+  couple: {
+    type: "couple",
+    for: "invitation",
+    label: "Mempelai",
+    description: "Profil kedua mempelai dan orang tua",
+    fields: [
+      { key: "heading", label: "Judul", kind: "text" },
+      { key: "intro", label: "Kalimat pembuka", kind: "textarea" },
+      { key: "name1", label: "Mempelai 1 — nama panggilan", kind: "text" },
+      { key: "full1", label: "Mempelai 1 — nama lengkap", kind: "text" },
+      { key: "parents1", label: "Mempelai 1 — orang tua", kind: "textarea" },
+      { key: "photo1", label: "Mempelai 1 — foto", kind: "image" },
+      { key: "ig1", label: "Mempelai 1 — Instagram", kind: "url" },
+      { key: "name2", label: "Mempelai 2 — nama panggilan", kind: "text" },
+      { key: "full2", label: "Mempelai 2 — nama lengkap", kind: "text" },
+      { key: "parents2", label: "Mempelai 2 — orang tua", kind: "textarea" },
+      { key: "photo2", label: "Mempelai 2 — foto", kind: "image" },
+      { key: "ig2", label: "Mempelai 2 — Instagram", kind: "url" },
+    ],
+    defaults: {
+      heading: "Mempelai",
+      intro: "Dengan memohon rahmat Tuhan Yang Maha Esa, kami bermaksud menyelenggarakan pernikahan putra-putri kami:",
+      name1: "Rina",
+      full1: "Rina Wulandari, S.Ds.",
+      parents1: "Putri dari Bapak Ahmad\n& Ibu Siti",
+      photo1: "/placeholder/portrait.svg",
+      ig1: "",
+      name2: "Dimas",
+      full2: "Dimas Pratama, S.T.",
+      parents2: "Putra dari Bapak Budi\n& Ibu Ani",
+      photo2: "/placeholder/hero.svg",
+      ig2: "",
+    },
+  },
+  event: {
+    type: "event",
+    for: "invitation",
+    label: "Acara",
+    description: "Waktu, tempat, dan peta acara",
+    fields: [
+      { key: "heading", label: "Judul", kind: "text" },
+      { key: "zone", label: "Zona waktu", kind: "select", options: ZONES },
+      {
+        key: "items",
+        label: "Acara",
+        kind: "list",
+        itemLabel: "Acara",
+        itemFields: [
+          { key: "name", label: "Nama acara", kind: "text" },
+          { key: "start", label: "Mulai", kind: "datetime" },
+          { key: "end", label: "Selesai (mis. 11.00 atau Selesai)", kind: "text" },
+          { key: "place", label: "Tempat", kind: "text" },
+          { key: "address", label: "Alamat", kind: "textarea" },
+          { key: "map", label: "Link Google Maps", kind: "url" },
+        ],
+      },
+    ],
+    defaults: {
+      heading: "Waktu & Tempat",
+      zone: "WIB",
+      items: [
+        { name: "Akad Nikah", start: "2026-12-20T08:00", end: "10.00", place: "Masjid Agung", address: "Jl. Jenderal Sudirman No. 1, Purwokerto", map: "https://maps.google.com/?q=Purwokerto" },
+        { name: "Resepsi", start: "2026-12-20T11:00", end: "Selesai", place: "Gedung Serbaguna", address: "Jl. Gatot Subroto No. 10, Purwokerto", map: "https://maps.google.com/?q=Purwokerto" },
+      ],
+    },
+  },
+  countdown: {
+    type: "countdown",
+    for: "invitation",
+    label: "Hitung Mundur",
+    description: "Hari, jam, menit menuju acara",
+    fields: [
+      { key: "heading", label: "Judul", kind: "text" },
+      { key: "target", label: "Tanggal & jam acara", kind: "datetime" },
+      { key: "zone", label: "Zona waktu", kind: "select", options: ZONES },
+      { key: "doneText", label: "Teks setelah acara dimulai", kind: "text" },
+    ],
+    defaults: { heading: "Menuju hari bahagia", target: "2026-12-20T08:00", zone: "WIB", doneText: "Acara sedang berlangsung / telah selesai" },
+  },
+  story: {
+    type: "story",
+    for: "invitation",
+    label: "Kisah",
+    description: "Perjalanan kisah (love story) atau linimasa",
+    fields: [
+      { key: "heading", label: "Judul", kind: "text" },
+      {
+        key: "items",
+        label: "Momen",
+        kind: "list",
+        itemLabel: "Momen",
+        itemFields: [
+          { key: "date", label: "Waktu", kind: "text" },
+          { key: "title", label: "Judul", kind: "text" },
+          { key: "description", label: "Cerita", kind: "textarea" },
+          { key: "image", label: "Foto", kind: "image" },
+        ],
+      },
+    ],
+    defaults: {
+      heading: "Kisah Kami",
+      items: [
+        { date: "2019", title: "Pertama bertemu", description: "Kami bertemu di sebuah acara kampus.", image: IMG(1) },
+        { date: "2023", title: "Lamaran", description: "Dengan restu keluarga, kami melangkah lebih serius.", image: IMG(2) },
+        { date: "2026", title: "Menikah", description: "Dan kini kami memulai babak baru bersama.", image: IMG(3) },
+      ],
+    },
+  },
+  rsvp: {
+    type: "rsvp",
+    for: "invitation",
+    label: "RSVP & Ucapan",
+    description: "Tamu mengisi kehadiran dan ucapan",
+    fields: [
+      { key: "heading", label: "Judul", kind: "text" },
+      { key: "text", label: "Teks", kind: "textarea" },
+      { key: "maxGuests", label: "Maksimal jumlah orang per tamu", kind: "number", min: 1, max: 4 },
+      {
+        key: "showWishes",
+        label: "Tampilkan ucapan tamu",
+        kind: "select",
+        options: [
+          { value: "ya", label: "Ya" },
+          { value: "tidak", label: "Tidak" },
+        ],
+      },
+    ],
+    defaults: { heading: "Konfirmasi Kehadiran", text: "Mohon konfirmasi kehadiran dan kirimkan doa restu untuk kami.", maxGuests: 2, showWishes: "ya" },
+  },
+  gift: {
+    type: "gift",
+    for: "invitation",
+    label: "Amplop Digital",
+    description: "Nomor rekening/e-wallet dengan tombol salin",
+    fields: [
+      { key: "heading", label: "Judul", kind: "text" },
+      { key: "text", label: "Teks", kind: "textarea" },
+      {
+        key: "items",
+        label: "Rekening / dompet digital",
+        kind: "list",
+        itemLabel: "Rekening",
+        itemFields: [
+          { key: "bank", label: "Bank / e-wallet", kind: "text" },
+          { key: "number", label: "Nomor", kind: "text" },
+          { key: "holder", label: "Atas nama", kind: "text" },
+          { key: "qr", label: "Gambar QR (opsional)", kind: "image" },
+        ],
+      },
+      { key: "address", label: "Alamat kirim kado (opsional)", kind: "textarea" },
+    ],
+    defaults: {
+      heading: "Amplop Digital",
+      text: "Doa restu Anda adalah karunia yang sangat berarti. Jika ingin memberi tanda kasih, dapat melalui:",
+      items: [{ bank: "Nama Bank", number: "0000000000", holder: "Nama Pemilik", qr: "" }],
+      address: "",
+    },
+  },
+  music: {
+    type: "music",
+    for: "invitation",
+    label: "Musik Latar",
+    description: "Tombol musik mengambang (mp3)",
+    fields: [
+      { key: "src", label: "File lagu (mp3)", kind: "audio" },
+      { key: "title", label: "Judul lagu", kind: "text" },
+    ],
+    defaults: { src: "", title: "" },
+  },
+
+  // ================= Umum / portofolio =================
   canvas: {
     type: "canvas",
     label: "Desain Bebas",
@@ -255,6 +461,14 @@ export const SECTION_DEFS: Record<SectionType, SectionDef> = {
 
 export const SECTION_ORDER: SectionType[] = [
   "canvas",
+  "cover",
+  "couple",
+  "event",
+  "countdown",
+  "story",
+  "rsvp",
+  "gift",
+  "music",
   "hero",
   "about",
   "projects",

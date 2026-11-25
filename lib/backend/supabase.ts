@@ -2,7 +2,7 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
-import type { Page, PortfolioData, Project, Role, Section, Template, TemplateCategory, Theme } from "@/lib/types";
+import type { Page, PortfolioData, ProductKind, Project, Role, Rsvp, Section, Template, TemplateCategory, Theme, Wish } from "@/lib/types";
 import type { AuthResult, Backend } from "./types";
 
 interface TemplateRow {
@@ -12,11 +12,12 @@ interface TemplateRow {
   description: string | null;
   tags: string[] | null;
   data: { theme: Theme; sections: Section[]; pages?: Page[] };
+  kind: ProductKind | null;
   published: boolean;
   updated_at: string;
 }
 
-const TEMPLATE_COLUMNS = "id, name, category, description, tags, data, published, updated_at";
+const TEMPLATE_COLUMNS = "id, name, category, description, tags, kind, data, published, updated_at";
 
 function toTemplate(r: TemplateRow): Template {
   return {
@@ -25,6 +26,7 @@ function toTemplate(r: TemplateRow): Template {
     category: r.category as TemplateCategory,
     description: r.description ?? "",
     tags: r.tags ?? [],
+    kind: r.kind ?? "portfolio",
     theme: r.data.theme,
     sections: r.data.sections,
     pages: r.data.pages ?? [],
@@ -57,6 +59,7 @@ interface ProjectRow {
   id: string;
   owner_id: string;
   template_id: string;
+  kind: ProductKind | null;
   name: string;
   data: PortfolioData;
   created_at: string;
@@ -64,7 +67,7 @@ interface ProjectRow {
   publications: { slug: string; published: boolean } | { slug: string; published: boolean }[] | null;
 }
 
-const PROJECT_COLUMNS = "id, owner_id, template_id, name, data, created_at, updated_at, publications(slug, published)";
+const PROJECT_COLUMNS = "id, owner_id, template_id, kind, name, data, created_at, updated_at, publications(slug, published)";
 
 function toProject(r: ProjectRow): Project {
   const pub = Array.isArray(r.publications) ? r.publications[0] : r.publications;
@@ -72,6 +75,7 @@ function toProject(r: ProjectRow): Project {
     id: r.id,
     ownerId: r.owner_id,
     templateId: r.template_id,
+    kind: r.kind ?? "portfolio",
     name: r.name,
     data: r.data,
     createdAt: r.created_at,
@@ -142,11 +146,11 @@ export const supabaseBackend: Backend = {
     return data ? toProject(data as unknown as ProjectRow) : null;
   },
 
-  async createProject(userId, { name, templateId, data }) {
+  async createProject(userId, { name, templateId, kind, data }) {
     const sb = await supabaseServer();
     const { data: row, error } = await sb
       .from("projects")
-      .insert({ owner_id: userId, template_id: templateId, name, data })
+      .insert({ owner_id: userId, template_id: templateId, kind, name, data })
       .select(PROJECT_COLUMNS)
       .single();
     if (error) throw error;
@@ -207,7 +211,7 @@ export const supabaseBackend: Backend = {
 
   async uploadImage(userId, file) {
     const sb = await supabaseServer();
-    const ext = (file.type.split("/")[1] || "png").replace("jpeg", "jpg");
+    const ext = file.type === "audio/mpeg" ? "mp3" : (file.type.split("/")[1] || "png").replace("jpeg", "jpg");
     const objectPath = `${userId}/${randomUUID()}.${ext}`;
     const { error } = await sb.storage.from("assets").upload(objectPath, file, { contentType: file.type });
     if (error) throw error;
@@ -241,6 +245,7 @@ export const supabaseBackend: Backend = {
         category: t.category,
         description: t.description,
         tags: t.tags,
+        kind: t.kind ?? "portfolio",
         data: { theme: t.theme, sections: t.sections, pages: t.pages ?? [] },
         published: !!t.published,
         created_by: userId,
@@ -254,7 +259,7 @@ export const supabaseBackend: Backend = {
   async updateTemplate(id, patch) {
     const sb = await supabaseServer();
     const row: Record<string, unknown> = { updated_at: new Date().toISOString() };
-    for (const k of ["name", "category", "description", "tags", "published"] as const) {
+    for (const k of ["name", "category", "description", "tags", "published", "kind"] as const) {
       if (patch[k] !== undefined) row[k] = patch[k];
     }
     if (patch.theme || patch.sections || patch.pages) {
@@ -283,4 +288,59 @@ export const supabaseBackend: Backend = {
     for (const p of (projects.data ?? []) as { template_id: string }[]) usage[p.template_id] = (usage[p.template_id] ?? 0) + 1;
     return { users: users.count ?? 0, projects: projects.data?.length ?? 0, published: published.count ?? 0, usage };
   },
+
+  async addRsvp(slug, input) {
+    const sb = await supabaseServer();
+    const { data: pub } = await sb.from("publications").select("project_id").eq("slug", slug).eq("published", true).maybeSingle();
+    if (!pub) return null;
+    const { data, error } = await sb
+      .from("rsvps")
+      .insert({ project_id: pub.project_id, ...input })
+      .select("id, name, attendance, guests, message, created_at")
+      .single();
+    if (error || !data) return null;
+    return toRsvp(data as RsvpRow);
+  },
+
+  async listRsvps(projectId, userId) {
+    const sb = await supabaseServer();
+    const { data: own } = await sb.from("projects").select("id").eq("id", projectId).eq("owner_id", userId).maybeSingle();
+    if (!own) return [];
+    const { data } = await sb
+      .from("rsvps")
+      .select("id, name, attendance, guests, message, created_at")
+      .eq("project_id", projectId)
+      .order("created_at", { ascending: false });
+    return ((data ?? []) as RsvpRow[]).map(toRsvp);
+  },
+
+  async listWishes(slug) {
+    const sb = await supabaseServer();
+    const { data: pub } = await sb.from("publications").select("project_id").eq("slug", slug).eq("published", true).maybeSingle();
+    if (!pub) return [];
+    const { data } = await sb
+      .from("rsvps")
+      .select("id, name, attendance, guests, message, created_at")
+      .eq("project_id", pub.project_id)
+      .neq("message", "")
+      .order("created_at", { ascending: false })
+      .limit(200);
+    return ((data ?? []) as RsvpRow[]).map((r): Wish => {
+      const { id, name, attendance, message, createdAt } = toRsvp(r);
+      return { id, name, attendance, message, createdAt };
+    });
+  },
 };
+
+interface RsvpRow {
+  id: string;
+  name: string;
+  attendance: Rsvp["attendance"];
+  guests: number;
+  message: string;
+  created_at: string;
+}
+
+function toRsvp(r: RsvpRow): Rsvp {
+  return { id: r.id, name: r.name, attendance: r.attendance, guests: r.guests, message: r.message, createdAt: r.created_at };
+}

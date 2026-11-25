@@ -1,0 +1,210 @@
+{
+  "id": "tpl-undangan-ultah",
+  "kind": "invitation",
+  "name": "Ulang Tahun Ceria",
+  "category": "ulang-tahun",
+  "description": "Warna pastel ceria dan huruf membulat untuk pesta ulang tahun anak atau dewasa.",
+  "tags": [
+    "ulang tahun",
+    "anak",
+    "ceria"
+  ],
+  "theme": {
+    "fontHeading": "Bricolage Grotesque",
+    "fontBody": "Poppins",
+    "colorPrimary": "#2B1B3D",
+    "colorAccent": "#FF5DA2",
+    "colorBackground": "#FFF5FB",
+    "colorSurface": "#FFE0F0",
+    "radius": "lg",
+    "headingCase": "normal"
+  },
+  "sections": [
+    {
+      "id": "sec-sampul-20",
+      "type": "cover",
+      "props": {
+        "eyebrow": "Undangan Ulang Tahun",
+        "title": "Kayla ke-7 🎉",
+        "subtitle": "Sabtu, 10 Januari 2027",
+        "greeting": "Halo,",
+        "image": "/placeholder/cover-pink.svg",
+        "buttonText": "Lihat Undangan",
+        "buttonLink": ""
+      }
+    },
+    {
+      "id": "sec-musik-21",
+      "type": "music",
+      "props": {
+        "src": "",
+        "title": ""
+      }
+    },
+    {
+      "id": "sec-kartu-22",
+      "type": "canvas",
+      "props": {
+        "height": 520,
+        "background": "theme:bg",
+        "backgroundImage": "",
+        "elements": [
+          {
+            "id": "el-u1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Balon 1",
+            "x": 80,
+            "y": 60,
+            "w": 160,
+            "h": 200,
+            "fill": "theme:accent",
+            "radius": 999
+          },
+          {
+            "id": "el-u2",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Balon 2",
+            "x": 960,
+            "y": 90,
+            "w": 140,
+            "h": 180,
+            "fill": "#FFC145",
+            "radius": 999
+          },
+          {
+            "id": "el-u3",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Balon 3",
+            "x": 860,
+            "y": 300,
+            "w": 110,
+            "h": 140,
+            "fill": "#5DD3FF",
+            "radius": 999
+          },
+          {
+            "id": "el-u4",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Ajakan",
+            "x": 260,
+            "y": 150,
+            "w": 680,
+            "h": 130,
+            "text": "Ayo datang ke\npesta ulang tahunku!",
+            "fontFamily": "heading",
+            "fontSize": 54,
+            "fontWeight": 800,
+            "align": "center",
+            "lineHeight": 1.1,
+            "color": "theme:text"
+          },
+          {
+            "id": "el-u5",
+            "rotation": 0,
+            "opacity": 0.8,
+            "type": "text",
+            "name": "Pesan",
+            "x": 300,
+            "y": 310,
+            "w": 600,
+            "h": 70,
+            "text": "Akan ada kue, games, dan banyak hadiah seru. Jangan lupa pakai baju warna-warni ya!",
+            "fontFamily": "body",
+            "fontSize": 19,
+            "align": "center",
+            "lineHeight": 1.5,
+            "color": "theme:text"
+          },
+          {
+            "id": "el-u6",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "button",
+            "name": "Ke RSVP",
+            "x": 480,
+            "y": 410,
+            "w": 240,
+            "h": 58,
+            "text": "Aku datang! 🎈",
+            "fontFamily": "body",
+            "fontSize": 18,
+            "fontWeight": 700,
+            "align": "center",
+            "color": "#FFFFFF",
+            "fill": "theme:accent",
+            "radius": 999,
+            "link": "#rsvp"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-acara-23",
+      "type": "event",
+      "props": {
+        "heading": "Pesta",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Pesta Ulang Tahun",
+            "start": "2027-01-10T15:00",
+            "end": "18.00",
+            "place": "Rumah Kayla",
+            "address": "Jl. Melati No. 7, Purwokerto",
+            "map": "https://maps.google.com/?q=Purwokerto"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-mundur-24",
+      "type": "countdown",
+      "props": {
+        "heading": "Pesta dimulai dalam",
+        "target": "2027-01-10T15:00",
+        "zone": "WIB",
+        "doneText": "Pestanya sudah dimulai! 🎉"
+      }
+    },
+    {
+      "id": "sec-galeri-25",
+      "type": "gallery",
+      "props": {
+        "heading": "Foto Kayla",
+        "columns": 3,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-rsvp-26",
+      "type": "rsvp",
+      "props": {
+        "heading": "Kamu datang?",
+        "text": "Kabari kami ya, supaya kami bisa menyiapkan kue yang cukup!",
+        "maxGuests": 4,
+        "showWishes": "ya"
+      }
+    }
+  ]
+}

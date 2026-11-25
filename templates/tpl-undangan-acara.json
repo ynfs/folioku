@@ -1,0 +1,119 @@
+{
+  "id": "tpl-undangan-acara",
+  "kind": "invitation",
+  "name": "Undangan Acara & Event",
+  "category": "acara",
+  "description": "Tampilan gelap modern untuk peluncuran produk, seminar, reuni, atau gathering.",
+  "tags": [
+    "event",
+    "seminar",
+    "gathering"
+  ],
+  "theme": {
+    "fontHeading": "Space Grotesk",
+    "fontBody": "Inter",
+    "colorPrimary": "#F2F2F2",
+    "colorAccent": "#FFC145",
+    "colorBackground": "#111318",
+    "colorSurface": "#1C1F26",
+    "radius": "lg",
+    "headingCase": "normal"
+  },
+  "sections": [
+    {
+      "id": "sec-sampul-34",
+      "type": "cover",
+      "props": {
+        "eyebrow": "Anda diundang ke",
+        "title": "Peluncuran Produk 2027",
+        "subtitle": "Jumat, 5 Februari 2027 · Purwokerto",
+        "greeting": "Undangan khusus untuk",
+        "image": "/placeholder/cover-dark.svg",
+        "buttonText": "Lihat Detail",
+        "buttonLink": ""
+      }
+    },
+    {
+      "id": "sec-tentang-35",
+      "type": "about",
+      "props": {
+        "heading": "Tentang acara",
+        "body": "Bergabunglah bersama kami dalam peluncuran produk terbaru, sesi berbagi bersama para pembicara, dan networking dengan komunitas.",
+        "image": "/placeholder/img-4.svg"
+      }
+    },
+    {
+      "id": "sec-agenda-36",
+      "type": "event",
+      "props": {
+        "heading": "Agenda",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Registrasi & Coffee Break",
+            "start": "2027-02-05T13:00",
+            "end": "13.30",
+            "place": "Lobby Hotel",
+            "address": "Jl. Jenderal Sudirman No. 99, Purwokerto",
+            "map": "https://maps.google.com/?q=Purwokerto"
+          },
+          {
+            "name": "Sesi Utama",
+            "start": "2027-02-05T13:30",
+            "end": "16.00",
+            "place": "Ballroom",
+            "address": "Jl. Jenderal Sudirman No. 99, Purwokerto",
+            "map": "https://maps.google.com/?q=Purwokerto"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-pembicara-37",
+      "type": "projects",
+      "props": {
+        "heading": "Pembicara",
+        "items": [
+          {
+            "title": "Nama Pembicara 1",
+            "description": "CEO Perusahaan",
+            "image": "/placeholder/portrait.svg",
+            "link": ""
+          },
+          {
+            "title": "Nama Pembicara 2",
+            "description": "Kepala Produk",
+            "image": "/placeholder/hero.svg",
+            "link": ""
+          },
+          {
+            "title": "Nama Pembicara 3",
+            "description": "Komunitas Kreatif",
+            "image": "/placeholder/img-5.svg",
+            "link": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-mundur-38",
+      "type": "countdown",
+      "props": {
+        "heading": "Acara dimulai dalam",
+        "target": "2027-02-05T13:00",
+        "zone": "WIB",
+        "doneText": "Acara sedang berlangsung"
+      }
+    },
+    {
+      "id": "sec-rsvp-39",
+      "type": "rsvp",
+      "props": {
+        "heading": "Daftar hadir",
+        "text": "Konfirmasi kehadiran Anda agar kami dapat menyiapkan tempat.",
+        "maxGuests": 1,
+        "showWishes": "tidak"
+      }
+    }
+  ]
+}

@@ -6,7 +6,7 @@ import { AppHeader } from "@/components/ui/AppHeader";
 import { DeleteTemplateButton } from "@/components/ui/DeleteTemplateButton";
 import { backend, requireUser } from "@/lib/backend";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
-import { TEMPLATES } from "@/lib/templates";
+import { CATEGORIES, TEMPLATES } from "@/lib/templates";
 import type { Template } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Admin" };
@@ -40,7 +40,13 @@ export default async function AdminPage() {
           <div className="mt-4 flex flex-wrap items-end gap-3">
             <form action={createTemplateAction}>
               <input type="hidden" name="source" value="blank" />
-              <button className="btn-brand">+ Kanvas kosong</button>
+              <input type="hidden" name="kind" value="portfolio" />
+              <button className="btn-brand">+ Kanvas kosong (portofolio)</button>
+            </form>
+            <form action={createTemplateAction}>
+              <input type="hidden" name="source" value="blank" />
+              <input type="hidden" name="kind" value="invitation" />
+              <button className="btn-brand">+ Kanvas kosong (undangan)</button>
             </form>
             <form action={createTemplateAction} className="flex items-end gap-2">
               <div>
@@ -50,6 +56,7 @@ export default async function AdminPage() {
                 <select id="source" name="source" className="input min-w-56">
                   {[...custom, ...TEMPLATES].map((t) => (
                     <option key={t.id} value={t.id}>
+                      {t.kind === "invitation" ? "✉ " : ""}
                       {t.name}
                       {t.builtin ? " (bawaan)" : ""}
                     </option>
@@ -128,8 +135,8 @@ function TemplateCard({ t, usage, children }: { t: Template; usage: number; chil
             </span>
           )}
         </div>
-        <p className="mt-1 text-xs capitalize text-app-muted">
-          {t.category} · dipakai {usage} proyek
+        <p className="mt-1 text-xs text-app-muted">
+          {t.kind === "invitation" ? "Undangan" : "Portofolio"} · {CATEGORIES.find((c) => c.value === t.category)?.label ?? t.category} · dipakai {usage}
         </p>
         {children}
       </div>

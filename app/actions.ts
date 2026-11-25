@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 import { randomUUID } from "node:crypto";
 import { backend, requireUser } from "@/lib/backend";
 import { blankCanvas } from "@/lib/sections";
-import { CATEGORIES, TEMPLATES } from "@/lib/templates";
+import { CATEGORIES, TEMPLATES, parseKind } from "@/lib/templates";
 import { findTemplate } from "@/lib/templates-server";
-import type { PortfolioData, Template, TemplateCategory } from "@/lib/types";
+import type { PortfolioData, ProductKind, Template, TemplateCategory } from "@/lib/types";
 
 export type FormState = { error?: string } | undefined;
 
@@ -58,8 +58,9 @@ export async function createProjectAction(form: FormData) {
   if (!template) throw new Error("Template tidak ditemukan");
 
   const project = await backend.createProject(user.id, {
-    name: `Portofolio ${template.name}`,
+    name: `${template.kind === "invitation" ? "Undangan" : "Portofolio"} ${template.name}`,
     templateId: template.id,
+    kind: template.kind ?? "portfolio",
     data: { theme: structuredClone(template.theme), sections: structuredClone(template.sections), pages: structuredClone(template.pages ?? []) },
   });
   redirect(`/editor/${project.id}`);
@@ -153,23 +154,33 @@ export async function createTemplateAction(form: FormData) {
   const source = String(form.get("source") ?? "blank");
   const projectId = String(form.get("projectId") ?? "");
 
-  let base: { name: string; category: TemplateCategory; description: string; tags: string[]; data: PortfolioData };
+  let base: { name: string; category: TemplateCategory; kind: ProductKind; description: string; tags: string[]; data: PortfolioData };
   if (projectId) {
     const project = await backend.getProject(projectId, user.id);
     if (!project) throw new Error("Proyek tidak ditemukan");
-    base = { name: project.name, category: "modern", description: "", tags: [], data: project.data };
+    const kind = project.kind ?? "portfolio";
+    base = { name: project.name, category: kind === "invitation" ? "pernikahan" : "modern", kind, description: "", tags: [], data: project.data };
   } else if (source !== "blank") {
     const t = await findTemplate(source, { allowDraft: true });
     if (!t) throw new Error("Template sumber tidak ditemukan");
-    base = { name: `${t.name} (salinan)`, category: t.category, description: t.description, tags: t.tags, data: { theme: t.theme, sections: t.sections, pages: t.pages } };
+    base = { name: `${t.name} (salinan)`, category: t.category, kind: t.kind ?? "portfolio", description: t.description, tags: t.tags, data: { theme: t.theme, sections: t.sections, pages: t.pages } };
   } else {
-    base = { name: "Template baru", category: "kreatif", description: "", tags: [], data: { theme: DEFAULT_THEME, sections: [blankCanvas()] } };
+    const kind = parseKind(form.get("kind"));
+    base = {
+      name: kind === "invitation" ? "Template undangan baru" : "Template baru",
+      category: kind === "invitation" ? "pernikahan" : "kreatif",
+      kind,
+      description: "",
+      tags: [],
+      data: { theme: DEFAULT_THEME, sections: [blankCanvas()] },
+    };
   }
 
   const template: Template = {
     id: `tpl-custom-${randomUUID().slice(0, 8)}`,
     name: base.name,
     category: base.category,
+    kind: base.kind,
     description: base.description,
     tags: base.tags,
     theme: structuredClone(base.data.theme),
@@ -210,6 +221,8 @@ export async function updateTemplateMetaAction(id: string, meta: TemplateMeta): 
   await backend.updateTemplate(id, {
     name,
     category: meta.category,
+    // Jenis produk mengikuti kategori (mis. "pernikahan" → undangan).
+    kind: CATEGORIES.find((c) => c.value === meta.category)?.kind ?? "portfolio",
     description: meta.description.trim().slice(0, 200),
     tags: meta.tags.map((t) => t.trim().toLowerCase()).filter(Boolean).slice(0, 10),
     published: !!meta.published,

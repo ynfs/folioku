@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { SectionView } from "@/components/sections";
+import { SiteProvider } from "@/components/sections/site-context";
 import { canvasElements, canvasFonts } from "@/lib/canvas";
 import { fontStack, googleFontsHref } from "@/lib/fonts";
 import { sectionAnchor } from "@/lib/pages";
@@ -66,7 +67,9 @@ export function PortfolioThumb({ data, height = 220 }: { data: PortfolioData; he
   return (
     <div className="relative w-full overflow-hidden" style={{ height, background: data.theme.colorBackground }} aria-hidden>
       <div className="pointer-events-none absolute left-0 top-0 origin-top-left" style={{ width: 1280, transform: `scale(${scale})` }}>
-        <Portfolio data={{ ...data, sections: data.sections.slice(0, 3) }} />
+        <SiteProvider value={{ slug: null, guest: "", editing: true }}>
+          <Portfolio data={{ ...data, sections: data.sections.filter((s) => s.type !== "music").slice(0, 3) }} />
+        </SiteProvider>
       </div>
     </div>
   );

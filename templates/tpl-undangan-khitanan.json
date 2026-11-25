@@ -1,0 +1,166 @@
+{
+  "id": "tpl-undangan-khitanan",
+  "kind": "invitation",
+  "name": "Tasyakuran Khitanan",
+  "category": "khitanan",
+  "description": "Hijau teduh bernuansa islami untuk tasyakuran khitanan atau aqiqah.",
+  "tags": [
+    "khitanan",
+    "aqiqah",
+    "tasyakuran"
+  ],
+  "theme": {
+    "fontHeading": "Cormorant Garamond",
+    "fontBody": "Manrope",
+    "colorPrimary": "#1F3A33",
+    "colorAccent": "#2E7D5B",
+    "colorBackground": "#F5FAF7",
+    "colorSurface": "#DDEFE6",
+    "radius": "sm",
+    "headingCase": "normal"
+  },
+  "sections": [
+    {
+      "id": "sec-sampul-27",
+      "type": "cover",
+      "props": {
+        "eyebrow": "Tasyakuran Khitanan",
+        "title": "Muhammad Fatih",
+        "subtitle": "Ahad, 7 Maret 2027",
+        "greeting": "Kepada Yth. Bapak/Ibu/Saudara/i",
+        "image": "/placeholder/cover-green.svg",
+        "buttonText": "Buka Undangan",
+        "buttonLink": ""
+      }
+    },
+    {
+      "id": "sec-salam-28",
+      "type": "about",
+      "props": {
+        "heading": "Assalamu’alaikum Wr. Wb.",
+        "body": "Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan tasyakuran khitanan putra kami:\n\nMuhammad Fatih\nPutra dari Bapak Hendra & Ibu Nurul\n\nMerupakan suatu kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir.",
+        "image": "/placeholder/portrait.svg"
+      }
+    },
+    {
+      "id": "sec-acara-29",
+      "type": "event",
+      "props": {
+        "heading": "Waktu & Tempat",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Tasyakuran",
+            "start": "2027-03-07T10:00",
+            "end": "Selesai",
+            "place": "Kediaman Keluarga",
+            "address": "Jl. Kenanga No. 12, Purwokerto",
+            "map": "https://maps.google.com/?q=Purwokerto"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-mundur-30",
+      "type": "countdown",
+      "props": {
+        "heading": "Menuju hari tasyakuran",
+        "target": "2027-03-07T10:00",
+        "zone": "WIB",
+        "doneText": "Acara sedang berlangsung / telah selesai"
+      }
+    },
+    {
+      "id": "sec-rsvp-31",
+      "type": "rsvp",
+      "props": {
+        "heading": "Konfirmasi Kehadiran",
+        "text": "Mohon doa dan kehadirannya.",
+        "maxGuests": 2,
+        "showWishes": "ya"
+      }
+    },
+    {
+      "id": "sec-amplop-32",
+      "type": "gift",
+      "props": {
+        "heading": "Tanda Kasih",
+        "text": "Doa restu Anda adalah karunia yang sangat berarti. Jika ingin memberi tanda kasih, dapat melalui:",
+        "items": [
+          {
+            "bank": "Nama Bank",
+            "number": "0000000000",
+            "holder": "Nama Pemilik",
+            "qr": ""
+          },
+          {
+            "bank": "Dompet Digital",
+            "number": "0800000000",
+            "holder": "Nama Pemilik",
+            "qr": ""
+          }
+        ],
+        "address": ""
+      }
+    },
+    {
+      "id": "sec-penutup-33",
+      "type": "canvas",
+      "props": {
+        "height": 420,
+        "background": "theme:surface",
+        "backgroundImage": "",
+        "elements": [
+          {
+            "id": "el-p1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Terima kasih",
+            "x": 100,
+            "y": 110,
+            "w": 1000,
+            "h": 90,
+            "text": "Wassalamu’alaikum Wr. Wb.",
+            "fontFamily": "heading",
+            "fontSize": 64,
+            "fontWeight": 700,
+            "align": "center",
+            "lineHeight": 1.1,
+            "color": "theme:text"
+          },
+          {
+            "id": "el-p2",
+            "rotation": 0,
+            "opacity": 0.75,
+            "type": "text",
+            "name": "Penutup",
+            "x": 200,
+            "y": 220,
+            "w": 800,
+            "h": 80,
+            "text": "Kami yang berbahagia,\nKeluarga Bapak Hendra",
+            "fontFamily": "body",
+            "fontSize": 20,
+            "align": "center",
+            "lineHeight": 1.5,
+            "color": "theme:text"
+          },
+          {
+            "id": "el-p3",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Garis",
+            "x": 540,
+            "y": 320,
+            "w": 120,
+            "h": 4,
+            "fill": "theme:accent",
+            "radius": 2
+          }
+        ]
+      }
+    }
+  ]
+}

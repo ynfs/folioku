@@ -3,28 +3,33 @@ import Link from "next/link";
 import { createProjectAction } from "@/app/actions";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
-import { CATEGORIES } from "@/lib/templates";
+import { ProductTabs } from "@/components/ui/ProductTabs";
+import { CATEGORIES, kindOf, parseKind } from "@/lib/templates";
 import { galleryTemplates } from "@/lib/templates-server";
 
 export const metadata: Metadata = { title: "Galeri template" };
 
 export default async function TemplatesPage(props: PageProps<"/templates">) {
-  const { gaya } = await props.searchParams;
-  const active = typeof gaya === "string" ? gaya : "";
-  const all = await galleryTemplates();
+  const { gaya, jenis } = await props.searchParams;
+  const kind = parseKind(jenis);
+  const base = `/templates?jenis=${kind === "invitation" ? "undangan" : "portofolio"}`;
+  const cats = CATEGORIES.filter((c) => c.kind === kind);
+  const active = typeof gaya === "string" && cats.some((c) => c.value === gaya) ? gaya : "";
+  const all = (await galleryTemplates()).filter((t) => kindOf(t) === kind);
   const list = active ? all.filter((t) => t.category === active) : all;
 
   return (
     <>
       <AppHeader />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
-        <h1 className="text-3xl font-extrabold">Galeri template</h1>
+        <ProductTabs active={kind} hrefFor={(k) => `/templates?jenis=${k === "invitation" ? "undangan" : "portofolio"}`} />
+        <h1 className="mt-6 text-3xl font-extrabold">{kind === "invitation" ? "Template undangan digital" : "Template portofolio"}</h1>
         <p className="mt-1 text-app-muted">Pilih gaya yang paling cocok, nanti semuanya bisa kamu ubah.</p>
 
         <div className="mt-6 flex flex-wrap gap-2">
-          <FilterChip href="/templates" active={!active} label="Semua" />
-          {CATEGORIES.map((c) => (
-            <FilterChip key={c.value} href={`/templates?gaya=${c.value}`} active={active === c.value} label={c.label} />
+          <FilterChip href={base} active={!active} label="Semua" />
+          {cats.map((c) => (
+            <FilterChip key={c.value} href={`${base}&gaya=${c.value}`} active={active === c.value} label={c.label} />
           ))}
         </div>
 
@@ -41,8 +46,8 @@ export default async function TemplatesPage(props: PageProps<"/templates">) {
                       {t.name}
                       {!t.builtin && <span className="ml-2 rounded-full bg-brand/10 px-2 py-0.5 text-[10px] font-bold uppercase text-brand">Baru</span>}
                     </h2>
-                    <span className="rounded-full bg-app-bg px-2 py-0.5 text-xs font-semibold capitalize text-app-muted">
-                      {t.category}
+                    <span className="shrink-0 rounded-full bg-app-bg px-2 py-0.5 text-xs font-semibold text-app-muted">
+                      {CATEGORIES.find((c) => c.value === t.category)?.label ?? t.category}
                     </span>
                   </div>
                   <p className="mt-1 flex-1 text-sm text-app-muted">{t.description}</p>

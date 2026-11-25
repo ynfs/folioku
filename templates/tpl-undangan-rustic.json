@@ -1,0 +1,158 @@
+{
+  "id": "tpl-undangan-rustic",
+  "kind": "invitation",
+  "name": "Pernikahan Rustic Sage",
+  "category": "pernikahan",
+  "description": "Hijau sage yang lembut dan modern untuk pernikahan outdoor atau garden party.",
+  "tags": [
+    "pernikahan",
+    "rustic",
+    "hijau"
+  ],
+  "theme": {
+    "fontHeading": "DM Serif Display",
+    "fontBody": "DM Sans",
+    "colorPrimary": "#2F3A2F",
+    "colorAccent": "#6F8F72",
+    "colorBackground": "#F7F5EF",
+    "colorSurface": "#E6EBDD",
+    "radius": "lg",
+    "headingCase": "normal"
+  },
+  "sections": [
+    {
+      "id": "sec-sampul-12",
+      "type": "cover",
+      "props": {
+        "eyebrow": "Save the Date",
+        "title": "Sari & Yoga",
+        "subtitle": "Minggu, 14 Februari 2027",
+        "greeting": "Kepada Yth. Bapak/Ibu/Saudara/i",
+        "image": "/placeholder/cover-sage.svg",
+        "buttonText": "Buka Undangan",
+        "buttonLink": ""
+      }
+    },
+    {
+      "id": "sec-musik-13",
+      "type": "music",
+      "props": {
+        "src": "",
+        "title": ""
+      }
+    },
+    {
+      "id": "sec-mempelai-14",
+      "type": "couple",
+      "props": {
+        "heading": "Kami yang Berbahagia",
+        "intro": "Dengan memohon rahmat dan ridho Tuhan Yang Maha Esa, kami bermaksud menyelenggarakan pernikahan putra-putri kami:",
+        "name1": "Sari",
+        "full1": "Sari Lestari",
+        "parents1": "Putri dari Bapak Ahmad\n& Ibu Siti",
+        "photo1": "/placeholder/portrait.svg",
+        "ig1": "",
+        "name2": "Yoga",
+        "full2": "Yoga Saputra",
+        "parents2": "Putra dari Bapak Budi\n& Ibu Ani",
+        "photo2": "/placeholder/hero.svg",
+        "ig2": ""
+      }
+    },
+    {
+      "id": "sec-acara-15",
+      "type": "event",
+      "props": {
+        "heading": "Waktu & Tempat",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Pemberkatan",
+            "start": "2027-02-14T09:00",
+            "end": "10.00",
+            "place": "Taman Kota",
+            "address": "Jl. Jenderal Sudirman No. 1, Purwokerto",
+            "map": "https://maps.google.com/?q=Purwokerto"
+          },
+          {
+            "name": "Garden Party",
+            "start": "2027-02-14T16:00",
+            "end": "Selesai",
+            "place": "Kebun Raya",
+            "address": "Jl. Gatot Subroto No. 10, Purwokerto",
+            "map": "https://maps.google.com/?q=Purwokerto"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-mundur-16",
+      "type": "countdown",
+      "props": {
+        "heading": "Hitung mundur",
+        "target": "2027-02-14T09:00",
+        "zone": "WIB",
+        "doneText": "Hari bahagia telah tiba"
+      }
+    },
+    {
+      "id": "sec-galeri-17",
+      "type": "gallery",
+      "props": {
+        "heading": "Momen Kami",
+        "columns": 2,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-4.svg",
+            "caption": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-rsvp-18",
+      "type": "rsvp",
+      "props": {
+        "heading": "Konfirmasi Kehadiran",
+        "text": "Merupakan suatu kehormatan apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
+        "maxGuests": 2,
+        "showWishes": "ya"
+      }
+    },
+    {
+      "id": "sec-amplop-19",
+      "type": "gift",
+      "props": {
+        "heading": "Tanda Kasih",
+        "text": "Doa restu Anda adalah karunia yang sangat berarti. Jika ingin memberi tanda kasih, dapat melalui:",
+        "items": [
+          {
+            "bank": "Nama Bank",
+            "number": "0000000000",
+            "holder": "Nama Pemilik",
+            "qr": ""
+          },
+          {
+            "bank": "Dompet Digital",
+            "number": "0800000000",
+            "holder": "Nama Pemilik",
+            "qr": ""
+          }
+        ],
+        "address": ""
+      }
+    }
+  ]
+}

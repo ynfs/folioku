@@ -1,6 +1,8 @@
-import type { PortfolioData, Project, Publication, Template, User } from "@/lib/types";
+import type { PortfolioData, ProductKind, Project, Publication, Rsvp, Template, User, Wish } from "@/lib/types";
 
-export type TemplatePatch = Partial<Pick<Template, "name" | "category" | "description" | "tags" | "published" | "theme" | "sections" | "pages">>;
+export type RsvpInput = Pick<Rsvp, "name" | "attendance" | "guests" | "message">;
+
+export type TemplatePatch = Partial<Pick<Template, "name" | "category" | "description" | "tags" | "published" | "theme" | "sections" | "pages" | "kind">>;
 
 export interface AdminStats {
   users: number;
@@ -26,7 +28,7 @@ export interface Backend {
 
   listProjects(userId: string): Promise<Project[]>;
   getProject(id: string, userId: string): Promise<Project | null>;
-  createProject(userId: string, input: { name: string; templateId: string; data: PortfolioData }): Promise<Project>;
+  createProject(userId: string, input: { name: string; templateId: string; kind: ProductKind; data: PortfolioData }): Promise<Project>;
   updateProject(id: string, userId: string, patch: { name?: string; data?: PortfolioData }): Promise<void>;
   deleteProject(id: string, userId: string): Promise<void>;
 
@@ -44,4 +46,12 @@ export interface Backend {
   updateTemplate(id: string, patch: TemplatePatch): Promise<void>;
   deleteTemplate(id: string): Promise<void>;
   adminStats(): Promise<AdminStats>;
+
+  // ---- RSVP undangan ----
+  /** Menyimpan RSVP untuk undangan yang terbit; null jika undangan tidak ditemukan. */
+  addRsvp(slug: string, input: RsvpInput): Promise<Rsvp | null>;
+  /** Semua RSVP milik proyek (hanya pemilik). */
+  listRsvps(projectId: string, userId: string): Promise<Rsvp[]>;
+  /** Ucapan publik untuk ditampilkan di undangan. */
+  listWishes(slug: string): Promise<Wish[]>;
 }

@@ -6,7 +6,16 @@ import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalList
 import { CSS } from "@dnd-kit/utilities";
 import { FONTS } from "@/lib/fonts";
 import { SECTION_DEFS, SECTION_ORDER } from "@/lib/sections";
-import type { Section, Theme } from "@/lib/types";
+import type { ProductKind, Section, SectionType, Theme } from "@/lib/types";
+
+/** Bagian yang paling cocok dengan produk tampil lebih dulu di "Tambah bagian". */
+function orderFor(kind: ProductKind): SectionType[] {
+  const fits = (t: SectionType) => {
+    const f = SECTION_DEFS[t].for;
+    return !f || f === kind;
+  };
+  return [...SECTION_ORDER.filter(fits), ...SECTION_ORDER.filter((t) => !fits(t))];
+}
 import { ElementPanel, LayersList } from "./ElementPanel";
 import { FieldInput, IconBtn } from "./fields";
 import { currentSections, useEditor } from "./store";
@@ -59,7 +68,7 @@ function SortableRow({ section, index, total }: { section: Section; index: numbe
   );
 }
 
-export function SectionsPanel() {
+export function SectionsPanel({ kind = "portfolio" }: { kind?: ProductKind }) {
   const data = useEditor((s) => s.data);
   const page = useEditor((s) => s.page);
   const sections = currentSections({ data, page });
@@ -103,7 +112,7 @@ export function SectionsPanel() {
               </IconBtn>
             </div>
             <div className="grid max-h-72 gap-1 overflow-y-auto">
-              {SECTION_ORDER.map((type) => (
+              {orderFor(kind).map((type) => (
                 <button
                   key={type}
                   type="button"

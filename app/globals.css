@@ -85,3 +85,33 @@ body {
   border: 2px solid var(--c-text);
   border-radius: var(--radius);
 }
+
+/* ---------- Form undangan (RSVP) ---------- */
+.inv-input {
+  margin-top: 0.25rem;
+  display: block;
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--c-text) 20%, transparent);
+  background: var(--c-bg);
+  color: var(--c-text);
+  padding: 0.6rem 0.75rem;
+  outline: none;
+}
+.inv-input:focus {
+  border-color: var(--c-accent);
+}
+.inv-choice {
+  cursor: pointer;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--c-text) 20%, transparent);
+  padding: 0.55rem 0.25rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.inv-choice:has(input:checked) {
+  border-color: var(--c-accent);
+  background: var(--c-accent);
+  color: var(--c-bg);
+}

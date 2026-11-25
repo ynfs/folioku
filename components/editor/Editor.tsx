@@ -13,8 +13,9 @@ import {
 } from "@/app/actions";
 import { HOME, findSection, getPages, pageSections, resolvePageLinks } from "@/lib/pages";
 import { Portfolio } from "@/lib/renderer/Portfolio";
-import { CATEGORIES } from "@/lib/templates";
+import { CATEGORIES, PRODUCTS } from "@/lib/templates";
 import type { PortfolioData, Project, Template } from "@/lib/types";
+import { SiteProvider } from "@/components/sections/site-context";
 import { CanvasEditable, handleCanvasKey } from "./CanvasEditor";
 import { PagesPanel } from "./PagesPanel";
 import { PropertiesPanel, SectionsPanel, ThemePanel } from "./Panels";
@@ -192,7 +193,7 @@ function EditorInner({ mode }: { mode: EditorMode }) {
         <aside className="flex w-64 shrink-0 flex-col border-r border-app-line bg-app-bg">
           <PagesPanel siteBase={siteBase} />
           <div className="min-h-0 flex-1">
-            <SectionsPanel />
+            <SectionsPanel kind={mode.kind === "project" ? (mode.project.kind ?? "portfolio") : (mode.template.kind ?? "portfolio")} />
           </div>
         </aside>
 
@@ -219,6 +220,7 @@ function EditorInner({ mode }: { mode: EditorMode }) {
               followLink(href);
             }}
           >
+            <SiteProvider value={{ slug: null, guest: "", editing: true }}>
             <Portfolio
               key={page}
               data={preview}
@@ -239,6 +241,7 @@ function EditorInner({ mode }: { mode: EditorMode }) {
                 </div>
               )}
             />
+            </SiteProvider>
             {preview.sections.length === 0 && (
               <div className="p-16 text-center text-app-muted">Halaman kosong. Tambahkan bagian dari panel kiri.</div>
             )}
@@ -310,6 +313,7 @@ function slugify(s: string): string {
 }
 
 function ProjectPublish({ project }: { project: Project }) {
+  const word = project.kind === "invitation" ? "undangan" : "portofolio";
   const [open, setOpen] = useState(false);
   const [state, setState] = useState({ published: project.published, slug: project.slug });
   const [slug, setSlug] = useState(project.slug ?? slugify(project.name));
@@ -348,13 +352,13 @@ function ProjectPublish({ project }: { project: Project }) {
       {open && (
         <div className="absolute right-0 top-12 z-50 w-80 rounded-xl border border-app-line bg-white p-4 shadow-xl">
           <div className="mb-3 flex items-center justify-between">
-            <p className="font-bold">Publikasikan portofolio</p>
+            <p className="font-bold">Publikasikan {word}</p>
             <button type="button" onClick={() => setOpen(false)} className="text-app-muted" aria-label="Tutup">
               ✕
             </button>
           </div>
           <label className="label" htmlFor="slug">
-            Alamat portofolio
+            Alamat {word}
           </label>
           <div className="flex items-center rounded-lg border border-app-line bg-white text-sm focus-within:border-app-fg">
             <span className="pl-3 text-app-muted">/p/</span>
@@ -371,7 +375,7 @@ function ProjectPublish({ project }: { project: Project }) {
           </button>
           {state.published && state.slug && (
             <div className="mt-4 rounded-lg bg-green-50 p-3 text-sm">
-              <p className="font-semibold text-green-800">Portofolio sudah terbit</p>
+              <p className="font-semibold text-green-800">{word === "undangan" ? "Undangan" : "Portofolio"} sudah terbit</p>
               <a href={`/p/${state.slug}`} target="_blank" className="mt-1 block break-all font-semibold text-brand underline">
                 {origin}/p/{state.slug}
               </a>
@@ -456,10 +460,14 @@ function TemplateSettings({ template }: { template: Template }) {
               value={meta.category}
               onChange={(e) => setMeta({ ...meta, category: e.target.value as TemplateMeta["category"] })}
             >
-              {CATEGORIES.map((c) => (
-                <option key={c.value} value={c.value}>
-                  {c.label}
-                </option>
+              {PRODUCTS.map((p) => (
+                <optgroup key={p.value} label={p.label}>
+                  {CATEGORIES.filter((c) => c.kind === p.value).map((c) => (
+                    <option key={c.value} value={c.value}>
+                      {c.label}
+                    </option>
+                  ))}
+                </optgroup>
               ))}
             </select>
           </div>

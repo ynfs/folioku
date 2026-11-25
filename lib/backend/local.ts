@@ -3,7 +3,7 @@ import { createHmac, randomBytes, randomUUID, scryptSync, timingSafeEqual } from
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { cookies } from "next/headers";
-import type { PortfolioData, Project, Role, Template, User } from "@/lib/types";
+import type { PortfolioData, Project, Role, Rsvp, Template, User } from "@/lib/types";
 import type { AdminStats, AuthResult, Backend } from "./types";
 
 // MODE LOKAL: semua data disimpan di ./data/db.json dan gambar di ./data/uploads.
@@ -24,10 +24,14 @@ interface StoredTemplate extends Template {
   createdAt: string;
   updatedAt: string;
 }
+interface StoredRsvp extends Rsvp {
+  projectId: string;
+}
 interface DB {
   users: StoredUser[];
   projects: Project[];
   templates: StoredTemplate[];
+  rsvps: StoredRsvp[];
 }
 
 let queue: Promise<unknown> = Promise.resolve();
@@ -35,9 +39,9 @@ let queue: Promise<unknown> = Promise.resolve();
 async function readDB(): Promise<DB> {
   try {
     const db = JSON.parse(await fs.readFile(DB_FILE, "utf8")) as Partial<DB>;
-    return { users: db.users ?? [], projects: db.projects ?? [], templates: db.templates ?? [] };
+    return { users: db.users ?? [], projects: db.projects ?? [], templates: db.templates ?? [], rsvps: db.rsvps ?? [] };
   } catch {
-    return { users: [], projects: [], templates: [] };
+    return { users: [], projects: [], templates: [], rsvps: [] };
   }
 }
 
@@ -180,12 +184,13 @@ export const localBackend: Backend = {
     return (await readDB()).projects.find((p) => p.id === id && p.ownerId === userId) ?? null;
   },
 
-  async createProject(userId, { name, templateId, data }) {
+  async createProject(userId, { name, templateId, kind, data }) {
     const now = new Date().toISOString();
     const project: Project = {
       id: randomUUID(),
       ownerId: userId,
       templateId,
+      kind,
       name,
       data,
       createdAt: now,
@@ -211,7 +216,9 @@ export const localBackend: Backend = {
 
   async deleteProject(id, userId) {
     await mutate((db) => {
+      const before = db.projects.length;
       db.projects = db.projects.filter((p) => !(p.id === id && p.ownerId === userId));
+      if (db.projects.length !== before) db.rsvps = db.rsvps.filter((r) => r.projectId !== id);
     });
   },
 
@@ -244,7 +251,7 @@ export const localBackend: Backend = {
   },
 
   async uploadImage(_userId, file) {
-    const ext = (file.type.split("/")[1] || "png").replace("jpeg", "jpg").replace("svg+xml", "svg");
+    const ext = file.type === "audio/mpeg" ? "mp3" : (file.type.split("/")[1] || "png").replace("jpeg", "jpg");
     const name = `${randomUUID()}.${ext}`;
     await fs.mkdir(UPLOAD_DIR, { recursive: true });
     await fs.writeFile(path.join(UPLOAD_DIR, name), Buffer.from(await file.arrayBuffer()));
@@ -293,9 +300,44 @@ export const localBackend: Backend = {
     for (const p of db.projects) usage[p.templateId] = (usage[p.templateId] ?? 0) + 1;
     return { users: db.users.length, projects: db.projects.length, published: db.projects.filter((p) => p.published).length, usage };
   },
+
+  async addRsvp(slug, input) {
+    return mutate((db) => {
+      const p = db.projects.find((x) => x.slug === slug && x.published);
+      if (!p) return null;
+      if (db.rsvps.filter((r) => r.projectId === p.id).length >= MAX_RSVP_PER_PROJECT) return null;
+      const rsvp: StoredRsvp = { ...input, id: randomUUID(), projectId: p.id, createdAt: new Date().toISOString() };
+      db.rsvps.push(rsvp);
+      const { projectId: _omit, ...pub } = rsvp;
+      void _omit;
+      return pub;
+    });
+  },
+
+  async listRsvps(projectId, userId) {
+    const db = await readDB();
+    if (!db.projects.some((p) => p.id === projectId && p.ownerId === userId)) return [];
+    return db.rsvps
+      .filter((r) => r.projectId === projectId)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .map(({ projectId: _omit, ...r }) => (void _omit, r));
+  },
+
+  async listWishes(slug) {
+    const db = await readDB();
+    const p = db.projects.find((x) => x.slug === slug && x.published);
+    if (!p) return [];
+    return db.rsvps
+      .filter((r) => r.projectId === p.id && r.message)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .slice(0, 200)
+      .map(({ id, name, attendance, message, createdAt }) => ({ id, name, attendance, message, createdAt }));
+  },
 };
 
+const MAX_RSVP_PER_PROJECT = 5000;
+
 function toTemplate(t: StoredTemplate): Template {
-  const { id, name, category, description, tags, theme, sections, pages, published, updatedAt } = t;
-  return { id, name, category, description, tags, theme, sections, pages: pages ?? [], published: !!published, builtin: false, updatedAt };
+  const { id, name, category, description, tags, kind, theme, sections, pages, published, updatedAt } = t;
+  return { id, name, category, description, tags, kind: kind ?? "portfolio", theme, sections, pages: pages ?? [], published: !!published, builtin: false, updatedAt };
 }

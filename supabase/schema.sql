@@ -43,6 +43,19 @@ alter table public.templates add column if not exists description text not null 
 alter table public.templates add column if not exists published boolean not null default false;
 alter table public.templates add column if not exists created_by uuid references public.users (id) on delete set null;
 alter table public.templates add column if not exists updated_at timestamptz not null default now();
+alter table public.templates add column if not exists kind text not null default 'portfolio' check (kind in ('portfolio', 'invitation'));
+
+-- ---------- rsvps: konfirmasi kehadiran & ucapan tamu undangan ----------
+create table if not exists public.rsvps (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.projects (id) on delete cascade,
+  name text not null check (char_length(name) between 1 and 60),
+  attendance text not null check (attendance in ('hadir', 'tidak', 'ragu')),
+  guests int not null default 1 check (guests between 1 and 10),
+  message text not null default '' check (char_length(message) <= 500),
+  created_at timestamptz not null default now()
+);
+create index if not exists rsvps_project_idx on public.rsvps (project_id, created_at desc);
 
 -- ---------- projects: salinan template milik klien ----------
 create table if not exists public.projects (
@@ -55,6 +68,7 @@ create table if not exists public.projects (
   updated_at timestamptz not null default now()
 );
 create index if not exists projects_owner_idx on public.projects (owner_id, updated_at desc);
+alter table public.projects add column if not exists kind text not null default 'portfolio' check (kind in ('portfolio', 'invitation'));
 
 -- ---------- publications: slug publik dan status publish ----------
 create table if not exists public.publications (
@@ -83,6 +97,7 @@ alter table public.templates enable row level security;
 alter table public.projects enable row level security;
 alter table public.publications enable row level security;
 alter table public.assets enable row level security;
+alter table public.rsvps enable row level security;
 
 create or replace function public.is_admin()
 returns boolean language sql stable security definer set search_path = public as $$
@@ -125,6 +140,18 @@ create policy publications_owner on public.publications for all
               and exists (select 1 from public.projects pr where pr.id = project_id and pr.owner_id = auth.uid()));
 drop policy if exists publications_public on public.publications;
 create policy publications_public on public.publications for select using (published);
+
+-- rsvps: siapa pun boleh mengisi & membaca ucapan undangan yang terbit; pemilik boleh menghapus
+drop policy if exists rsvps_insert_public on public.rsvps;
+create policy rsvps_insert_public on public.rsvps for insert
+  with check (exists (select 1 from public.publications p where p.project_id = rsvps.project_id and p.published));
+drop policy if exists rsvps_read on public.rsvps;
+create policy rsvps_read on public.rsvps for select
+  using (exists (select 1 from public.publications p where p.project_id = rsvps.project_id and p.published)
+         or exists (select 1 from public.projects pr where pr.id = rsvps.project_id and pr.owner_id = auth.uid()));
+drop policy if exists rsvps_owner_delete on public.rsvps;
+create policy rsvps_owner_delete on public.rsvps for delete
+  using (exists (select 1 from public.projects pr where pr.id = rsvps.project_id and pr.owner_id = auth.uid()));
 
 -- assets: hanya pemilik
 drop policy if exists assets_owner on public.assets;

@@ -1,0 +1,261 @@
+{
+  "id": "tpl-undangan-elegan",
+  "kind": "invitation",
+  "name": "Pernikahan Elegan Emas",
+  "category": "pernikahan",
+  "description": "Krem dan emas dengan huruf serif klasik — lengkap dari sampul sampai amplop digital.",
+  "tags": [
+    "pernikahan",
+    "elegan",
+    "emas"
+  ],
+  "theme": {
+    "fontHeading": "Playfair Display",
+    "fontBody": "Lora",
+    "colorPrimary": "#3B2F2F",
+    "colorAccent": "#B08D57",
+    "colorBackground": "#FFFBF5",
+    "colorSurface": "#F4EBDD",
+    "radius": "sm",
+    "headingCase": "normal"
+  },
+  "sections": [
+    {
+      "id": "sec-sampul-1",
+      "type": "cover",
+      "props": {
+        "eyebrow": "The Wedding of",
+        "title": "Rina & Dimas",
+        "subtitle": "Sabtu, 20 Desember 2026",
+        "greeting": "Kepada Yth. Bapak/Ibu/Saudara/i",
+        "image": "/placeholder/cover-gold.svg",
+        "buttonText": "Buka Undangan",
+        "buttonLink": ""
+      }
+    },
+    {
+      "id": "sec-musik-2",
+      "type": "music",
+      "props": {
+        "src": "",
+        "title": ""
+      }
+    },
+    {
+      "id": "sec-ayat-3",
+      "type": "testimonial",
+      "props": {
+        "quote": "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu agar kamu merasa tenteram kepadanya.",
+        "author": "QS. Ar-Rum: 21",
+        "role": ""
+      }
+    },
+    {
+      "id": "sec-mempelai-4",
+      "type": "couple",
+      "props": {
+        "heading": "Mempelai",
+        "intro": "Dengan memohon rahmat dan ridho Tuhan Yang Maha Esa, kami bermaksud menyelenggarakan pernikahan putra-putri kami:",
+        "name1": "Rina",
+        "full1": "Rina Wulandari, S.Ds.",
+        "parents1": "Putri dari Bapak Ahmad\n& Ibu Siti",
+        "photo1": "/placeholder/portrait.svg",
+        "ig1": "",
+        "name2": "Dimas",
+        "full2": "Dimas Pratama, S.T.",
+        "parents2": "Putra dari Bapak Budi\n& Ibu Ani",
+        "photo2": "/placeholder/hero.svg",
+        "ig2": ""
+      }
+    },
+    {
+      "id": "sec-mundur-5",
+      "type": "countdown",
+      "props": {
+        "heading": "Menuju hari bahagia",
+        "target": "2026-12-20T08:00",
+        "zone": "WIB",
+        "doneText": "Hari bahagia telah tiba"
+      }
+    },
+    {
+      "id": "sec-acara-6",
+      "type": "event",
+      "props": {
+        "heading": "Waktu & Tempat",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Akad Nikah",
+            "start": "2026-12-20T08:00",
+            "end": "10.00",
+            "place": "Masjid Agung",
+            "address": "Jl. Jenderal Sudirman No. 1, Purwokerto",
+            "map": "https://maps.google.com/?q=Purwokerto"
+          },
+          {
+            "name": "Resepsi",
+            "start": "2026-12-20T11:00",
+            "end": "Selesai",
+            "place": "Gedung Serbaguna",
+            "address": "Jl. Gatot Subroto No. 10, Purwokerto",
+            "map": "https://maps.google.com/?q=Purwokerto"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-kisah-7",
+      "type": "story",
+      "props": {
+        "heading": "Kisah Kami",
+        "items": [
+          {
+            "date": "2019",
+            "title": "Pertama bertemu",
+            "description": "Kami bertemu di sebuah acara kampus dan mulai berteman.",
+            "image": "/placeholder/img-1.svg"
+          },
+          {
+            "date": "2023",
+            "title": "Lamaran",
+            "description": "Dengan restu keluarga, kami melangkah lebih serius.",
+            "image": "/placeholder/img-2.svg"
+          },
+          {
+            "date": "2026",
+            "title": "Menikah",
+            "description": "Kini kami siap memulai babak baru bersama.",
+            "image": "/placeholder/img-3.svg"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-galeri-8",
+      "type": "gallery",
+      "props": {
+        "heading": "Galeri",
+        "columns": 3,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-4.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-5.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-6.svg",
+            "caption": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-rsvp-9",
+      "type": "rsvp",
+      "props": {
+        "heading": "Konfirmasi Kehadiran",
+        "text": "Merupakan suatu kehormatan apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
+        "maxGuests": 2,
+        "showWishes": "ya"
+      }
+    },
+    {
+      "id": "sec-amplop-10",
+      "type": "gift",
+      "props": {
+        "heading": "Amplop Digital",
+        "text": "Doa restu Anda adalah karunia yang sangat berarti. Jika ingin memberi tanda kasih, dapat melalui:",
+        "items": [
+          {
+            "bank": "Nama Bank",
+            "number": "0000000000",
+            "holder": "Nama Pemilik",
+            "qr": ""
+          },
+          {
+            "bank": "Dompet Digital",
+            "number": "0800000000",
+            "holder": "Nama Pemilik",
+            "qr": ""
+          }
+        ],
+        "address": ""
+      }
+    },
+    {
+      "id": "sec-penutup-11",
+      "type": "canvas",
+      "props": {
+        "height": 420,
+        "background": "theme:surface",
+        "backgroundImage": "",
+        "elements": [
+          {
+            "id": "el-p1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Terima kasih",
+            "x": 100,
+            "y": 110,
+            "w": 1000,
+            "h": 90,
+            "text": "Terima kasih",
+            "fontFamily": "heading",
+            "fontSize": 64,
+            "fontWeight": 700,
+            "align": "center",
+            "lineHeight": 1.1,
+            "color": "theme:text"
+          },
+          {
+            "id": "el-p2",
+            "rotation": 0,
+            "opacity": 0.75,
+            "type": "text",
+            "name": "Penutup",
+            "x": 200,
+            "y": 220,
+            "w": 800,
+            "h": 80,
+            "text": "Atas kehadiran dan doa restu Bapak/Ibu/Saudara/i, kami ucapkan terima kasih.\nRina & Dimas",
+            "fontFamily": "body",
+            "fontSize": 20,
+            "align": "center",
+            "lineHeight": 1.5,
+            "color": "theme:text"
+          },
+          {
+            "id": "el-p3",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Garis",
+            "x": 540,
+            "y": 320,
+            "w": 120,
+            "h": 4,
+            "fill": "theme:accent",
+            "radius": 2
+          }
+        ]
+      }
+    }
+  ]
+}

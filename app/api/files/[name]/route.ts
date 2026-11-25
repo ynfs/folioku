@@ -8,11 +8,12 @@ const TYPES: Record<string, string> = {
   jpg: "image/jpeg",
   webp: "image/webp",
   gif: "image/gif",
+  mp3: "audio/mpeg",
 };
 
 export async function GET(_req: Request, ctx: RouteContext<"/api/files/[name]">) {
   const { name } = await ctx.params;
-  const match = /^[a-f0-9-]{36}\.(png|jpg|webp|gif)$/.exec(name);
+  const match = /^[a-f0-9-]{36}\.(png|jpg|webp|gif|mp3)$/.exec(name);
   if (!match) return new Response("Not found", { status: 404 });
   try {
     const buf = await fs.readFile(path.join(UPLOAD_DIR, name));

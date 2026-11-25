@@ -27,7 +27,16 @@ export type SectionType =
   | "skills"
   | "testimonial"
   | "contact"
-  | "canvas";
+  | "canvas"
+  // ---- khusus undangan digital ----
+  | "cover"
+  | "couple"
+  | "event"
+  | "countdown"
+  | "story"
+  | "rsvp"
+  | "gift"
+  | "music";
 
 /** Elemen di bagian "Desain Bebas" (kanvas ala Figma). Satuan posisi = piksel desain
  *  pada frame selebar CANVAS_WIDTH, lalu diskalakan proporsional saat ditampilkan. */
@@ -92,13 +101,21 @@ export interface PortfolioData {
   pages?: Page[];
 }
 
+/** Produk Safantara: portofolio/company profile atau undangan digital. */
+export type ProductKind = "portfolio" | "invitation";
+
 export type TemplateCategory =
   | "modern"
   | "minimalis"
   | "klasik"
   | "retro"
   | "editorial"
-  | "kreatif";
+  | "kreatif"
+  // undangan
+  | "pernikahan"
+  | "ulang-tahun"
+  | "khitanan"
+  | "acara";
 
 export interface Template extends PortfolioData {
   id: string;
@@ -106,6 +123,8 @@ export interface Template extends PortfolioData {
   category: TemplateCategory;
   description: string;
   tags: string[];
+  /** Jenis produk; kosong = portofolio */
+  kind?: ProductKind;
   /** true untuk template bawaan (file JSON), false untuk buatan admin */
   builtin?: boolean;
   /** Template buatan admin hanya tampil di galeri jika diterbitkan */
@@ -126,6 +145,8 @@ export interface Project {
   id: string;
   ownerId: string;
   templateId: string;
+  /** Jenis produk; kosong = portofolio */
+  kind?: ProductKind;
   name: string;
   data: PortfolioData;
   createdAt: string;
@@ -141,3 +162,18 @@ export interface Publication {
   data: PortfolioData;
   ownerName: string;
 }
+
+/** Konfirmasi kehadiran + ucapan dari tamu undangan. */
+export type Attendance = "hadir" | "tidak" | "ragu";
+
+export interface Rsvp {
+  id: string;
+  name: string;
+  attendance: Attendance;
+  guests: number;
+  message: string;
+  createdAt: string;
+}
+
+/** Ucapan yang boleh ditampilkan publik di halaman undangan. */
+export type Wish = Pick<Rsvp, "id" | "name" | "attendance" | "message" | "createdAt">;

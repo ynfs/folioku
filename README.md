@@ -1,8 +1,8 @@
 # Safantara
 
-Platform pembuat portofolio berbasis template. Admin menyediakan koleksi template dari gaya modern sampai klasik, lalu pengguna atau klien dapat memilih, mengedit, menambah, menghapus bagian, dan mempublikasikan portofolio mereka tanpa perlu menulis kode.
+Platform pembuat **portofolio/company profile** dan **undangan digital** berbasis template. Admin menyediakan koleksi template dari gaya modern sampai klasik, lalu pengguna atau klien dapat memilih, mengedit, menambah, menghapus bagian, dan mempublikasikan portofolio mereka tanpa perlu menulis kode.
 
-> Safantara adalah platform pembuat portofolio.
+> Beranda punya dua tab produk: **Portofolio & Company Profile** dan **Undangan Digital**. Keduanya memakai editor, template, multi-halaman, dan Desain Bebas yang sama.
 
 ---
 
@@ -36,6 +36,16 @@ Platform pembuat portofolio berbasis template. Admin menyediakan koleksi templat
 - Dashboard untuk mengelola beberapa proyek portofolio
 - Publish ke link publik (saat ini `/p/namaklien`; subdomain `namaklien.safantara.com` menyusul)
 - Ekspor ke PDF
+
+### Undangan Digital
+Untuk pernikahan, ulang tahun, khitanan/aqiqah, dan acara/event. 5 template bawaan.
+- **Sampul** dengan nama tamu otomatis dari link: `/p/nama-undangan?to=Budi` → "Kepada Yth. Budi". Teks `{{tamu}}` di bagian mana pun juga diganti nama tamu
+- **Mempelai**, **Acara** (tanggal, jam, zona WIB/WITA/WIT, peta, simpan ke Google Calendar), **Hitung mundur**, **Kisah**, **Galeri**
+- **RSVP & ucapan**: tamu mengisi kehadiran, jumlah orang, dan ucapan; ucapan tampil di undangan
+- **Amplop digital**: rekening/e-wallet dengan tombol salin dan QR opsional
+- **Musik latar** (mp3, maks. 10 MB) diputar saat tamu menekan "Buka Undangan"
+- Dashboard **Tamu & RSVP**: ringkasan kehadiran, tabel RSVP + unduh CSV, pembuat link per tamu, salin pesan, dan kirim lewat WhatsApp
+- Formulir RSVP dilindungi kolom jebakan bot dan batas kiriman per IP
 
 ### Desain Bebas (ala Figma)
 Bagian **Desain Bebas** adalah kanvas tempat elemen bisa ditaruh di mana saja:
@@ -120,7 +130,9 @@ safantara/
 │   ├── p/[slug]/            # Portofolio publik (beranda)
 │   ├── p/[slug]/[page]/     # Halaman tambahan portofolio publik
 │   ├── admin/               # Panel admin & pembuat template
-│   ├── api/upload/          # Unggah gambar
+│   ├── api/upload/          # Unggah gambar & lagu mp3
+│   ├── api/rsvp/            # RSVP & ucapan tamu undangan
+│   ├── (dashboard)/dashboard/undangan/[id]/  # Tamu & RSVP
 │   ├── api/files/[name]/    # Menyajikan gambar (mode lokal)
 │   └── actions.ts           # Server action: akun, proyek, publish
 ├── components/
@@ -279,6 +291,7 @@ Jangan pernah mengunggah `.env.local` ke repository publik.
 - [ ] Custom domain
 - [x] Pembuat template dan editor Desain Bebas (ala Figma)
 - [x] Multi-halaman: tombol membuka halaman lain
+- [x] Undangan digital: nama tamu, RSVP, amplop digital, musik, link per tamu
 - [ ] Panel admin lengkap (kelola pengguna)
 - [ ] Tata letak khusus HP untuk Desain Bebas
 
