@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+/* ---------- Aplikasi Folioku ---------- */
+:root {
+  --app-bg: #f7f6f3;
+  --app-fg: #1b1b1b;
+  --app-muted: #6b6b6b;
+  --app-line: #e4e2dc;
+  --app-card: #ffffff;
+  --app-brand: #ff5a36;
+}
+
+@theme inline {
+  --color-app-bg: var(--app-bg);
+  --color-app-fg: var(--app-fg);
+  --color-app-muted: var(--app-muted);
+  --color-app-line: var(--app-line);
+  --color-app-card: var(--app-card);
+  --color-brand: var(--app-brand);
+  --font-sans: var(--font-app), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--app-bg);
+  color: var(--app-fg);
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition disabled:opacity-50;
+}
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition disabled:opacity-50 bg-app-fg text-white hover:bg-black;
+}
+.btn-brand {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition disabled:opacity-50 bg-brand text-white hover:brightness-95;
+}
+.btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition disabled:opacity-50 border border-app-line bg-white text-app-fg hover:bg-app-bg;
+}
+.input {
+  @apply w-full rounded-lg border border-app-line bg-white px-3 py-2 text-sm outline-none focus:border-app-fg;
+}
+.label {
+  @apply mb-1 block text-xs font-semibold text-app-muted;
+}
+
+/* ---------- Portofolio (hasil render template) ---------- */
+.pf-root {
+  container-type: inline-size;
+  font-family: var(--fb);
+  color: var(--c-text);
+  background: var(--c-bg);
+}
+.pf-h {
+  font-family: var(--fh);
+  text-transform: var(--hcase);
+}
+.pf-muted {
+  color: color-mix(in srgb, var(--c-text) 68%, transparent);
+}
+.pf-accent {
+  color: var(--c-accent);
+}
+.pf-img {
+  border-radius: var(--radius);
+}
+.pf-card {
+  background: var(--c-surface);
+  border-radius: var(--radius);
+}
+.pf-surface {
+  background: var(--c-surface);
+}
+.pf-btn {
+  background: var(--c-accent);
+  color: var(--c-bg);
+  border-radius: var(--radius);
+}
+.pf-btn-outline {
+  border: 2px solid var(--c-text);
+  border-radius: var(--radius);
+}

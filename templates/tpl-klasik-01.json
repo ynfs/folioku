@@ -1,0 +1,98 @@
+{
+  "id": "tpl-klasik-01",
+  "name": "Klasik Elegan",
+  "category": "klasik",
+  "description": "Huruf serif dan warna krem untuk kesan anggun.",
+  "tags": [
+    "penulis",
+    "serif",
+    "hangat"
+  ],
+  "theme": {
+    "fontHeading": "Playfair Display",
+    "fontBody": "Lora",
+    "colorPrimary": "#2B2118",
+    "colorAccent": "#8C5A2B",
+    "colorBackground": "#FBF7F0",
+    "colorSurface": "#F1E9DC",
+    "radius": "none",
+    "headingCase": "normal"
+  },
+  "sections": [
+    {
+      "id": "sec-6",
+      "type": "hero",
+      "props": {
+        "eyebrow": "Penulis & Editor",
+        "title": "Nama Kamu",
+        "subtitle": "Menulis cerita yang layak dibaca dua kali",
+        "description": "",
+        "image": "/placeholder/portrait.svg",
+        "align": "center",
+        "buttonText": "Baca tulisan",
+        "buttonLink": "#karya"
+      }
+    },
+    {
+      "id": "sec-7",
+      "type": "about",
+      "props": {
+        "heading": "Sekilas",
+        "body": "Saya menulis esai, cerita pendek, dan naskah untuk brand. Tulisan saya pernah dimuat di berbagai media nasional.\n\nSaat tidak menulis, saya mengajar kelas menulis kreatif untuk pemula.",
+        "image": ""
+      }
+    },
+    {
+      "id": "sec-8",
+      "type": "experience",
+      "props": {
+        "heading": "Perjalanan",
+        "items": [
+          {
+            "role": "Editor Senior",
+            "place": "Penerbit Nusantara",
+            "period": "2021 – sekarang",
+            "description": "Menyunting buku fiksi dan nonfiksi."
+          },
+          {
+            "role": "Penulis Lepas",
+            "place": "Berbagai media",
+            "period": "2017 – 2021",
+            "description": "Esai budaya dan perjalanan."
+          },
+          {
+            "role": "S1 Sastra Indonesia",
+            "place": "Universitas Negeri",
+            "period": "2013 – 2017",
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-9",
+      "type": "testimonial",
+      "props": {
+        "quote": "Tulisannya mengalir, hangat, dan selalu tepat waktu. Salah satu penulis terbaik yang pernah bekerja dengan kami.",
+        "author": "Nama Redaktur",
+        "role": "Pemimpin Redaksi"
+      }
+    },
+    {
+      "id": "sec-10",
+      "type": "contact",
+      "props": {
+        "heading": "Surat untuk saya",
+        "text": "Untuk kerja sama penulisan, penyuntingan, atau kelas, silakan hubungi lewat email.",
+        "email": "surat@email.com",
+        "phone": "",
+        "links": [
+          {
+            "label": "Medium",
+            "url": "https://medium.com/"
+          }
+        ]
+      }
+    }
+  ]
+}

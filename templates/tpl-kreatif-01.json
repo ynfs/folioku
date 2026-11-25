@@ -1,0 +1,96 @@
+{
+  "id": "tpl-kreatif-01",
+  "name": "Kreatif Pastel",
+  "category": "kreatif",
+  "description": "Warna pastel lembut dan sudut membulat.",
+  "tags": [
+    "arsitek",
+    "lembut",
+    "pastel"
+  ],
+  "theme": {
+    "fontHeading": "Syne",
+    "fontBody": "Manrope",
+    "colorPrimary": "#2E2A47",
+    "colorAccent": "#6C5CE7",
+    "colorBackground": "#F5F3FF",
+    "colorSurface": "#E8E3FF",
+    "radius": "lg",
+    "headingCase": "normal"
+  },
+  "sections": [
+    {
+      "id": "sec-25",
+      "type": "hero",
+      "props": {
+        "eyebrow": "Arsitek & Desainer Interior",
+        "title": "Ruang yang nyaman untuk ditinggali",
+        "subtitle": "Nama Kamu",
+        "description": "Desain rumah tinggal, kafe, dan ruang kerja.",
+        "image": "/placeholder/img-3.svg",
+        "align": "center",
+        "buttonText": "Lihat proyek",
+        "buttonLink": "#karya"
+      }
+    },
+    {
+      "id": "sec-26",
+      "type": "projects",
+      "props": {
+        "heading": "Proyek",
+        "items": [
+          {
+            "title": "Rumah Tropis",
+            "description": "Rumah dua lantai dengan ventilasi silang.",
+            "image": "/placeholder/img-1.svg",
+            "link": ""
+          },
+          {
+            "title": "Kafe Taman",
+            "description": "Interior kafe 80 kursi.",
+            "image": "/placeholder/img-4.svg",
+            "link": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-27",
+      "type": "about",
+      "props": {
+        "heading": "Pendekatan saya",
+        "body": "Setiap ruang dimulai dari mendengar: kebiasaan, anggaran, dan cahaya matahari di lokasi.",
+        "image": "/placeholder/portrait.svg"
+      }
+    },
+    {
+      "id": "sec-28",
+      "type": "testimonial",
+      "props": {
+        "quote": "Rumah kami jadi terasa lebih luas dan sejuk.",
+        "author": "Keluarga Klien",
+        "role": "Purwokerto"
+      }
+    },
+    {
+      "id": "sec-29",
+      "type": "contact",
+      "props": {
+        "heading": "Konsultasi gratis",
+        "text": "Jadwalkan konsultasi 30 menit untuk membahas rencanamu.",
+        "email": "studio@email.com",
+        "phone": "0812-3333-4444",
+        "links": [
+          {
+            "label": "Instagram",
+            "url": "https://instagram.com/"
+          },
+          {
+            "label": "Pinterest",
+            "url": "https://pinterest.com/"
+          }
+        ]
+      }
+    }
+  ]
+}

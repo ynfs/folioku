@@ -1,0 +1,112 @@
+{
+  "id": "tpl-retro-01",
+  "name": "Retro Cerah",
+  "category": "retro",
+  "description": "Warna berani dan huruf tebal ala poster 70-an.",
+  "tags": [
+    "ilustrator",
+    "berani",
+    "warna"
+  ],
+  "theme": {
+    "fontHeading": "Archivo Black",
+    "fontBody": "Space Grotesk",
+    "colorPrimary": "#1F1A17",
+    "colorAccent": "#E4572E",
+    "colorBackground": "#F6E7C8",
+    "colorSurface": "#F2C14E",
+    "radius": "lg",
+    "headingCase": "uppercase"
+  },
+  "sections": [
+    {
+      "id": "sec-11",
+      "type": "hero",
+      "props": {
+        "eyebrow": "Ilustrator",
+        "title": "Gambar penuh warna untuk cerita yang ceria",
+        "subtitle": "Nama Kamu",
+        "description": "Ilustrasi untuk buku anak, kemasan, dan mural.",
+        "image": "/placeholder/img-5.svg",
+        "align": "left",
+        "buttonText": "Intip galeri",
+        "buttonLink": "#galeri"
+      }
+    },
+    {
+      "id": "sec-12",
+      "type": "gallery",
+      "props": {
+        "heading": "Galeri",
+        "columns": 3,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-4.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-5.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-6.svg",
+            "caption": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-13",
+      "type": "skills",
+      "props": {
+        "heading": "Bisa bantu apa?",
+        "items": [
+          {
+            "name": "Buku anak",
+            "detail": "Ilustrasi & tata letak"
+          },
+          {
+            "name": "Kemasan",
+            "detail": "Karakter & label"
+          },
+          {
+            "name": "Mural",
+            "detail": "Dinding kafe & sekolah"
+          },
+          {
+            "name": "Stiker",
+            "detail": "Merchandise"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-14",
+      "type": "contact",
+      "props": {
+        "heading": "Ayo ngobrol!",
+        "text": "Kirim brief singkat proyekmu, nanti saya kirim penawaran.",
+        "email": "halo@email.com",
+        "phone": "0812-0000-0000",
+        "links": [
+          {
+            "label": "Instagram",
+            "url": "https://instagram.com/"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "id": "tpl-editorial-01",
+  "name": "Editorial Majalah",
+  "category": "editorial",
+  "description": "Tata letak ala majalah dengan foto besar.",
+  "tags": [
+    "fotografer",
+    "foto",
+    "majalah"
+  ],
+  "theme": {
+    "fontHeading": "DM Serif Display",
+    "fontBody": "DM Sans",
+    "colorPrimary": "#141414",
+    "colorAccent": "#B4232A",
+    "colorBackground": "#FFFFFF",
+    "colorSurface": "#F2F0EB",
+    "radius": "none",
+    "headingCase": "normal"
+  },
+  "sections": [
+    {
+      "id": "sec-15",
+      "type": "hero",
+      "props": {
+        "eyebrow": "Fotografer",
+        "title": "Cahaya, wajah, dan cerita di baliknya",
+        "subtitle": "Nama Kamu — Fotografi potret & produk",
+        "description": "",
+        "image": "/placeholder/cover.svg",
+        "align": "cover",
+        "buttonText": "Lihat portofolio",
+        "buttonLink": "#galeri"
+      }
+    },
+    {
+      "id": "sec-16",
+      "type": "gallery",
+      "props": {
+        "heading": "Karya terbaru",
+        "columns": 2,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": "Seri 1"
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": "Seri 2"
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": "Seri 3"
+          },
+          {
+            "image": "/placeholder/img-4.svg",
+            "caption": "Seri 4"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-17",
+      "type": "about",
+      "props": {
+        "heading": "Di balik lensa",
+        "body": "Saya memotret untuk majalah, brand fesyen, dan keluarga. Gaya saya natural, memanfaatkan cahaya yang ada.",
+        "image": "/placeholder/portrait.svg"
+      }
+    },
+    {
+      "id": "sec-18",
+      "type": "testimonial",
+      "props": {
+        "quote": "Fotonya membuat produk kami terlihat jauh lebih premium.",
+        "author": "Nama Klien",
+        "role": "Pemilik Brand Fesyen"
+      }
+    },
+    {
+      "id": "sec-19",
+      "type": "contact",
+      "props": {
+        "heading": "Pesan sesi foto",
+        "text": "Ceritakan kebutuhanmu: tanggal, lokasi, dan jenis foto.",
+        "email": "foto@email.com",
+        "phone": "0812-1111-2222",
+        "links": [
+          {
+            "label": "Instagram",
+            "url": "https://instagram.com/"
+          }
+        ]
+      }
+    }
+  ]
+}

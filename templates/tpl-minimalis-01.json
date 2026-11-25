@@ -1,0 +1,118 @@
+{
+  "id": "tpl-minimalis-01",
+  "name": "Minimalis Modern",
+  "category": "minimalis",
+  "description": "Bersih, banyak ruang kosong, fokus pada karya.",
+  "tags": [
+    "desainer",
+    "bersih",
+    "terang"
+  ],
+  "theme": {
+    "fontHeading": "Plus Jakarta Sans",
+    "fontBody": "Inter",
+    "colorPrimary": "#111111",
+    "colorAccent": "#FF5A36",
+    "colorBackground": "#FFFFFF",
+    "colorSurface": "#F4F4F2",
+    "radius": "sm",
+    "headingCase": "normal"
+  },
+  "sections": [
+    {
+      "id": "sec-1",
+      "type": "hero",
+      "props": {
+        "eyebrow": "Desainer Grafis · Purwokerto",
+        "title": "Halo, saya Nama Kamu",
+        "subtitle": "Desainer Grafis",
+        "description": "Saya membantu brand lokal tampil jelas dan berkesan lewat identitas visual yang rapi.",
+        "image": "/placeholder/hero.svg",
+        "align": "left",
+        "buttonText": "Lihat karya",
+        "buttonLink": "#karya"
+      }
+    },
+    {
+      "id": "sec-2",
+      "type": "projects",
+      "props": {
+        "heading": "Proyek pilihan",
+        "items": [
+          {
+            "title": "Identitas Kopi Lokal",
+            "description": "Logo, kemasan, dan panduan brand untuk kedai kopi.",
+            "image": "/placeholder/img-1.svg",
+            "link": ""
+          },
+          {
+            "title": "Aplikasi Kasir UMKM",
+            "description": "Desain UI kasir sederhana untuk warung.",
+            "image": "/placeholder/img-2.svg",
+            "link": ""
+          },
+          {
+            "title": "Kampanye Festival",
+            "description": "Poster dan konten media sosial festival seni.",
+            "image": "/placeholder/img-3.svg",
+            "link": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-3",
+      "type": "about",
+      "props": {
+        "heading": "Tentang saya",
+        "body": "Lima tahun terakhir saya bekerja dengan UMKM, studio, dan lembaga budaya. Saya percaya desain yang baik itu sederhana, jujur, dan mudah diingat.",
+        "image": "/placeholder/portrait.svg"
+      }
+    },
+    {
+      "id": "sec-4",
+      "type": "skills",
+      "props": {
+        "heading": "Layanan",
+        "items": [
+          {
+            "name": "Identitas brand",
+            "detail": "Logo, warna, tipografi"
+          },
+          {
+            "name": "Desain UI",
+            "detail": "Web dan aplikasi"
+          },
+          {
+            "name": "Kemasan",
+            "detail": "Label dan box produk"
+          },
+          {
+            "name": "Media sosial",
+            "detail": "Template konten"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-5",
+      "type": "contact",
+      "props": {
+        "heading": "Mari bekerja sama",
+        "text": "Punya proyek? Kirim pesan dan saya balas dalam 1–2 hari kerja.",
+        "email": "halo@email.com",
+        "phone": "0812-3456-7890",
+        "links": [
+          {
+            "label": "Instagram",
+            "url": "https://instagram.com/"
+          },
+          {
+            "label": "Behance",
+            "url": "https://behance.net/"
+          }
+        ]
+      }
+    }
+  ]
+}

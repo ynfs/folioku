@@ -1,0 +1,130 @@
+{
+  "id": "tpl-modern-gelap-01",
+  "name": "Modern Gelap",
+  "category": "modern",
+  "description": "Latar gelap dengan aksen neon untuk pengembang.",
+  "tags": [
+    "developer",
+    "gelap",
+    "teknologi"
+  ],
+  "theme": {
+    "fontHeading": "Space Grotesk",
+    "fontBody": "Inter",
+    "colorPrimary": "#EDEDED",
+    "colorAccent": "#7CFFB2",
+    "colorBackground": "#0E0F12",
+    "colorSurface": "#1A1C21",
+    "radius": "lg",
+    "headingCase": "normal"
+  },
+  "sections": [
+    {
+      "id": "sec-20",
+      "type": "hero",
+      "props": {
+        "eyebrow": "// web developer",
+        "title": "Saya membangun web yang cepat dan mudah dipakai",
+        "subtitle": "Nama Kamu",
+        "description": "Full-stack developer. Next.js, TypeScript, PostgreSQL.",
+        "image": "/placeholder/img-2.svg",
+        "align": "left",
+        "buttonText": "Lihat proyek",
+        "buttonLink": "#karya"
+      }
+    },
+    {
+      "id": "sec-21",
+      "type": "projects",
+      "props": {
+        "heading": "Proyek",
+        "items": [
+          {
+            "title": "Sistem Kasir",
+            "description": "Aplikasi kasir offline-first untuk UMKM.",
+            "image": "/placeholder/img-4.svg",
+            "link": "https://github.com/"
+          },
+          {
+            "title": "Dashboard Sekolah",
+            "description": "Rekap nilai dan absensi siswa.",
+            "image": "/placeholder/img-6.svg",
+            "link": "https://github.com/"
+          },
+          {
+            "title": "Toko Online",
+            "description": "Katalog produk dengan checkout WhatsApp.",
+            "image": "/placeholder/img-2.svg",
+            "link": "https://github.com/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-22",
+      "type": "skills",
+      "props": {
+        "heading": "Teknologi",
+        "items": [
+          {
+            "name": "TypeScript",
+            "detail": "Frontend & backend"
+          },
+          {
+            "name": "Next.js",
+            "detail": "App Router"
+          },
+          {
+            "name": "PostgreSQL",
+            "detail": "Supabase"
+          },
+          {
+            "name": "Tailwind CSS",
+            "detail": "Desain sistem"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-23",
+      "type": "experience",
+      "props": {
+        "heading": "Pengalaman",
+        "items": [
+          {
+            "role": "Software Engineer",
+            "place": "Startup Teknologi",
+            "period": "2022 – sekarang",
+            "description": "Membangun produk SaaS."
+          },
+          {
+            "role": "Web Developer Lepas",
+            "place": "Klien UMKM",
+            "period": "2019 – 2022",
+            "description": "Situs dan aplikasi kecil."
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-24",
+      "type": "contact",
+      "props": {
+        "heading": "Ada proyek?",
+        "text": "Terbuka untuk kerja lepas dan kolaborasi.",
+        "email": "dev@email.com",
+        "phone": "",
+        "links": [
+          {
+            "label": "GitHub",
+            "url": "https://github.com/"
+          },
+          {
+            "label": "LinkedIn",
+            "url": "https://linkedin.com/"
+          }
+        ]
+      }
+    }
+  ]
+}
