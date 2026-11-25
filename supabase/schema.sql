@@ -27,8 +27,9 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
 
--- ---------- templates: untuk panel admin (tahap 2) ----------
--- Template bawaan MVP disimpan sebagai file JSON di folder /templates.
+-- ---------- templates: template buatan admin ----------
+-- Template bawaan disimpan sebagai file JSON di folder /templates.
+-- Kolom data berisi { theme, sections }.
 create table if not exists public.templates (
   id text primary key,
   name text not null,
@@ -38,6 +39,10 @@ create table if not exists public.templates (
   data jsonb not null,
   created_at timestamptz not null default now()
 );
+alter table public.templates add column if not exists description text not null default '';
+alter table public.templates add column if not exists published boolean not null default false;
+alter table public.templates add column if not exists created_by uuid references public.users (id) on delete set null;
+alter table public.templates add column if not exists updated_at timestamptz not null default now();
 
 -- ---------- projects: salinan template milik klien ----------
 create table if not exists public.projects (
@@ -69,6 +74,9 @@ create table if not exists public.assets (
   created_at timestamptz not null default now()
 );
 
+-- Untuk menjadikan akun kamu admin, jalankan:
+--   update public.users set role = 'admin' where id = (select id from auth.users where email = 'email@kamu.com');
+
 -- ---------- Row Level Security ----------
 alter table public.users enable row level security;
 alter table public.templates enable row level security;
@@ -93,9 +101,9 @@ create policy users_update_self on public.users for update
 revoke update on public.users from anon, authenticated;
 grant update (name) on public.users to authenticated;
 
--- templates: semua orang boleh membaca, hanya admin yang mengubah
+-- templates: semua orang boleh membaca yang terbit, hanya admin yang mengubah
 drop policy if exists templates_read on public.templates;
-create policy templates_read on public.templates for select using (true);
+create policy templates_read on public.templates for select using (published or public.is_admin());
 drop policy if exists templates_admin on public.templates;
 create policy templates_admin on public.templates for all using (public.is_admin()) with check (public.is_admin());
 

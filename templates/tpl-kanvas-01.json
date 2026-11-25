@@ -1,0 +1,261 @@
+{
+  "id": "tpl-kanvas-01",
+  "name": "Poster Bebas",
+  "category": "kreatif",
+  "description": "Dibuat penuh dengan kanvas Desain Bebas — semua elemen bisa digeser.",
+  "tags": [
+    "kanvas",
+    "poster",
+    "berani"
+  ],
+  "theme": {
+    "fontHeading": "Bricolage Grotesque",
+    "fontBody": "DM Sans",
+    "colorPrimary": "#1B1B1B",
+    "colorAccent": "#FF4D2E",
+    "colorBackground": "#FFF8EE",
+    "colorSurface": "#FFE3C7",
+    "radius": "lg",
+    "headingCase": "normal"
+  },
+  "sections": [
+    {
+      "id": "sec-k1",
+      "type": "canvas",
+      "props": {
+        "height": 760,
+        "background": "theme:bg",
+        "backgroundImage": "",
+        "elements": [
+          {
+            "id": "el-k1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Blok aksen",
+            "x": 640,
+            "y": 0,
+            "w": 560,
+            "h": 760,
+            "fill": "theme:accent",
+            "radius": 0
+          },
+          {
+            "id": "el-k2",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Lingkaran",
+            "x": 560,
+            "y": 470,
+            "w": 200,
+            "h": 200,
+            "fill": "theme:surface",
+            "radius": 999
+          },
+          {
+            "id": "el-k3",
+            "rotation": 3,
+            "opacity": 1,
+            "type": "image",
+            "name": "Foto",
+            "x": 720,
+            "y": 120,
+            "w": 380,
+            "h": 480,
+            "src": "/placeholder/hero.svg",
+            "fit": "cover",
+            "radius": 24
+          },
+          {
+            "id": "el-k4",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Label",
+            "x": 80,
+            "y": 120,
+            "w": 420,
+            "h": 30,
+            "text": "ILUSTRATOR · YOGYAKARTA",
+            "fontFamily": "body",
+            "fontSize": 16,
+            "fontWeight": 700,
+            "letterSpacing": 3,
+            "color": "theme:accent"
+          },
+          {
+            "id": "el-k5",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Judul",
+            "x": 80,
+            "y": 170,
+            "w": 560,
+            "h": 300,
+            "text": "Gambar\nyang\nbercerita.",
+            "fontFamily": "heading",
+            "fontSize": 96,
+            "fontWeight": 800,
+            "lineHeight": 0.98,
+            "color": "theme:text"
+          },
+          {
+            "id": "el-k6",
+            "rotation": 0,
+            "opacity": 0.8,
+            "type": "text",
+            "name": "Deskripsi",
+            "x": 80,
+            "y": 500,
+            "w": 440,
+            "h": 70,
+            "text": "Halo, saya Nama Kamu. Saya membuat ilustrasi untuk buku, kemasan, dan kampanye brand.",
+            "fontFamily": "body",
+            "fontSize": 19,
+            "lineHeight": 1.45,
+            "color": "theme:text"
+          },
+          {
+            "id": "el-k7",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "button",
+            "name": "Tombol utama",
+            "x": 80,
+            "y": 610,
+            "w": 200,
+            "h": 58,
+            "text": "Lihat karya",
+            "fontFamily": "body",
+            "fontSize": 18,
+            "fontWeight": 700,
+            "align": "center",
+            "color": "theme:bg",
+            "fill": "theme:text",
+            "radius": 999,
+            "link": "#karya"
+          },
+          {
+            "id": "el-k8",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "button",
+            "name": "Tombol kontak",
+            "x": 296,
+            "y": 610,
+            "w": 180,
+            "h": 58,
+            "text": "Kontak",
+            "fontFamily": "body",
+            "fontSize": 18,
+            "fontWeight": 700,
+            "align": "center",
+            "color": "theme:text",
+            "fill": "transparent",
+            "borderWidth": 2,
+            "borderColor": "theme:text",
+            "radius": 999,
+            "link": "#kontak"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-k2",
+      "type": "gallery",
+      "props": {
+        "heading": "Karya pilihan",
+        "columns": 3,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-4.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-5.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-6.svg",
+            "caption": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-k3",
+      "type": "canvas",
+      "props": {
+        "height": 360,
+        "background": "theme:text",
+        "backgroundImage": "",
+        "elements": [
+          {
+            "id": "el-k9",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Ajakan",
+            "x": 80,
+            "y": 90,
+            "w": 760,
+            "h": 120,
+            "text": "Punya cerita yang perlu digambar?",
+            "fontFamily": "heading",
+            "fontSize": 56,
+            "fontWeight": 800,
+            "lineHeight": 1.05,
+            "color": "theme:bg"
+          },
+          {
+            "id": "el-k10",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "button",
+            "name": "Email",
+            "x": 80,
+            "y": 240,
+            "w": 260,
+            "h": 60,
+            "text": "halo@email.com",
+            "fontFamily": "body",
+            "fontSize": 18,
+            "fontWeight": 700,
+            "align": "center",
+            "color": "theme:text",
+            "fill": "theme:accent",
+            "radius": 999,
+            "link": "mailto:halo@email.com"
+          },
+          {
+            "id": "el-k11",
+            "rotation": 45,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Bintang",
+            "x": 960,
+            "y": 80,
+            "w": 160,
+            "h": 160,
+            "fill": "theme:accent",
+            "radius": 12
+          }
+        ]
+      }
+    }
+  ]
+}

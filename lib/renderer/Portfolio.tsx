@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { SectionView } from "@/components/sections";
+import { canvasElements, canvasFonts } from "@/lib/canvas";
 import { fontStack, googleFontsHref } from "@/lib/fonts";
 import type { PortfolioData, Section, Theme } from "@/lib/types";
 
@@ -20,11 +21,16 @@ export function themeVars(theme: Theme): CSSProperties {
   } as CSSProperties;
 }
 
-export function FontLinks({ theme }: { theme: Theme }) {
-  const href = googleFontsHref([theme.fontHeading, theme.fontBody]);
+export function FontLinks({ theme, extra = [] }: { theme: Theme; extra?: string[] }) {
+  const href = googleFontsHref([theme.fontHeading, theme.fontBody, ...extra]);
   if (!href) return null;
   // React 19 memindahkan <link precedence> ke <head> dan menghapus duplikat.
   return <link rel="stylesheet" href={href} precedence="default" />;
+}
+
+/** Font tambahan yang dipakai elemen di bagian Desain Bebas. */
+function usedFonts(data: PortfolioData): string[] {
+  return data.sections.filter((s) => s.type === "canvas").flatMap((s) => canvasFonts(canvasElements(s.props.elements)));
 }
 
 export function Portfolio({
@@ -39,7 +45,7 @@ export function Portfolio({
 }) {
   return (
     <div className={`pf-root ${className}`} style={themeVars(data.theme)}>
-      <FontLinks theme={data.theme} />
+      <FontLinks theme={data.theme} extra={usedFonts(data)} />
       {data.sections.map((section) => {
         const node = <SectionView section={section} />;
         return renderSection ? (

@@ -26,6 +26,11 @@ export async function AppHeader() {
               <Link href="/dashboard" className="rounded-lg px-3 py-2 font-semibold hover:bg-app-bg">
                 Dashboard
               </Link>
+              {user.role === "admin" && (
+                <Link href="/admin" className="rounded-lg px-3 py-2 font-semibold hover:bg-app-bg">
+                  Admin
+                </Link>
+              )}
               <form action={signOutAction}>
                 <button className="btn-ghost" title={user.email}>
                   Keluar

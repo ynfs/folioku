@@ -10,5 +10,5 @@ export default async function EditorPage(props: PageProps<"/editor/[projectId]">
   const user = await requireUser(`/editor/${projectId}`);
   const project = await backend.getProject(projectId, user.id);
   if (!project) notFound();
-  return <Editor key={project.id} project={project} />;
+  return <Editor key={project.id} mode={{ kind: "project", project }} />;
 }

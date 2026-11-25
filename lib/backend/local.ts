@@ -3,13 +3,13 @@ import { createHmac, randomBytes, randomUUID, scryptSync, timingSafeEqual } from
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { cookies } from "next/headers";
-import type { PortfolioData, Project, Role, User } from "@/lib/types";
-import type { AuthResult, Backend } from "./types";
+import type { PortfolioData, Project, Role, Template, User } from "@/lib/types";
+import type { AdminStats, AuthResult, Backend } from "./types";
 
 // MODE LOKAL: semua data disimpan di ./data/db.json dan gambar di ./data/uploads.
 // Cocok untuk mencoba di komputer sendiri. Untuk produksi gunakan Supabase.
 
-const DATA_DIR = path.join(process.cwd(), "data");
+const DATA_DIR = process.env.FOLIOKU_DATA_DIR || path.join(process.cwd(), "data");
 const DB_FILE = path.join(DATA_DIR, "db.json");
 export const UPLOAD_DIR = path.join(DATA_DIR, "uploads");
 const COOKIE = "folioku_session";
@@ -19,18 +19,25 @@ interface StoredUser extends User {
   passwordHash: string;
   createdAt: string;
 }
+interface StoredTemplate extends Template {
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
 interface DB {
   users: StoredUser[];
   projects: Project[];
+  templates: StoredTemplate[];
 }
 
 let queue: Promise<unknown> = Promise.resolve();
 
 async function readDB(): Promise<DB> {
   try {
-    return JSON.parse(await fs.readFile(DB_FILE, "utf8")) as DB;
+    const db = JSON.parse(await fs.readFile(DB_FILE, "utf8")) as Partial<DB>;
+    return { users: db.users ?? [], projects: db.projects ?? [], templates: db.templates ?? [] };
   } catch {
-    return { users: [], projects: [] };
+    return { users: [], projects: [], templates: [] };
   }
 }
 
@@ -233,4 +240,52 @@ export const localBackend: Backend = {
     await fs.writeFile(path.join(UPLOAD_DIR, name), Buffer.from(await file.arrayBuffer()));
     return `/api/files/${name}`;
   },
+
+  async listTemplates(opts) {
+    const { templates } = await readDB();
+    return templates
+      .filter((t) => opts?.includeDrafts || t.published)
+      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+      .map(toTemplate);
+  },
+
+  async getTemplate(id) {
+    const t = (await readDB()).templates.find((x) => x.id === id);
+    return t ? toTemplate(t) : null;
+  },
+
+  async createTemplate(userId, template) {
+    const now = new Date().toISOString();
+    const stored: StoredTemplate = { ...template, builtin: false, createdBy: userId, createdAt: now, updatedAt: now };
+    await mutate((db) => {
+      db.templates.push(stored);
+    });
+    return toTemplate(stored);
+  },
+
+  async updateTemplate(id, patch) {
+    await mutate((db) => {
+      const t = db.templates.find((x) => x.id === id);
+      if (!t) throw new Error("Template tidak ditemukan");
+      Object.assign(t, patch, { updatedAt: new Date().toISOString() });
+    });
+  },
+
+  async deleteTemplate(id) {
+    await mutate((db) => {
+      db.templates = db.templates.filter((t) => t.id !== id);
+    });
+  },
+
+  async adminStats(): Promise<AdminStats> {
+    const db = await readDB();
+    const usage: Record<string, number> = {};
+    for (const p of db.projects) usage[p.templateId] = (usage[p.templateId] ?? 0) + 1;
+    return { users: db.users.length, projects: db.projects.length, published: db.projects.filter((p) => p.published).length, usage };
+  },
 };
+
+function toTemplate(t: StoredTemplate): Template {
+  const { id, name, category, description, tags, theme, sections, published, updatedAt } = t;
+  return { id, name, category, description, tags, theme, sections, published: !!published, builtin: false, updatedAt };
+}

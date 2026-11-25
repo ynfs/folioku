@@ -3,14 +3,16 @@ import Link from "next/link";
 import { createProjectAction } from "@/app/actions";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
-import { CATEGORIES, TEMPLATES } from "@/lib/templates";
+import { CATEGORIES } from "@/lib/templates";
+import { galleryTemplates } from "@/lib/templates-server";
 
 export const metadata: Metadata = { title: "Galeri template" };
 
 export default async function TemplatesPage(props: PageProps<"/templates">) {
   const { gaya } = await props.searchParams;
   const active = typeof gaya === "string" ? gaya : "";
-  const list = active ? TEMPLATES.filter((t) => t.category === active) : TEMPLATES;
+  const all = await galleryTemplates();
+  const list = active ? all.filter((t) => t.category === active) : all;
 
   return (
     <>
@@ -35,7 +37,10 @@ export default async function TemplatesPage(props: PageProps<"/templates">) {
                 <PortfolioThumb data={t} height={240} />
                 <div className="flex flex-1 flex-col border-t border-app-line p-4">
                   <div className="flex items-center justify-between gap-2">
-                    <h2 className="font-bold">{t.name}</h2>
+                    <h2 className="font-bold">
+                      {t.name}
+                      {!t.builtin && <span className="ml-2 rounded-full bg-brand/10 px-2 py-0.5 text-[10px] font-bold uppercase text-brand">Baru</span>}
+                    </h2>
                     <span className="rounded-full bg-app-bg px-2 py-0.5 text-xs font-semibold capitalize text-app-muted">
                       {t.category}
                     </span>

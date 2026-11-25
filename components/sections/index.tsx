@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- gambar bisa berasal dari URL apa pun milik klien */
 import type { PropValue, Section } from "@/lib/types";
+import { CanvasView, safeHref } from "./canvas";
 
 // Komponen section siap pakai. Semuanya murni (tanpa state) sehingga bisa
 // dirender di server (halaman publik) maupun di browser (editor).
@@ -9,15 +10,7 @@ import type { PropValue, Section } from "@/lib/types";
 type P = Record<string, PropValue>;
 
 const s = (v: PropValue | undefined): string => (typeof v === "string" ? v : v == null ? "" : String(v));
-/** Hanya izinkan link aman (http, https, mailto, tel, anchor, path internal). */
-const safeHref = (url: string | undefined): string => {
-  const u = (url ?? "").trim();
-  if (!u) return "#";
-  if (/^(https?:|mailto:|tel:)/i.test(u) || u.startsWith("#") || (u.startsWith("/") && !u.startsWith("//"))) return u;
-  if (/^[a-z][a-z0-9+.-]*:/i.test(u)) return "#";
-  return `https://${u}`;
-};
-const list = (v: PropValue | undefined): Record<string, string>[] => (Array.isArray(v) ? v : []);
+const list = (v: PropValue | undefined): Record<string, string>[] => (Array.isArray(v) ? (v as Record<string, string>[]) : []);
 
 function Heading({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   if (!children) return null;
@@ -240,6 +233,7 @@ const COMPONENTS = {
   skills: Skills,
   testimonial: Testimonial,
   contact: Contact,
+  canvas: CanvasView,
 } as const;
 
 export function SectionView({ section }: { section: Section }) {

@@ -37,7 +37,24 @@ Platform pembuat portofolio berbasis template. Admin menyediakan koleksi templat
 - Publish ke link publik (saat ini `/p/namaklien`; subdomain `namaklien.folioku.com` menyusul)
 - Ekspor ke PDF
 
+### Desain Bebas (ala Figma)
+Bagian **Desain Bebas** adalah kanvas tempat elemen bisa ditaruh di mana saja:
+- Elemen: teks, gambar, bentuk, tombol (tambah lewat toolbar hitam di atas kanvas)
+- Geser, ubah ukuran (8 pegangan, Shift = jaga proporsi), putar (Shift = per 15°)
+- Garis bantu snap ke tepi/tengah frame dan elemen lain (tahan Alt untuk mematikan)
+- Seleksi banyak (Shift+klik) dan seleksi kotak (seret area kosong)
+- Klik ganda teks untuk mengetik langsung
+- Panel layer: urutan, sembunyikan, kunci, ganti nama
+- Panel properti: posisi X/Y/W/H, rotasi, opasitas, font, ukuran, ketebalan, spasi, perataan, warna, sudut, garis, link
+- Warna bisa memakai **warna tema** (ikut berubah saat palet diganti) atau warna bebas
+- Pintasan: Ctrl+Z/Shift+Z, Ctrl+C/V/X/D, Delete, panah (Shift = 10px), [ ] dan Ctrl+[ ] untuk urutan layer, Ctrl+A, Esc
+
+Frame memakai lebar desain 1200px dan mengecil proporsional di layar yang lebih sempit.
+
 ### Untuk Admin
+- **Pembuat template** di `/admin`: mulai dari kanvas kosong, salin template yang ada, atau jadikan proyek sebagai template
+- Edit template dengan editor yang sama (termasuk Desain Bebas), atur nama, kategori, deskripsi, tag
+- Terbitkan ke galeri atau simpan sebagai draf
 - Upload dan kelola template
 - Atur kategori dan tag template
 - Kelola pengguna dan proyek
@@ -93,17 +110,19 @@ folioku/
 │   ├── editor/[projectId]/  # Halaman editor
 │   ├── templates/           # Galeri template
 │   ├── p/[slug]/            # Halaman portofolio publik
+│   ├── admin/               # Panel admin & pembuat template
 │   ├── api/upload/          # Unggah gambar
 │   ├── api/files/[name]/    # Menyajikan gambar (mode lokal)
 │   └── actions.ts           # Server action: akun, proyek, publish
 ├── components/
-│   ├── editor/              # Editor: store Zustand, panel, field
+│   ├── editor/              # Editor: store Zustand, panel, kanvas ala Figma
 │   ├── sections/            # Section siap pakai (hero, tentang, galeri, kontak, dll.)
 │   └── ui/                  # Komponen UI umum
 ├── lib/
 │   ├── backend/             # Penyimpanan: mode lokal dan Supabase
 │   ├── renderer/            # Mengubah JSON menjadi halaman
 │   ├── sections.ts          # Skema field setiap jenis section
+│   ├── canvas.ts            # Utilitas Desain Bebas (elemen, warna tema)
 │   └── templates.ts         # Daftar template bawaan
 ├── supabase/schema.sql      # Tabel, RLS, dan bucket Storage
 ├── templates/               # File JSON template bawaan
@@ -248,7 +267,9 @@ Jangan pernah mengunggah `.env.local` ke repository publik.
 - [x] Pratinjau responsif (desktop, tablet, HP)
 - [ ] Ekspor PDF
 - [ ] Custom domain
-- [ ] Panel admin lengkap
+- [x] Pembuat template dan editor Desain Bebas (ala Figma)
+- [ ] Panel admin lengkap (kelola pengguna)
+- [ ] Tata letak khusus HP untuk Desain Bebas
 
 ### Tahap 3: Skala Bisnis
 - [ ] Paket langganan (gratis dan premium)

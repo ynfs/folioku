@@ -2,9 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { randomUUID } from "node:crypto";
 import { backend, requireUser } from "@/lib/backend";
-import { getTemplate } from "@/lib/templates";
-import type { PortfolioData } from "@/lib/types";
+import { blankCanvas } from "@/lib/sections";
+import { CATEGORIES, TEMPLATES } from "@/lib/templates";
+import { findTemplate } from "@/lib/templates-server";
+import type { PortfolioData, Template, TemplateCategory } from "@/lib/types";
 
 export type FormState = { error?: string } | undefined;
 
@@ -51,7 +54,7 @@ export async function signOutAction() {
 export async function createProjectAction(form: FormData) {
   const templateId = String(form.get("templateId") ?? "");
   const user = await requireUser(`/templates`);
-  const template = getTemplate(templateId);
+  const template = await findTemplate(templateId, { allowDraft: user.role === "admin" });
   if (!template) throw new Error("Template tidak ditemukan");
 
   const project = await backend.createProject(user.id, {
@@ -124,4 +127,102 @@ export async function unpublishAction(id: string, slug: string | null) {
   await backend.unpublish(id, user.id);
   if (slug) revalidatePath(`/p/${slug}`);
   revalidatePath("/dashboard");
+}
+
+// ---------- Template (khusus admin) ----------
+
+async function requireAdmin() {
+  const user = await requireUser("/admin");
+  if (user.role !== "admin") redirect("/dashboard");
+  return user;
+}
+
+const DEFAULT_THEME = TEMPLATES[0].theme;
+
+/** Membuat template baru: kosong, salinan template lain, atau dari proyek. */
+export async function createTemplateAction(form: FormData) {
+  const user = await requireAdmin();
+  const source = String(form.get("source") ?? "blank");
+  const projectId = String(form.get("projectId") ?? "");
+
+  let base: { name: string; category: TemplateCategory; description: string; tags: string[]; data: PortfolioData };
+  if (projectId) {
+    const project = await backend.getProject(projectId, user.id);
+    if (!project) throw new Error("Proyek tidak ditemukan");
+    base = { name: project.name, category: "modern", description: "", tags: [], data: project.data };
+  } else if (source !== "blank") {
+    const t = await findTemplate(source, { allowDraft: true });
+    if (!t) throw new Error("Template sumber tidak ditemukan");
+    base = { name: `${t.name} (salinan)`, category: t.category, description: t.description, tags: t.tags, data: { theme: t.theme, sections: t.sections } };
+  } else {
+    base = { name: "Template baru", category: "kreatif", description: "", tags: [], data: { theme: DEFAULT_THEME, sections: [blankCanvas()] } };
+  }
+
+  const template: Template = {
+    id: `tpl-custom-${randomUUID().slice(0, 8)}`,
+    name: base.name,
+    category: base.category,
+    description: base.description,
+    tags: base.tags,
+    theme: structuredClone(base.data.theme),
+    sections: structuredClone(base.data.sections),
+    published: false,
+  };
+  await backend.createTemplate(user.id, template);
+  redirect(`/admin/templates/${template.id}`);
+}
+
+export async function saveTemplateAction(id: string, data: PortfolioData): Promise<{ ok: boolean; error?: string }> {
+  const user = await backend.getCurrentUser();
+  if (!user || user.role !== "admin") return { ok: false, error: "Hanya admin yang bisa mengubah template." };
+  if (!isPortfolioData(data)) return { ok: false, error: "Data tidak valid." };
+  if (JSON.stringify(data).length > 500_000) return { ok: false, error: "Data terlalu besar." };
+  try {
+    await backend.updateTemplate(id, { theme: data.theme, sections: data.sections });
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Gagal menyimpan." };
+  }
+}
+
+export interface TemplateMeta {
+  name: string;
+  category: TemplateCategory;
+  description: string;
+  tags: string[];
+  published: boolean;
+}
+
+export async function updateTemplateMetaAction(id: string, meta: TemplateMeta): Promise<{ ok: boolean; error?: string }> {
+  await requireAdmin();
+  const name = meta.name.trim().slice(0, 80);
+  if (!name) return { ok: false, error: "Nama template wajib diisi." };
+  if (!CATEGORIES.some((c) => c.value === meta.category)) return { ok: false, error: "Kategori tidak valid." };
+  await backend.updateTemplate(id, {
+    name,
+    category: meta.category,
+    description: meta.description.trim().slice(0, 200),
+    tags: meta.tags.map((t) => t.trim().toLowerCase()).filter(Boolean).slice(0, 10),
+    published: !!meta.published,
+  });
+  revalidatePath("/templates");
+  revalidatePath("/admin");
+  return { ok: true };
+}
+
+export async function deleteTemplateAction(form: FormData) {
+  await requireAdmin();
+  await backend.deleteTemplate(String(form.get("id")));
+  revalidatePath("/admin");
+  revalidatePath("/templates");
+}
+
+export async function toggleTemplatePublishAction(form: FormData) {
+  await requireAdmin();
+  const id = String(form.get("id"));
+  const t = await backend.getTemplate(id);
+  if (!t) return;
+  await backend.updateTemplate(id, { published: !t.published });
+  revalidatePath("/admin");
+  revalidatePath("/templates");
 }

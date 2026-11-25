@@ -7,6 +7,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { FONTS } from "@/lib/fonts";
 import { SECTION_DEFS, SECTION_ORDER } from "@/lib/sections";
 import type { Section, Theme } from "@/lib/types";
+import { ElementPanel, LayersList } from "./ElementPanel";
 import { FieldInput, IconBtn } from "./fields";
 import { useEditor } from "./store";
 
@@ -25,12 +26,11 @@ function SortableRow({ section, index, total }: { section: Section; index: numbe
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: section.id });
   const active = selectedId === section.id;
   return (
-    <li
-      ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
+    <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={isDragging ? "relative z-10 opacity-80" : ""}>
+    <div
       className={`group flex items-center gap-1 rounded-lg border px-1.5 py-1.5 ${
         active ? "border-app-fg bg-white shadow-sm" : "border-transparent hover:bg-white"
-      } ${isDragging ? "z-10 opacity-80 shadow-lg" : ""}`}
+      } ${isDragging ? "shadow-lg" : ""}`}
     >
       <button
         type="button"
@@ -53,6 +53,8 @@ function SortableRow({ section, index, total }: { section: Section; index: numbe
           ↓
         </IconBtn>
       </span>
+    </div>
+    {active && section.type === "canvas" && !isDragging && <LayersList section={section} />}
     </li>
   );
 }
@@ -129,6 +131,7 @@ export function SectionsPanel() {
 
 export function PropertiesPanel() {
   const section = useEditor((s) => s.data.sections.find((x) => x.id === s.selectedId));
+  const hasElementSelection = useEditor((s) => s.selectedEls.length > 0);
   const updateProp = useEditor((s) => s.updateProp);
   const duplicateSection = useEditor((s) => s.duplicateSection);
   const removeSection = useEditor((s) => s.removeSection);
@@ -138,6 +141,7 @@ export function PropertiesPanel() {
     return <p className="p-4 text-sm text-app-muted">Klik salah satu bagian di pratinjau untuk mengeditnya.</p>;
   }
   const def = SECTION_DEFS[section.type];
+  if (section.type === "canvas" && hasElementSelection) return <ElementPanel section={section} />;
 
   return (
     <div className="space-y-4 p-4" key={section.id}>
@@ -168,6 +172,11 @@ export function PropertiesPanel() {
           )}
         </div>
       </div>
+      {section.type === "canvas" && (
+        <p className="rounded-lg bg-[#0d99ff]/10 px-3 py-2 text-xs text-[#0b6fb8]">
+          Pilih elemen di kanvas untuk mengedit teks, warna, dan posisinya. Tambah elemen lewat toolbar hitam di atas kanvas.
+        </p>
+      )}
       {def.fields.map((f) => (
         <FieldInput key={f.key} field={f} value={section.props[f.key]} onChange={(v) => updateProp(section.id, f.key, v)} />
       ))}

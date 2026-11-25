@@ -2,6 +2,8 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { THEME_COLORS, resolveColor } from "@/lib/canvas";
+import { useEditor } from "./store";
 import type { Field } from "@/lib/sections";
 import type { PropValue } from "@/lib/types";
 
@@ -73,7 +75,20 @@ export function FieldInput({
     case "image":
       return <ImageInput id={id} label={field.label} value={str} onChange={onChange} />;
     case "list":
-      return <ListInput field={field} value={Array.isArray(value) ? value : []} onChange={onChange} />;
+      return <ListInput field={field} value={Array.isArray(value) ? (value as Record<string, string>[]) : []} onChange={onChange} />;
+    case "size":
+      return (
+        <Labeled id={id} label={field.label}>
+          <NumberInput id={id} value={Number(value) || field.min} min={field.min} max={field.max} step={field.step} unit={field.unit} onChange={onChange} />
+        </Labeled>
+      );
+    case "color":
+      return (
+        <div>
+          <p className="label">{field.label}</p>
+          <ColorPicker value={str} onChange={onChange} />
+        </div>
+      );
   }
 }
 
@@ -250,5 +265,113 @@ export function IconBtn({
     >
       {children}
     </button>
+  );
+}
+
+/** Input angka yang hanya menyimpan nilai valid (boleh dikosongkan sementara saat mengetik). */
+export function NumberInput({
+  id,
+  value,
+  onChange,
+  min,
+  max,
+  step = 1,
+  unit,
+  label,
+}: {
+  id?: string;
+  value: number;
+  onChange: (v: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  unit?: string;
+  label?: string;
+}) {
+  const [text, setText] = useState(String(value));
+  const [prev, setPrev] = useState(value);
+  if (value !== prev) {
+    setPrev(value);
+    setText(String(value));
+  }
+  const clamp = (n: number) => Math.min(max ?? Infinity, Math.max(min ?? -Infinity, n));
+  return (
+    <div className="flex items-center rounded-lg border border-app-line bg-white focus-within:border-app-fg">
+      {label && <span className="pl-2 text-[11px] font-semibold text-app-muted">{label}</span>}
+      <input
+        id={id}
+        type="number"
+        className="w-full min-w-0 bg-transparent px-2 py-1.5 text-sm outline-none"
+        value={text}
+        step={step}
+        min={min}
+        max={max}
+        onChange={(e) => {
+          setText(e.target.value);
+          const n = Number(e.target.value);
+          if (e.target.value !== "" && Number.isFinite(n)) onChange(clamp(n));
+        }}
+        onBlur={() => setText(String(value))}
+      />
+      {unit && <span className="pr-2 text-[11px] text-app-muted">{unit}</span>}
+    </div>
+  );
+}
+
+/** Pemilih warna: warna tema (ikut berubah saat palet diganti) atau warna bebas. */
+export function ColorPicker({ value, onChange, allowNone }: { value: string; onChange: (v: string) => void; allowNone?: boolean }) {
+  const theme = useEditor((s) => s.data.theme);
+  const isHex = /^#[0-9a-f]{6}$/i.test(value);
+  const [text, setText] = useState(isHex ? value : "");
+  const [prev, setPrev] = useState(value);
+  if (value !== prev) {
+    setPrev(value);
+    setText(/^#[0-9a-f]{6}$/i.test(value) ? value : "");
+  }
+  return (
+    <div className="space-y-1.5">
+      <div className="flex flex-wrap gap-1">
+        {THEME_COLORS.map((c) => (
+          <button
+            key={c.token}
+            type="button"
+            title={`Warna tema: ${c.label}`}
+            onClick={() => onChange(c.token)}
+            className={`flex items-center gap-1 rounded-md border px-1.5 py-1 text-[11px] font-semibold ${value === c.token ? "border-app-fg" : "border-app-line"}`}
+          >
+            <span className="h-3 w-3 rounded-sm border border-black/10" style={{ background: resolveColor(c.token, theme) }} />
+            {c.label}
+          </button>
+        ))}
+        {allowNone && (
+          <button
+            type="button"
+            onClick={() => onChange("transparent")}
+            className={`rounded-md border px-1.5 py-1 text-[11px] font-semibold ${value === "transparent" ? "border-app-fg" : "border-app-line"}`}
+          >
+            Tanpa
+          </button>
+        )}
+      </div>
+      <div className="flex items-center gap-1.5 rounded-lg border border-app-line bg-white p-1">
+        <input
+          type="color"
+          aria-label="Pilih warna"
+          value={isHex ? value : /^#[0-9a-f]{6}$/i.test(resolveColor(value, theme)) ? resolveColor(value, theme) : "#000000"}
+          onChange={(e) => onChange(e.target.value.toUpperCase())}
+          className="h-6 w-7 cursor-pointer rounded border-0 bg-transparent p-0"
+        />
+        <input
+          aria-label="Kode warna"
+          className="w-full min-w-0 font-mono text-xs uppercase outline-none"
+          placeholder={isHex ? "" : "warna tema"}
+          value={text}
+          onChange={(e) => {
+            setText(e.target.value);
+            if (/^#[0-9a-f]{6}$/i.test(e.target.value)) onChange(e.target.value.toUpperCase());
+          }}
+        />
+      </div>
+    </div>
   );
 }

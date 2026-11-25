@@ -5,11 +5,12 @@ import retro from "@/templates/tpl-retro-01.json";
 import editorial from "@/templates/tpl-editorial-01.json";
 import modernGelap from "@/templates/tpl-modern-gelap-01.json";
 import kreatif from "@/templates/tpl-kreatif-01.json";
+import kanvas from "@/templates/tpl-kanvas-01.json";
 
 // Template bawaan disimpan sebagai file JSON di folder /templates.
 // Untuk menambah template: buat file JSON baru dengan format yang sama lalu
 // daftarkan di sini.
-export const TEMPLATES = [minimalis, klasik, retro, editorial, modernGelap, kreatif] as unknown as Template[];
+export const TEMPLATES = ([kanvas, minimalis, klasik, retro, editorial, modernGelap, kreatif] as unknown as Template[]).map((t) => ({ ...t, builtin: true }));
 
 export const CATEGORIES: { value: TemplateCategory; label: string }[] = [
   { value: "modern", label: "Modern" },

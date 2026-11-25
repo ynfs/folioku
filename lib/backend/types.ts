@@ -1,4 +1,14 @@
-import type { PortfolioData, Project, Publication, User } from "@/lib/types";
+import type { PortfolioData, Project, Publication, Template, User } from "@/lib/types";
+
+export type TemplatePatch = Partial<Pick<Template, "name" | "category" | "description" | "tags" | "published" | "theme" | "sections">>;
+
+export interface AdminStats {
+  users: number;
+  projects: number;
+  published: number;
+  /** Jumlah proyek per templateId */
+  usage: Record<string, number>;
+}
 
 // Antarmuka penyimpanan. Ada dua implementasi:
 //  - local    : file JSON di ./data (tanpa konfigurasi, untuk mencoba)
@@ -26,4 +36,12 @@ export interface Backend {
   getPublication(slug: string): Promise<Publication | null>;
 
   uploadImage(userId: string, file: File): Promise<string>;
+
+  // ---- Template buatan admin ----
+  listTemplates(opts?: { includeDrafts?: boolean }): Promise<Template[]>;
+  getTemplate(id: string): Promise<Template | null>;
+  createTemplate(userId: string, template: Template): Promise<Template>;
+  updateTemplate(id: string, patch: TemplatePatch): Promise<void>;
+  deleteTemplate(id: string): Promise<void>;
+  adminStats(): Promise<AdminStats>;
 }

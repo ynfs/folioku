@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { createTemplateAction } from "@/app/actions";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { DeleteProjectButton } from "@/components/ui/DeleteProjectButton";
 import { backend, requireUser } from "@/lib/backend";
@@ -75,6 +76,12 @@ export default async function DashboardPage() {
                     </Link>
                     <DeleteProjectButton id={p.id} />
                   </div>
+                  {user.role === "admin" && (
+                    <form action={createTemplateAction} className="mt-2">
+                      <input type="hidden" name="projectId" value={p.id} />
+                      <button className="w-full text-xs font-semibold text-app-muted underline hover:text-app-fg">Jadikan template</button>
+                    </form>
+                  )}
                 </div>
               </article>
             ))}

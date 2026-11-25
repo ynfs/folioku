@@ -26,9 +26,49 @@ export type SectionType =
   | "experience"
   | "skills"
   | "testimonial"
-  | "contact";
+  | "contact"
+  | "canvas";
 
-export type PropValue = string | number | boolean | Record<string, string>[];
+/** Elemen di bagian "Desain Bebas" (kanvas ala Figma). Satuan posisi = piksel desain
+ *  pada frame selebar CANVAS_WIDTH, lalu diskalakan proporsional saat ditampilkan. */
+export type CanvasElementType = "text" | "image" | "shape" | "button";
+
+export interface CanvasElement {
+  id: string;
+  type: CanvasElementType;
+  name?: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  rotation?: number;
+  opacity?: number;
+  hidden?: boolean;
+  locked?: boolean;
+  // teks & tombol
+  text?: string;
+  fontFamily?: string; // "heading" | "body" | nama font
+  fontSize?: number;
+  fontWeight?: number;
+  italic?: boolean;
+  uppercase?: boolean;
+  align?: "left" | "center" | "right";
+  lineHeight?: number;
+  letterSpacing?: number;
+  color?: string; // hex atau token tema "theme:text" dst.
+  // bentuk & tombol
+  fill?: string;
+  radius?: number;
+  borderColor?: string;
+  borderWidth?: number;
+  // gambar
+  src?: string;
+  fit?: "cover" | "contain";
+  // tombol
+  link?: string;
+}
+
+export type PropValue = string | number | boolean | Record<string, string>[] | CanvasElement[];
 
 export interface Section {
   id: string;
@@ -55,6 +95,11 @@ export interface Template extends PortfolioData {
   category: TemplateCategory;
   description: string;
   tags: string[];
+  /** true untuk template bawaan (file JSON), false untuk buatan admin */
+  builtin?: boolean;
+  /** Template buatan admin hanya tampil di galeri jika diterbitkan */
+  published?: boolean;
+  updatedAt?: string;
 }
 
 export type Role = "admin" | "client";

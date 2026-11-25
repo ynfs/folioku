@@ -2,8 +2,36 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
-import type { PortfolioData, Project, Role } from "@/lib/types";
+import type { PortfolioData, Project, Role, Section, Template, TemplateCategory, Theme } from "@/lib/types";
 import type { AuthResult, Backend } from "./types";
+
+interface TemplateRow {
+  id: string;
+  name: string;
+  category: string;
+  description: string | null;
+  tags: string[] | null;
+  data: { theme: Theme; sections: Section[] };
+  published: boolean;
+  updated_at: string;
+}
+
+const TEMPLATE_COLUMNS = "id, name, category, description, tags, data, published, updated_at";
+
+function toTemplate(r: TemplateRow): Template {
+  return {
+    id: r.id,
+    name: r.name,
+    category: r.category as TemplateCategory,
+    description: r.description ?? "",
+    tags: r.tags ?? [],
+    theme: r.data.theme,
+    sections: r.data.sections,
+    published: r.published,
+    builtin: false,
+    updatedAt: r.updated_at,
+  };
+}
 
 // MODE SUPABASE: Supabase Auth untuk login, PostgreSQL untuk data, Storage untuk gambar.
 // Skema tabel dan kebijakan keamanan (RLS) ada di supabase/schema.sql.
@@ -185,5 +213,73 @@ export const supabaseBackend: Backend = {
     const url = sb.storage.from("assets").getPublicUrl(objectPath).data.publicUrl;
     await sb.from("assets").insert({ owner_id: userId, path: objectPath, url });
     return url;
+  },
+
+  async listTemplates(opts) {
+    const sb = await supabaseServer();
+    let q = sb.from("templates").select(TEMPLATE_COLUMNS).order("updated_at", { ascending: false });
+    if (!opts?.includeDrafts) q = q.eq("published", true);
+    const { data, error } = await q;
+    if (error) throw error;
+    return (data as unknown as TemplateRow[]).map(toTemplate);
+  },
+
+  async getTemplate(id) {
+    const sb = await supabaseServer();
+    const { data } = await sb.from("templates").select(TEMPLATE_COLUMNS).eq("id", id).maybeSingle();
+    return data ? toTemplate(data as unknown as TemplateRow) : null;
+  },
+
+  async createTemplate(userId, t) {
+    const sb = await supabaseServer();
+    const { data, error } = await sb
+      .from("templates")
+      .insert({
+        id: t.id,
+        name: t.name,
+        category: t.category,
+        description: t.description,
+        tags: t.tags,
+        data: { theme: t.theme, sections: t.sections },
+        published: !!t.published,
+        created_by: userId,
+      })
+      .select(TEMPLATE_COLUMNS)
+      .single();
+    if (error) throw error;
+    return toTemplate(data as unknown as TemplateRow);
+  },
+
+  async updateTemplate(id, patch) {
+    const sb = await supabaseServer();
+    const row: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    for (const k of ["name", "category", "description", "tags", "published"] as const) {
+      if (patch[k] !== undefined) row[k] = patch[k];
+    }
+    if (patch.theme || patch.sections) {
+      const current = await this.getTemplate(id);
+      if (!current) throw new Error("Template tidak ditemukan");
+      row.data = { theme: patch.theme ?? current.theme, sections: patch.sections ?? current.sections };
+    }
+    const { error } = await sb.from("templates").update(row).eq("id", id);
+    if (error) throw error;
+  },
+
+  async deleteTemplate(id) {
+    const sb = await supabaseServer();
+    const { error } = await sb.from("templates").delete().eq("id", id);
+    if (error) throw error;
+  },
+
+  async adminStats() {
+    const sb = await supabaseServer();
+    const [users, projects, published] = await Promise.all([
+      sb.from("users").select("id", { count: "exact", head: true }),
+      sb.from("projects").select("template_id"),
+      sb.from("publications").select("project_id", { count: "exact", head: true }).eq("published", true),
+    ]);
+    const usage: Record<string, number> = {};
+    for (const p of (projects.data ?? []) as { template_id: string }[]) usage[p.template_id] = (usage[p.template_id] ?? 0) + 1;
+    return { users: users.count ?? 0, projects: projects.data?.length ?? 0, published: published.count ?? 0, usage };
   },
 };
