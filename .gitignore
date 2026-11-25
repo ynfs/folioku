@@ -43,3 +43,8 @@ next-env.d.ts
 
 # data mode lokal (akun, proyek, upload)
 /data/
+
+# Cloudflare / OpenNext
+/.open-next/
+/.wrangler/
+.dev.vars*

@@ -110,7 +110,12 @@ export const supabaseBackend: Backend = {
 
   async signUp(name, email, password): Promise<AuthResult> {
     const sb = await supabaseServer();
-    const { data, error } = await sb.auth.signUp({ email, password, options: { data: { name } } });
+    const origin = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const { data, error } = await sb.auth.signUp({
+      email,
+      password,
+      options: { data: { name }, emailRedirectTo: `${origin}/auth/callback` },
+    });
     if (error) return { ok: false, error: translateAuthError(error.message) };
     if (!data.session) {
       return { ok: false, error: "Akun dibuat. Cek email kamu untuk konfirmasi, lalu masuk." };
