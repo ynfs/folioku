@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 // Catatan: cacheComponents sengaja tidak diaktifkan. Hampir semua halaman
-// Folioku membaca sesi login, jadi model rendering dinamis klasik lebih cocok.
+// Safantara membaca sesi login, jadi model rendering dinamis klasik lebih cocok.
 const nextConfig: NextConfig = {
   turbopack: {
     rules: {

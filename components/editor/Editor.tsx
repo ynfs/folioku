@@ -31,7 +31,7 @@ const DEVICES: { id: Device; label: string; width: string }[] = [
 
 const AUTOSAVE_MS = 800;
 const MAX_WAIT_MS = 3000;
-const PREVIEW_BASE = "#folioku";
+const PREVIEW_BASE = "#safantara";
 
 export type EditorMode = { kind: "project"; project: Project } | { kind: "template"; template: Template };
 
@@ -143,7 +143,7 @@ function EditorInner({ mode }: { mode: EditorMode }) {
   }
 
   const width = DEVICES.find((d) => d.id === device)!.width;
-  // Link halaman di pratinjau menjadi "#folioku/<slug>" agar bisa dibuka dengan Ctrl+klik.
+  // Link halaman di pratinjau menjadi "#safantara/<slug>" agar bisa dibuka dengan Ctrl+klik.
   const resolved = resolvePageLinks(data, PREVIEW_BASE, page);
   const preview = { theme: data.theme, sections: pageSections(resolved, page) };
   const pageTitle = page === HOME ? "Beranda" : getPages(data).find((p) => p.id === page)?.title;

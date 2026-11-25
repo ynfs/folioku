@@ -1,4 +1,4 @@
-// Tipe data inti Folioku. Template dan proyek memakai format JSON yang sama:
+// Tipe data inti Safantara. Template dan proyek memakai format JSON yang sama:
 // sebuah `theme` dan daftar `sections`. Saat klien mengedit, hanya data ini yang
 // berubah, lalu halaman dirender ulang.
 

@@ -13,7 +13,7 @@ export function PublicPage({ pub, pageId = HOME }: { pub: Publication; pageId?: 
       <footer className="py-6 text-center text-xs opacity-60" style={{ color: data.theme.colorPrimary }}>
         Dibuat dengan{" "}
         <Link href="/" className="font-semibold underline">
-          Folioku
+          Safantara
         </Link>
       </footer>
     </main>

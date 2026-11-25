@@ -1,4 +1,4 @@
--- Skema database Folioku untuk Supabase.
+-- Skema database Safantara untuk Supabase.
 -- Jalankan sekali di Supabase Dashboard → SQL Editor.
 
 -- ---------- users: profil dan peran ----------

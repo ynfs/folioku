@@ -5,7 +5,7 @@ import "./globals.css";
 const appFont = Plus_Jakarta_Sans({ variable: "--font-app", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: { default: "Folioku — Buat portofolio tanpa kode", template: "%s · Folioku" },
+  title: { default: "Safantara — Buat portofolio tanpa kode", template: "%s · Safantara" },
   description: "Pilih template, edit, dan publikasikan portofolio kamu tanpa menulis kode.",
 };
 

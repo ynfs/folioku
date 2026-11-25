@@ -63,7 +63,7 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="border-t border-app-line py-8 text-center text-sm text-app-muted">© Folioku</footer>
+      <footer className="border-t border-app-line py-8 text-center text-sm text-app-muted">© Safantara</footer>
     </>
   );
 }

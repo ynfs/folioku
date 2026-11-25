@@ -1,8 +1,8 @@
-# Folioku
+# Safantara
 
 Platform pembuat portofolio berbasis template. Admin menyediakan koleksi template dari gaya modern sampai klasik, lalu pengguna atau klien dapat memilih, mengedit, menambah, menghapus bagian, dan mempublikasikan portofolio mereka tanpa perlu menulis kode.
 
-> **Catatan:** "Folioku" adalah nama sementara. Ganti sesuai nama brand kamu.
+> Safantara adalah platform pembuat portofolio.
 
 ---
 
@@ -34,7 +34,7 @@ Platform pembuat portofolio berbasis template. Admin menyediakan koleksi templat
   - Pratinjau tampilan desktop, tablet, dan HP
 - Simpan otomatis
 - Dashboard untuk mengelola beberapa proyek portofolio
-- Publish ke link publik (saat ini `/p/namaklien`; subdomain `namaklien.folioku.com` menyusul)
+- Publish ke link publik (saat ini `/p/namaklien`; subdomain `namaklien.safantara.com` menyusul)
 - Ekspor ke PDF
 
 ### Desain Bebas (ala Figma)
@@ -111,7 +111,7 @@ Publish          ──►  Link portofolio atau PDF
 ## Struktur Folder
 
 ```
-folioku/
+safantara/
 ├── app/
 │   ├── (auth)/              # Halaman masuk dan daftar
 │   ├── (dashboard)/         # Dashboard klien
@@ -214,8 +214,8 @@ Buka `http://localhost:3000`, daftar akun, lalu pilih template. Tanpa variabel S
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/username/folioku.git
-cd folioku
+git clone https://github.com/username/safantara.git
+cd safantara
 
 # 2. Install dependensi
 npm install

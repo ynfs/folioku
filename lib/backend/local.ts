@@ -9,10 +9,10 @@ import type { AdminStats, AuthResult, Backend } from "./types";
 // MODE LOKAL: semua data disimpan di ./data/db.json dan gambar di ./data/uploads.
 // Cocok untuk mencoba di komputer sendiri. Untuk produksi gunakan Supabase.
 
-const DATA_DIR = process.env.FOLIOKU_DATA_DIR || path.join(process.cwd(), "data");
+const DATA_DIR = process.env.SAFANTARA_DATA_DIR || path.join(process.cwd(), "data");
 const DB_FILE = path.join(DATA_DIR, "db.json");
 export const UPLOAD_DIR = path.join(DATA_DIR, "uploads");
-const COOKIE = "folioku_session";
+const COOKIE = "safantara_session";
 const SESSION_DAYS = 30;
 
 interface StoredUser extends User {
@@ -106,7 +106,9 @@ async function setSession(userId: string) {
 }
 
 async function sessionUserId(): Promise<string | null> {
-  const raw = (await cookies()).get(COOKIE)?.value;
+  const store = await cookies();
+  // Cookie lama (sebelum ganti nama ke Safantara) tetap diterima agar pengguna tidak keluar.
+  const raw = store.get(COOKIE)?.value ?? store.get("folioku_session")?.value;
   if (!raw) return null;
   const parts = raw.split(".");
   if (parts.length !== 3) return null;
@@ -163,7 +165,9 @@ export const localBackend: Backend = {
   },
 
   async signOut() {
-    (await cookies()).delete(COOKIE);
+    const store = await cookies();
+    store.delete(COOKIE);
+    store.delete("folioku_session");
   },
 
   async listProjects(userId) {
