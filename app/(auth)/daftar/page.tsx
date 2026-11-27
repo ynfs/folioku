@@ -10,8 +10,8 @@ export default async function DaftarPage(props: PageProps<"/daftar">) {
   if (await backend.getCurrentUser()) redirect("/dashboard");
   return (
     <>
-      <h1 className="mb-1 text-xl font-extrabold">Buat akun</h1>
-      <p className="mb-6 text-sm text-app-muted">Gratis. Mulai buat portofolio dalam beberapa menit.</p>
+      <h1 className="font-display mb-1 text-3xl font-extrabold">Buat akun gratis</h1>
+      <p className="mb-6 text-sm text-app-muted">Mulai dari ratusan template — jadi dalam beberapa menit.</p>
       <AuthForm mode="daftar" next={typeof next === "string" ? next : undefined} />
     </>
   );

@@ -66,13 +66,27 @@ export function Portfolio({
 }
 
 /** Pratinjau kecil (thumbnail) dengan merender halaman lebar 1280px lalu diperkecil. */
-export function PortfolioThumb({ data, height = 220 }: { data: PortfolioData; height?: number }) {
-  const scale = 0.3;
+export function PortfolioThumb({
+  data,
+  height = 220,
+  designWidth = 1280,
+  scale = 0.3,
+  maxSections = 3,
+  className = "",
+}: {
+  data: PortfolioData;
+  height?: number;
+  /** Lebar desain (1280 = desktop, 390 = HP) sebelum diperkecil. */
+  designWidth?: number;
+  scale?: number;
+  maxSections?: number;
+  className?: string;
+}) {
   return (
-    <div className="relative w-full overflow-hidden" style={{ height, background: data.theme.colorBackground }} aria-hidden>
-      <div className="pointer-events-none absolute left-0 top-0 origin-top-left" style={{ width: 1280, transform: `scale(${scale})` }}>
+    <div className={`relative w-full overflow-hidden ${className}`} style={{ height, background: data.theme.colorBackground }} aria-hidden>
+      <div className="pointer-events-none absolute left-0 top-0 origin-top-left" style={{ width: designWidth, transform: `scale(${scale})` }}>
         <SiteProvider value={{ slug: null, guest: "", editing: true }}>
-          <Portfolio data={{ ...data, sections: data.sections.filter((s) => s.type !== "music").slice(0, 3) }} />
+          <Portfolio data={{ ...data, sections: data.sections.filter((s) => s.type !== "music").slice(0, maxSections) }} />
         </SiteProvider>
       </div>
     </div>

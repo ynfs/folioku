@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createProjectAction } from "@/app/actions";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { ProductTabs } from "@/components/ui/ProductTabs";
+import { SiteFooter } from "@/components/ui/SiteFooter";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
 import { CATEGORIES, STYLES, categoryLabel, kindOf, kindSlug, parseKind, productWord, styleLabel } from "@/lib/templates";
 import { galleryTemplates } from "@/lib/templates-server";
@@ -52,7 +53,7 @@ export default async function TemplatesPage(props: PageProps<"/templates">) {
         <ProductTabs active={kind} hrefFor={(k) => `/templates?jenis=${kindSlug(k)}`} />
         <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold">{kind === "invitation" ? "Template undangan digital" : `Template ${productWord(kind)}`}</h1>
+            <h1 className="font-display text-4xl font-extrabold">{kind === "invitation" ? "Template undangan digital" : `Template ${productWord(kind)}`}</h1>
             <p className="mt-1 text-app-muted">{all.length} template · pilih berdasarkan kategori dan gaya, nanti semuanya bisa kamu ubah.</p>
           </div>
           <form action="/templates" className="flex gap-2">
@@ -98,22 +99,37 @@ export default async function TemplatesPage(props: PageProps<"/templates">) {
         ) : (
           <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {shown.map((t) => (
-              <article key={t.id} className="flex flex-col overflow-hidden rounded-2xl border border-app-line bg-white">
-                <PortfolioThumb data={t} height={240} />
+              <article key={t.id} className="card card-hover group flex flex-col overflow-hidden">
+                <div className="relative">
+                  <PortfolioThumb data={t} height={240} />
+                  {/* Lapisan hover: pratinjau */}
+                  <Link
+                    href={`/templates/${t.id}`}
+                    className="absolute inset-0 grid place-items-center bg-app-fg/0 opacity-0 transition duration-300 group-hover:bg-app-fg/35 group-hover:opacity-100 focus-visible:bg-app-fg/35 focus-visible:opacity-100"
+                    aria-label={`Pratinjau ${t.name}`}
+                  >
+                    <span className="rounded-full bg-white px-4 py-2 text-sm font-bold shadow-lift">👁 Pratinjau</span>
+                  </Link>
+                </div>
                 <div className="flex flex-1 flex-col border-t border-app-line p-4">
-                  <h2 className="font-bold">
+                  <h2 className="font-display font-bold">
                     {t.name}
                     {!t.builtin && <span className="ml-2 rounded-full bg-brand/10 px-2 py-0.5 text-[10px] font-bold uppercase text-brand">Baru</span>}
                   </h2>
                   <div className="mt-1.5 flex flex-wrap gap-1">
-                    <span className="rounded-full bg-app-bg px-2 py-0.5 text-[11px] font-semibold text-app-muted">{categoryLabel(t.category)}</span>
-                    {t.style && <span className="rounded-full border border-app-line px-2 py-0.5 text-[11px] font-semibold text-app-muted">{styleLabel(t.style)}</span>}
+                    <span className="chip bg-app-soft">{categoryLabel(t.category)}</span>
+                    {t.style && <span className="chip">{styleLabel(t.style)}</span>}
                   </div>
                   <p className="mt-2 flex-1 text-sm text-app-muted">{t.description}</p>
-                  <form action={createProjectAction} className="mt-4">
-                    <input type="hidden" name="templateId" value={t.id} />
-                    <button className="btn-primary w-full">Gunakan template ini</button>
-                  </form>
+                  <div className="mt-4 grid grid-cols-[auto_1fr] gap-2">
+                    <Link href={`/templates/${t.id}`} className="btn-ghost">
+                      Pratinjau
+                    </Link>
+                    <form action={createProjectAction}>
+                      <input type="hidden" name="templateId" value={t.id} />
+                      <button className="btn-primary w-full">Gunakan</button>
+                    </form>
+                  </div>
                 </div>
               </article>
             ))}
@@ -145,6 +161,7 @@ export default async function TemplatesPage(props: PageProps<"/templates">) {
           </nav>
         )}
       </main>
+      <SiteFooter />
     </>
   );
 }

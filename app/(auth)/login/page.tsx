@@ -10,8 +10,8 @@ export default async function LoginPage(props: PageProps<"/login">) {
   if (await backend.getCurrentUser()) redirect("/dashboard");
   return (
     <>
-      <h1 className="mb-1 text-xl font-extrabold">Masuk</h1>
-      <p className="mb-6 text-sm text-app-muted">Lanjutkan mengedit portofolio kamu.</p>
+      <h1 className="font-display mb-1 text-3xl font-extrabold">Selamat datang kembali</h1>
+      <p className="mb-6 text-sm text-app-muted">Masuk untuk melanjutkan undangan, proposal, atau portofoliomu.</p>
       <AuthForm mode="login" next={typeof next === "string" ? next : undefined} />
     </>
   );

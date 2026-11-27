@@ -40,7 +40,7 @@ export function AuthForm({ mode, next }: { mode: "login" | "daftar"; next?: stri
         />
       </div>
       {state?.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>}
-      <button className="btn-primary w-full py-2.5" disabled={pending}>
+      <button className="btn-brand w-full py-2.5" disabled={pending}>
         {pending ? "Memproses…" : isSignUp ? "Buat akun" : "Masuk"}
       </button>
       <p className="text-center text-sm text-app-muted">

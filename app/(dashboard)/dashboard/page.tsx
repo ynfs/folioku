@@ -4,6 +4,7 @@ import { createTemplateAction } from "@/app/actions";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { DeleteProjectButton } from "@/components/ui/DeleteProjectButton";
 import { ProductTabs } from "@/components/ui/ProductTabs";
+import { SiteFooter } from "@/components/ui/SiteFooter";
 import { backend, requireUser } from "@/lib/backend";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
 import { kindOf, kindSlug, parseKind, productWord } from "@/lib/templates";
@@ -27,10 +28,38 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
     <>
       <AppHeader />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
-        <ProductTabs active={kind} hrefFor={(k) => (k === "portfolio" ? "/dashboard" : `/dashboard?jenis=${kindSlug(k)}`)} />
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold text-app-muted">Dashboard</p>
+            <h1 className="font-display text-4xl font-extrabold">Halo, {user.name || "kamu"} 👋</h1>
+            <p className="mt-1 text-app-muted">Mau bikin apa hari ini?</p>
+          </div>
+        </div>
+
+        {/* Buat cepat per produk */}
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          {[
+            { k: "invitation" as const, icon: "✉", title: "Undangan baru", text: "Pernikahan, ulang tahun, adat, acara", n: all.filter((p) => kindOf(p) === "invitation").length },
+            { k: "proposal" as const, icon: "▤", title: "Proposal baru", text: "Penawaran, sponsorship, kegiatan", n: all.filter((p) => kindOf(p) === "proposal").length },
+            { k: "portfolio" as const, icon: "▦", title: "Portofolio baru", text: "Profil pribadi & company profile", n: all.filter((p) => kindOf(p) === "portfolio").length },
+          ].map((q) => (
+            <Link key={q.k} href={`/templates?jenis=${kindSlug(q.k)}`} className="card card-hover group flex items-center gap-4 p-5">
+              <span className="bg-grad grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-xl text-white shadow-[0_10px_20px_-10px_rgb(240_83_45/0.8)]">{q.icon}</span>
+              <span className="min-w-0 flex-1">
+                <span className="font-display block font-bold">+ {q.title}</span>
+                <span className="block truncate text-sm text-app-muted">{q.text}</span>
+              </span>
+              <span className="chip">{q.n}</span>
+            </Link>
+          ))}
+        </div>
+
+        <div className="mt-10">
+          <ProductTabs active={kind} hrefFor={(k) => (k === "portfolio" ? "/dashboard" : `/dashboard?jenis=${kindSlug(k)}`)} />
+        </div>
         <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold">Halo, {user.name || "kamu"}</h1>
+            <h2 className="font-display text-2xl font-extrabold capitalize">{word} saya</h2>
             <p className="mt-1 text-app-muted">
               {projects.length ? `Kamu punya ${projects.length} ${word}.` : `Belum ada ${word}. Mulai dari sebuah template.`}
             </p>
@@ -41,24 +70,25 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
         </div>
 
         {backend.mode === "local" && (
-          <p className="mt-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          <p className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
             Mode lokal aktif: data disimpan di folder <code>data/</code> komputer ini. Isi variabel Supabase di{" "}
             <code>.env.local</code> untuk penggunaan online.
           </p>
         )}
 
         {projects.length === 0 ? (
-          <div className="mt-10 rounded-2xl border border-dashed border-app-line bg-white p-12 text-center">
-            <p className="text-lg font-bold">Belum ada {word}</p>
+          <div className="mt-8 rounded-3xl border-2 border-dashed border-app-line bg-white/60 p-12 text-center">
+            <span className="bg-grad mx-auto grid h-14 w-14 place-items-center rounded-2xl text-2xl text-white">✦</span>
+            <p className="font-display mt-4 text-xl font-bold">Belum ada {word}</p>
             <p className="mt-1 text-app-muted">Pilih template untuk membuat {word} pertamamu.</p>
-            <Link href={newHref} className="btn-primary mt-6">
+            <Link href={newHref} className="btn-brand mt-6">
               Lihat galeri template
             </Link>
           </div>
         ) : (
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {projects.map((p) => (
-              <article key={p.id} className="flex flex-col overflow-hidden rounded-2xl border border-app-line bg-white">
+              <article key={p.id} className="card card-hover flex flex-col overflow-hidden">
                 <div className="relative">
                   <PortfolioThumb data={p.data} height={200} />
                   <Link href={`/editor/${p.id}`} className="absolute inset-0" aria-label={`Edit ${p.name}`} />
@@ -103,6 +133,7 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
           </div>
         )}
       </main>
+      <SiteFooter />
     </>
   );
 }
