@@ -17,6 +17,7 @@ export const FONTS: { name: string; kind: "sans" | "serif" | "display" | "mono" 
   { name: "Bricolage Grotesque", kind: "display" },
   { name: "Cinzel", kind: "display" },
   { name: "Great Vibes", kind: "display" },
+  { name: "Noto Sans Javanese", kind: "display" },
   { name: "IBM Plex Mono", kind: "mono" },
   { name: "Space Mono", kind: "mono" },
 ];
@@ -30,7 +31,7 @@ const FALLBACK: Record<string, string> = {
 
 export function fontStack(name: string): string {
   const f = FONTS.find((x) => x.name === name);
-  return `"${name}", ${FALLBACK[f?.kind ?? "sans"]}`;
+  return `"${name}", "Noto Sans Javanese", ${FALLBACK[f?.kind ?? "sans"]}`;
 }
 
 /** URL stylesheet Google Fonts untuk sekumpulan font. */

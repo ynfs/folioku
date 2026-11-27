@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { SectionView } from "@/components/sections";
 import { SiteProvider } from "@/components/sections/site-context";
+import { AKSARA_FONT, hasAksara } from "@/lib/aksara";
 import { canvasElements, canvasFonts } from "@/lib/canvas";
 import { fontStack, googleFontsHref } from "@/lib/fonts";
 import { sectionAnchor } from "@/lib/pages";
@@ -33,7 +34,9 @@ export function FontLinks({ theme, extra = [] }: { theme: Theme; extra?: string[
 
 /** Font tambahan yang dipakai elemen di bagian Desain Bebas. */
 function usedFonts(data: PortfolioData): string[] {
-  return data.sections.filter((s) => s.type === "canvas").flatMap((s) => canvasFonts(canvasElements(s.props.elements)));
+  const fonts = data.sections.filter((s) => s.type === "canvas").flatMap((s) => canvasFonts(canvasElements(s.props.elements)));
+  if (data.sections.some((s) => hasAksara(JSON.stringify(s.props)))) fonts.push(AKSARA_FONT);
+  return fonts;
 }
 
 export function Portfolio({

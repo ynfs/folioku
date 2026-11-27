@@ -40,6 +40,8 @@ Platform pembuat **portofolio/company profile** dan **undangan digital** berbasi
 ### Undangan Digital
 Untuk pernikahan, pernikahan adat, ulang tahun, khitanan/aqiqah, dan acara/event. 10 template bawaan.
 - **Pernikahan adat**: Jawa, Sunda, Minangkabau, Bali, Batak — tiap tema punya warna, ornamen SVG (kawung, mega mendung, songket, jepun, gorga), sapaan, dan susunan prosesi sendiri
+- **Pawiwahan Adat Jawa Klasik**: gunungan (kayon) SVG original, latar sogan berbingkai emas, tagline & nama mempelai dalam **Aksara Jawa** (Unicode, font Noto Sans Javanese)
+- **Pengubah Latin → Aksara Jawa** di editor (field aksara & teks Desain Bebas): sandhangan wulu/suku/pepet/taling, layar/cecak/wignyan, pangkon, pasangan, cakra, pengkal — hasil tetap perlu dicek untuk aksara murda/rekan
 - **Prosesi Adat**: linimasa rangkaian upacara (nama, makna, waktu, tempat) — sesuaikan dengan tradisi keluarga
 - **Dress Code**: anjuran busana dengan contoh warna
 - **Ornamen pemisah judul** bisa dipilih di panel Tema atau diunggah sendiri

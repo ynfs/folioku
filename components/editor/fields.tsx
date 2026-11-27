@@ -2,6 +2,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { latinToJawa } from "@/lib/aksara";
 import { THEME_COLORS, resolveColor } from "@/lib/canvas";
 import { HOME, findSection, getPages, linkedPageId, linkedSectionId, pageLink, pageSections, sectionLink, sectionPage } from "@/lib/pages";
 import { sectionLabel } from "@/lib/sections";
@@ -32,6 +33,8 @@ export function FieldInput({
       );
     case "url":
       return <LinkInput id={id} label={field.label} value={str} onChange={onChange} />;
+    case "aksara":
+      return <AksaraInput id={id} label={field.label} value={str} onChange={onChange} />;
     case "datetime":
       return (
         <Labeled id={id} label={field.label}>
@@ -520,6 +523,37 @@ function LinkInfo({ text, missing, action, onAction }: { text: string | null; mi
           {action}
         </button>
       )}
+    </div>
+  );
+}
+
+/** Teks Aksara Jawa + pengubah dari huruf Latin. */
+export function AksaraInput({ id, label, value, onChange }: { id: string; label: string; value: string; onChange: (v: string) => void }) {
+  const [latin, setLatin] = useState("");
+  const convert = () => latin.trim() && onChange(latinToJawa(latin.trim()));
+  return (
+    <div>
+      <label htmlFor={id} className="label">
+        {label}
+      </label>
+      <input id={id} lang="jv" className="input aksara text-lg" value={value} onChange={(e) => onChange(e.target.value)} placeholder="꧁ꦲꦏ꧀ꦱꦫ꧂" />
+      <div className="mt-1.5 flex gap-1.5">
+        <input
+          className="input py-1.5 text-xs"
+          placeholder="Ketik huruf Latin, mis. sugeng rawuh"
+          value={latin}
+          onChange={(e) => setLatin(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && convert()}
+          aria-label={`${label} (huruf Latin)`}
+        />
+        <button type="button" className="btn-ghost shrink-0 px-2 py-1 text-xs" onClick={convert}>
+          → Aksara
+        </button>
+        <button type="button" className="btn-ghost shrink-0 px-2 py-1 text-xs" title="Tambah hiasan ꧁ ꧂" onClick={() => value && onChange(`꧁${value.replace(/^꧁|꧂$/g, "")}꧂`)}>
+          ꧁꧂
+        </button>
+      </div>
+      <p className="mt-1 text-[11px] text-app-muted">Hasil otomatis perlu dicek untuk ejaan khusus (aksara murda/rekan).</p>
     </div>
   );
 }

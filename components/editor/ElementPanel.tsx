@@ -1,6 +1,7 @@
 "use client";
 
 import { CANVAS_WIDTH, canvasElements, elementLabel } from "@/lib/canvas";
+import { latinToJawa } from "@/lib/aksara";
 import { FONTS } from "@/lib/fonts";
 import type { CanvasElement, Section } from "@/lib/types";
 import { canvasHeight } from "@/components/sections/canvas";
@@ -146,6 +147,14 @@ export function ElementPanel({ section }: { section: Section }) {
       {!multi && isText && (
         <Group title={el.type === "button" ? "Teks tombol" : "Teks"}>
           <textarea className="input min-h-16 resize-y" value={el.text ?? ""} onChange={(e) => set({ text: e.target.value })} aria-label="Isi teks" />
+          <button
+            type="button"
+            className="btn-ghost w-full py-1 text-xs"
+            title="Ubah teks Latin di atas menjadi Aksara Jawa"
+            onClick={() => set({ text: latinToJawa(el.text ?? ""), fontFamily: "Noto Sans Javanese" })}
+          >
+            Ubah ke ꦲꦏ꧀ꦱꦫꦗꦮ (Aksara Jawa)
+          </button>
           <select className="input" aria-label="Font" value={el.fontFamily ?? "body"} onChange={(e) => set({ fontFamily: e.target.value })}>
             <option value="heading">Font judul tema</option>
             <option value="body">Font isi tema</option>

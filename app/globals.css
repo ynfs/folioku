@@ -135,3 +135,9 @@ body {
 .inv-ornament::before {
   content: var(--ornament-glyph, "❦");
 }
+
+/* Aksara Jawa (Hanacaraka) */
+.aksara {
+  font-family: "Noto Sans Javanese", var(--fh, serif);
+  letter-spacing: 0.02em;
+}

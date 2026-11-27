@@ -27,11 +27,16 @@ export function InvHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Person({ name, full, parents, photo, ig }: { name: string; full: string; parents: string; photo: string; ig: string }) {
+function Person({ name, script, full, parents, photo, ig }: { name: string; script: string; full: string; parents: string; photo: string; ig: string }) {
   return (
     <div className="flex flex-col items-center">
       {photo && <img src={photo} alt={name} className="h-44 w-44 rounded-full border-4 object-cover @3xl:h-56 @3xl:w-56" style={{ borderColor: "var(--c-surface)" }} />}
       <p className="pf-h mt-6 text-4xl font-bold @3xl:text-5xl">{name}</p>
+      {script && (
+        <p lang="jv" className="aksara pf-accent mt-2 text-2xl">
+          {script}
+        </p>
+      )}
       {full && <p className="mt-2 text-lg font-semibold">{full}</p>}
       {parents && <p className="pf-muted mt-2 whitespace-pre-line">{parents}</p>}
       {ig && (
@@ -49,11 +54,11 @@ export function Couple({ p }: { p: P }) {
       <InvHeading>{s(p.heading)}</InvHeading>
       {s(p.intro) && <p className="pf-muted mx-auto mb-12 max-w-2xl leading-relaxed">{s(p.intro)}</p>}
       <div className="grid items-center gap-10 @3xl:grid-cols-[1fr_auto_1fr]">
-        <Person name={s(p.name1)} full={s(p.full1)} parents={s(p.parents1)} photo={s(p.photo1)} ig={s(p.ig1)} />
+        <Person name={s(p.name1)} script={s(p.script1)} full={s(p.full1)} parents={s(p.parents1)} photo={s(p.photo1)} ig={s(p.ig1)} />
         <span className="pf-h pf-accent text-6xl" aria-hidden>
           &amp;
         </span>
-        <Person name={s(p.name2)} full={s(p.full2)} parents={s(p.parents2)} photo={s(p.photo2)} ig={s(p.ig2)} />
+        <Person name={s(p.name2)} script={s(p.script2)} full={s(p.full2)} parents={s(p.parents2)} photo={s(p.photo2)} ig={s(p.ig2)} />
       </div>
     </InvWrap>
   );

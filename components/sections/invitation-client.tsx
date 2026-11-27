@@ -37,6 +37,12 @@ export function Cover({ p }: { p: P }) {
     <section ref={ref} className="relative isolate flex min-h-[640px] flex-col items-center justify-center overflow-hidden px-6 py-20 text-center text-white @3xl:min-h-[760px]">
       {s(p.image) && <img src={s(p.image)} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover" />}
       <div className="absolute inset-0 -z-10 bg-black/50" />
+      {s(p.topImage) && <img src={s(p.topImage)} alt="" className="mb-6 h-36 w-auto drop-shadow-lg @3xl:h-48" />}
+      {s(p.tagline) && (
+        <p lang="jv" className="aksara mb-4 text-3xl leading-relaxed @3xl:text-4xl" style={{ color: "var(--c-accent)" }}>
+          {s(p.tagline)}
+        </p>
+      )}
       {s(p.eyebrow) && <p className="text-sm font-semibold uppercase tracking-[0.3em] opacity-90">{s(p.eyebrow)}</p>}
       <h1 className="pf-h mt-4 text-5xl font-bold leading-tight @3xl:text-7xl">{s(p.title)}</h1>
       {s(p.subtitle) && <p className="mt-4 text-lg opacity-90">{s(p.subtitle)}</p>}

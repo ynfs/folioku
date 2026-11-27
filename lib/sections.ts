@@ -6,7 +6,7 @@ import type { PropValue, Section, SectionType } from "./types";
 type ItemKind = "text" | "textarea" | "image" | "url" | "datetime";
 
 export type Field =
-  | { key: string; label: string; kind: "text" | "textarea" | "image" | "url" | "datetime" | "audio" }
+  | { key: string; label: string; kind: "text" | "textarea" | "image" | "url" | "datetime" | "audio" | "aksara" }
   | { key: string; label: string; kind: "select"; options: { value: string; label: string }[] }
   | { key: string; label: string; kind: "number"; min: number; max: number }
   | { key: string; label: string; kind: "size"; min: number; max: number; step?: number; unit?: string }
@@ -45,6 +45,8 @@ export const SECTION_DEFS: Record<SectionType, SectionDef> = {
     label: "Sampul",
     description: "Pembuka dengan nama tamu & tombol Buka Undangan",
     fields: [
+      { key: "topImage", label: "Hiasan atas (mis. gunungan)", kind: "image" },
+      { key: "tagline", label: "Tagline aksara (mis. Aksara Jawa)", kind: "aksara" },
       { key: "eyebrow", label: "Teks kecil", kind: "text" },
       { key: "title", label: "Judul (mis. nama mempelai)", kind: "text" },
       { key: "subtitle", label: "Tanggal / keterangan", kind: "text" },
@@ -58,6 +60,8 @@ export const SECTION_DEFS: Record<SectionType, SectionDef> = {
       title: "Rina & Dimas",
       subtitle: "Sabtu, 20 Desember 2026",
       greeting: "Kepada Yth. Bapak/Ibu/Saudara/i",
+      topImage: "",
+      tagline: "",
       image: "/placeholder/cover.svg",
       buttonText: "Buka Undangan",
       buttonLink: "",
@@ -72,11 +76,13 @@ export const SECTION_DEFS: Record<SectionType, SectionDef> = {
       { key: "heading", label: "Judul", kind: "text" },
       { key: "intro", label: "Kalimat pembuka", kind: "textarea" },
       { key: "name1", label: "Mempelai 1 — nama panggilan", kind: "text" },
+      { key: "script1", label: "Mempelai 1 — nama dalam aksara", kind: "aksara" },
       { key: "full1", label: "Mempelai 1 — nama lengkap", kind: "text" },
       { key: "parents1", label: "Mempelai 1 — orang tua", kind: "textarea" },
       { key: "photo1", label: "Mempelai 1 — foto", kind: "image" },
       { key: "ig1", label: "Mempelai 1 — Instagram", kind: "url" },
       { key: "name2", label: "Mempelai 2 — nama panggilan", kind: "text" },
+      { key: "script2", label: "Mempelai 2 — nama dalam aksara", kind: "aksara" },
       { key: "full2", label: "Mempelai 2 — nama lengkap", kind: "text" },
       { key: "parents2", label: "Mempelai 2 — orang tua", kind: "textarea" },
       { key: "photo2", label: "Mempelai 2 — foto", kind: "image" },
