@@ -4,7 +4,7 @@ import { createProjectAction } from "@/app/actions";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { ProductTabs } from "@/components/ui/ProductTabs";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
-import { CATEGORIES, STYLES, categoryLabel, kindOf, parseKind, styleLabel } from "@/lib/templates";
+import { CATEGORIES, STYLES, categoryLabel, kindOf, kindSlug, parseKind, productWord, styleLabel } from "@/lib/templates";
 import { galleryTemplates } from "@/lib/templates-server";
 
 export const metadata: Metadata = { title: "Galeri template" };
@@ -15,7 +15,7 @@ export default async function TemplatesPage(props: PageProps<"/templates">) {
   const sp = await props.searchParams;
   const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? "";
   const kind = parseKind(sp.jenis);
-  const jenis = kind === "invitation" ? "undangan" : "portofolio";
+  const jenis = kindSlug(kind);
 
   const all = (await galleryTemplates()).filter((t) => kindOf(t) === kind);
   const cats = CATEGORIES.filter((c) => c.kind === kind);
@@ -49,10 +49,10 @@ export default async function TemplatesPage(props: PageProps<"/templates">) {
     <>
       <AppHeader />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
-        <ProductTabs active={kind} hrefFor={(k) => `/templates?jenis=${k === "invitation" ? "undangan" : "portofolio"}`} />
+        <ProductTabs active={kind} hrefFor={(k) => `/templates?jenis=${kindSlug(k)}`} />
         <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold">{kind === "invitation" ? "Template undangan digital" : "Template portofolio"}</h1>
+            <h1 className="text-3xl font-extrabold">{kind === "invitation" ? "Template undangan digital" : `Template ${productWord(kind)}`}</h1>
             <p className="mt-1 text-app-muted">{all.length} template · pilih berdasarkan kategori dan gaya, nanti semuanya bisa kamu ubah.</p>
           </div>
           <form action="/templates" className="flex gap-2">

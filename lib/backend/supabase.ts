@@ -202,18 +202,18 @@ export const supabaseBackend: Backend = {
     const sb = await supabaseServer();
     const { data } = await sb
       .from("publications")
-      .select("slug, projects(name, data), users(name)")
+      .select("slug, projects(name, data, kind), users(name)")
       .eq("slug", slug)
       .eq("published", true)
       .maybeSingle();
     if (!data) return null;
     const row = data as unknown as {
       slug: string;
-      projects: { name: string; data: PortfolioData } | null;
+      projects: { name: string; data: PortfolioData; kind: ProductKind | null } | null;
       users: { name: string } | null;
     };
     if (!row.projects) return null;
-    return { slug: row.slug, name: row.projects.name, data: row.projects.data, ownerName: row.users?.name ?? "" };
+    return { slug: row.slug, kind: row.projects.kind ?? "portfolio", name: row.projects.name, data: row.projects.data, ownerName: row.users?.name ?? "" };
   },
 
   async uploadImage(userId, file) {

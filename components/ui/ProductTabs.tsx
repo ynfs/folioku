@@ -2,9 +2,9 @@ import Link from "next/link";
 import { PRODUCTS } from "@/lib/templates";
 import type { ProductKind } from "@/lib/types";
 
-const ICON: Record<ProductKind, string> = { portfolio: "▦", invitation: "✉" };
+const ICON: Record<ProductKind, string> = { portfolio: "▦", invitation: "✉", proposal: "▤" };
 
-/** Tab produk Safantara: Portofolio | Undangan Digital. */
+/** Tab produk Safantara: Portofolio | Undangan Digital | Proposal. */
 export function ProductTabs({ active, hrefFor }: { active: ProductKind; hrefFor: (k: ProductKind) => string }) {
   return (
     <nav className="inline-flex rounded-xl border border-app-line bg-white p-1" aria-label="Produk">

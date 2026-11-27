@@ -13,7 +13,7 @@ import {
 } from "@/app/actions";
 import { HOME, findSection, getPages, pageSections, resolvePageLinks } from "@/lib/pages";
 import { Portfolio } from "@/lib/renderer/Portfolio";
-import { CATEGORIES, PRODUCTS, STYLES } from "@/lib/templates";
+import { CATEGORIES, PRODUCTS, STYLES, productWord } from "@/lib/templates";
 import type { PortfolioData, Project, Template } from "@/lib/types";
 import { SiteProvider } from "@/components/sections/site-context";
 import { CanvasEditable, handleCanvasKey } from "./CanvasEditor";
@@ -313,7 +313,7 @@ function slugify(s: string): string {
 }
 
 function ProjectPublish({ project }: { project: Project }) {
-  const word = project.kind === "invitation" ? "undangan" : "portofolio";
+  const word = productWord(project.kind);
   const [open, setOpen] = useState(false);
   const [state, setState] = useState({ published: project.published, slug: project.slug });
   const [slug, setSlug] = useState(project.slug ?? slugify(project.name));
@@ -375,7 +375,7 @@ function ProjectPublish({ project }: { project: Project }) {
           </button>
           {state.published && state.slug && (
             <div className="mt-4 rounded-lg bg-green-50 p-3 text-sm">
-              <p className="font-semibold text-green-800">{word === "undangan" ? "Undangan" : "Portofolio"} sudah terbit</p>
+              <p className="font-semibold text-green-800">{word.charAt(0).toUpperCase() + word.slice(1)} sudah terbit</p>
               <a href={`/p/${state.slug}`} target="_blank" className="mt-1 block break-all font-semibold text-brand underline">
                 {origin}/p/{state.slug}
               </a>

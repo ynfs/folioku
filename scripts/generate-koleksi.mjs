@@ -1,6 +1,6 @@
-// Generator 100 template Safantara (60 undangan + 40 portofolio) beserta gambar sampulnya.
+// Generator template Safantara: 100 koleksi (60 undangan + 40 portofolio) dan 100 proposal, beserta gambar sampulnya.
 // Jalankan dari folder proyek:  node scripts/generate-koleksi.mjs
-// Hasil: templates/koleksi-100.json dan public/koleksi/*.svg (deterministik).
+// Hasil: templates/koleksi-100.json, templates/proposal-100.json, dan public/koleksi/*.svg (deterministik).
 import fs from "node:fs";
 import path from "node:path";
 
@@ -578,3 +578,240 @@ const tally = {};
 for (const t of out) tally[`${t.kind}/${t.category}`] = (tally[`${t.kind}/${t.category}`] ?? 0) + 1;
 console.log(`${out.length} template dibuat`);
 console.log(tally);
+
+// =====================================================================
+// FASE 2 — 100 template PROPOSAL (10 kategori × 10 topik)
+// Benih acak terpisah agar fase 1 di atas tidak berubah.
+// =====================================================================
+seed = 77001;
+
+const PROP_EYEBROW = {
+  penawaran: "Proposal Penawaran",
+  sponsorship: "Proposal Sponsorship",
+  kegiatan: "Proposal Kegiatan",
+  kerjasama: "Proposal Kerja Sama",
+  investasi: "Proposal Investasi",
+  "pitch-deck": "Pitch Deck",
+  proyek: "Proposal Proyek",
+  hibah: "Proposal Permohonan Dana",
+  penelitian: "Proposal Penelitian",
+  organisasi: "Proposal Kegiatan",
+};
+const PROP_LABEL = {
+  penawaran: "Penawaran", sponsorship: "Sponsorship", kegiatan: "Kegiatan", kerjasama: "Kerja Sama", investasi: "Investasi",
+  "pitch-deck": "Pitch Deck", proyek: "Proyek", hibah: "Hibah & CSR", penelitian: "Penelitian", organisasi: "Organisasi",
+};
+const ROMAWI = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+
+// [judul, gaya, pengaju]
+const TOPICS = {
+  penawaran: [
+    ["Jasa Desain & Branding", "kreatif", "Studio Kreasi Visual"], ["Pembuatan Website Company Profile", "modern", "Sinar Digital"], ["Jasa Fotografi Produk", "editorial", "Lensa Studio"],
+    ["Katering Makan Siang Kantor", "rustic", "Dapur Sehat Bunda"], ["Jasa Kebersihan Gedung", "minimalis", "Bersih Sejahtera"], ["Pengelolaan Media Sosial", "pastel", "Kontenin Agency"],
+    ["Jasa Konsultan Pajak", "klasik", "KKP Amanah"], ["Sewa Sound System & Panggung", "gelap", "Gema Audio"], ["Pelatihan Pelayanan Prima", "elegan", "Lembaga Pelatihan Prima"], ["Instalasi CCTV & Keamanan", "modern", "Mata Elang Security"],
+  ],
+  sponsorship: [
+    ["Festival Musik Kampus", "retro", "BEM Universitas Nusantara"], ["Turnamen E-sport Pelajar", "gelap", "Komunitas Gamer Kota"], ["Lomba Lari 10K Kota", "modern", "Panitia Run For Health"],
+    ["Pentas Seni Akhir Tahun", "ceria", "OSIS SMA Negeri 1"], ["Bazar UMKM Ramadan", "islami", "Asosiasi UMKM Kota"], ["Seminar Nasional Kewirausahaan", "elegan", "Himpunan Mahasiswa Manajemen"],
+    ["Pameran Fotografi Kota", "editorial", "Klub Fotografi Lensa"], ["Festival Kuliner Nusantara", "rustic", "Panitia Festival Kuliner"], ["Konser Amal Peduli Bencana", "kreatif", "Relawan Peduli"], ["Kompetisi Robotik Pelajar", "pastel", "Ikatan Guru Teknologi"],
+  ],
+  kegiatan: [
+    ["Bakti Sosial Ramadan", "islami", "Remaja Masjid Al-Ikhlas"], ["Pelatihan UMKM Desa", "minimalis", "Pemerintah Desa Sukamaju"], ["Lomba HUT Kemerdekaan RI", "ceria", "Karang Taruna RW 05"],
+    ["Donor Darah Massal", "modern", "Komunitas Peduli Sesama"], ["Kemah Bakti Pramuka", "rustic", "Gugus Depan 01"], ["Penghijauan Kampung", "floral", "Paguyuban Warga Hijau"],
+    ["Workshop Literasi Digital", "pastel", "Taman Baca Cerdas"], ["Pengajian Akbar & Santunan", "islami", "Majelis Taklim Nurul Iman"], ["Turnamen Futsal Antar RT", "retro", "Pemuda RW 03"], ["Studi Banding Desa Wisata", "klasik", "BUMDes Maju Bersama"],
+  ],
+  kerjasama: [
+    ["Kemitraan Distribusi Produk", "modern", "PT Sumber Rasa"], ["Kerja Sama Program Magang Siswa", "minimalis", "SMK Negeri 2"], ["Media Partner Acara", "kreatif", "Radio Suara Kota"],
+    ["Program Reseller & Agen", "ceria", "Keripik Mbok Sri"], ["Kolaborasi Produk Antar Brand", "pastel", "Kopi Kampung × Roti Manis"], ["Kerja Sama Layanan Kesehatan Karyawan", "klasik", "Klinik Pratama Sehat"],
+    ["Kemitraan Waralaba", "elegan", "Teh Tarik Juara"], ["Program CSR Bersama", "rustic", "Forum CSR Kota"], ["Pemasok Bahan Baku", "editorial", "Koperasi Tani Makmur"], ["Kemitraan Pemasaran Digital", "gelap", "Agensi Digital Sinar"],
+  ],
+  investasi: [
+    ["Ekspansi Kedai Kopi", "rustic", "Kopi Kampung"], ["Pembukaan Cabang Laundry", "minimalis", "Laundry Wangi"], ["Peternakan Ayam Petelur", "klasik", "Peternakan Berkah"],
+    ["Pabrik Keripik Singkong", "retro", "Keripik Mbok Sri"], ["Toko Online Fashion Muslim", "elegan", "Busana Anggun"], ["Budidaya Ikan Lele Bioflok", "modern", "Lele Mandiri"],
+    ["Pembangunan Rumah Kos", "editorial", "Griya Kos Nyaman"], ["Usaha Katering Sehat", "pastel", "Dapur Sehat Bunda"], ["Bengkel Motor Modern", "gelap", "Bengkel Maju Jaya"], ["Agrowisata Kebun Jeruk", "floral", "Kebun Jeruk Lestari"],
+  ],
+  "pitch-deck": [
+    ["KasirKu — Aplikasi Kasir UMKM", "modern", "KasirKu"], ["PanenID — Marketplace Hasil Tani", "rustic", "PanenID"], ["BelajarYuk — Platform Les Online", "pastel", "BelajarYuk"],
+    ["GalonGo — Antar Galon Cepat", "ceria", "GalonGo"], ["KodeKecil — Kelas Coding Anak", "kreatif", "KodeKecil"], ["KosKu — Aplikasi Manajemen Kos", "minimalis", "KosKu"],
+    ["NikahMudah — Platform Wedding Organizer", "elegan", "NikahMudah"], ["CuciKilat — Laundry On-demand", "gelap", "CuciKilat"], ["BundaSehat — Aplikasi Ibu Hamil", "floral", "BundaSehat"], ["DaurUlang — Platform Bank Sampah", "editorial", "DaurUlang"],
+  ],
+  proyek: [
+    ["Renovasi Gedung Sekolah", "klasik", "CV Bangun Karya"], ["Pembangunan Jalan Desa", "minimalis", "CV Jalan Mulus"], ["Pengadaan Komputer Lab", "modern", "PT Teknologi Nusantara"],
+    ["Sistem Informasi Desa", "editorial", "Sinar Digital"], ["Pembangunan Taman Kota", "floral", "CV Hijau Lestari"], ["Instalasi Panel Surya Kantor", "gelap", "PT Surya Energi"],
+    ["Pengadaan Seragam Pegawai", "elegan", "Konveksi Jaya Abadi"], ["Website Resmi Pemerintah Daerah", "minimalis", "Sinar Digital"], ["Renovasi Masjid", "islami", "CV Bangun Karya"], ["Pengadaan Alat Kesehatan Puskesmas", "pastel", "PT Medika Utama"],
+  ],
+  hibah: [
+    ["Beasiswa Anak Nelayan", "floral", "Yayasan Pesisir Cerdas"], ["Air Bersih untuk Desa", "minimalis", "Komunitas Air Untuk Semua"], ["Perpustakaan Keliling", "ceria", "Taman Baca Cerdas"],
+    ["Rumah Baca Anak", "pastel", "Rumah Baca Pelangi"], ["Pelatihan Menjahit Ibu Rumah Tangga", "rustic", "PKK Kelurahan Mekar"], ["Bank Sampah Kampung", "modern", "Paguyuban Warga Hijau"],
+    ["Renovasi Panti Asuhan", "islami", "Panti Asuhan Kasih Ibu"], ["Klinik Kesehatan Gratis", "klasik", "Relawan Medis Peduli"], ["Sekolah Alam Desa", "rustic", "Yayasan Sekolah Alam"], ["Pemberdayaan Petani Muda", "editorial", "Gerakan Petani Muda"],
+  ],
+  penelitian: [
+    ["Pengaruh Media Sosial terhadap Minat Beli Remaja", "klasik", "Mahasiswa Manajemen"], ["Analisis Kualitas Air Sungai Kota", "minimalis", "Mahasiswa Teknik Lingkungan"], ["Efektivitas Pembelajaran Daring di SD", "pastel", "Mahasiswa Pendidikan"],
+    ["Sistem Pakar Diagnosa Penyakit Tanaman", "modern", "Mahasiswa Informatika"], ["Pengembangan Pupuk Organik Cair", "rustic", "Mahasiswa Agroteknologi"], ["Studi Kelayakan Usaha Kedai Kopi", "editorial", "Mahasiswa Ekonomi"],
+    ["Perilaku Konsumen Produk Halal", "islami", "Mahasiswa Ekonomi Syariah"], ["Literasi Keuangan Mahasiswa", "elegan", "Mahasiswa Akuntansi"], ["Rancang Bangun Aplikasi Absensi", "gelap", "Mahasiswa Sistem Informasi"], ["Pemetaan Potensi Wisata Desa", "floral", "Mahasiswa Geografi"],
+  ],
+  organisasi: [
+    ["Pentas Seni OSIS", "ceria", "OSIS SMP Negeri 3"], ["Peringatan HUT RI Karang Taruna", "retro", "Karang Taruna Bina Remaja"], ["Seminar Kepemudaan BEM", "modern", "BEM Fakultas Ekonomi"],
+    ["Jambore Pramuka Daerah", "rustic", "Kwartir Cabang"], ["Kegiatan Ramadan Remaja Masjid", "islami", "Remaja Masjid Al-Ikhlas"], ["Reuni Akbar Ikatan Alumni", "elegan", "Ikatan Alumni SMA 1"],
+    ["Aksi Bersih Gunung", "minimalis", "Komunitas Pecinta Alam"], ["Lomba Masak PKK", "floral", "PKK Kelurahan Mekar"], ["Pelatihan Ronda & Keamanan Warga", "klasik", "Paguyuban Warga RW 07"], ["Sekolah Sepak Bola Anak", "pastel", "SSB Garuda Muda"],
+  ],
+};
+
+const rp = (n) => String(Math.round(n / 50000) * 50000);
+const pt = (title, detail) => ({ title, detail });
+const contactP = (issuer) => S("contact", { heading: "Kontak", text: `Untuk pertanyaan dan diskusi lebih lanjut, silakan hubungi ${issuer}.`, email: "halo@email.com", phone: "0812-0000-0000", links: [] });
+const approvalP = (issuer, city, dateText, signerRole = "Ketua / Direktur", text) =>
+  S("approval", {
+    heading: "Persetujuan",
+    text: text ?? "Jika proposal ini sesuai, silakan berikan persetujuan atau catatan Anda. Kami akan segera menindaklanjuti.",
+    signer: `Perwakilan ${issuer}`,
+    signerRole,
+    place: `${city}, ${dateText.split(", ")[1]}`,
+  });
+
+function proposalRecipe(cat, i, [title, , issuer], t, d, city) {
+  const k = 1 + (i % 5) * 0.35; // variasi skala anggaran
+  const team3 = (roles) => S("team", { heading: "Tim", items: roles.map((role, n) => ({ name: `Nama ${role}`, role, photo: n % 2 ? "/placeholder/hero.svg" : "/placeholder/portrait.svg" })) });
+  switch (cat) {
+    case "penawaran":
+      return [
+        S("about", { heading: "Ringkasan", body: `${issuer} dengan senang hati mengajukan penawaran ${title.toLowerCase()}. Proposal ini menjelaskan ruang lingkup pekerjaan, pilihan paket, jadwal, serta syarat dan ketentuan.`, image: "" }),
+        S("points", { heading: "Ruang Lingkup", intro: "", layout: "grid", items: [pt("Analisis kebutuhan", "Diskusi awal untuk memahami tujuan dan target."), pt("Pelaksanaan", `Pengerjaan ${title.toLowerCase()} sesuai standar kualitas kami.`), pt("Revisi", "Penyesuaian hasil sesuai masukan klien."), pt("Serah terima", "Laporan dan dokumentasi hasil pekerjaan.")] }),
+        S("pricing", { heading: "Pilihan Paket", intro: "Pilih paket yang paling sesuai dengan kebutuhan Anda.", items: [
+          { name: "Hemat", price: rp(2500000 * k), period: "", features: "Layanan inti\nKonsultasi 1x\nRevisi 1x", highlight: "" },
+          { name: "Bisnis", price: rp(5500000 * k), period: "", features: "Semua di paket Hemat\nKonsultasi 3x\nRevisi 3x\nLaporan bulanan", highlight: "ya" },
+          { name: "Premium", price: rp(9500000 * k), period: "", features: "Semua di paket Bisnis\nPrioritas pengerjaan\nRevisi tanpa batas\nPendampingan 3 bulan", highlight: "" } ] }),
+        S("timeline", { heading: "Jadwal Pelaksanaan", items: [{ phase: "Kick-off", period: "Minggu 1", detail: "Rapat awal dan pengumpulan bahan." }, { phase: "Pengerjaan", period: "Minggu 2–3", detail: "Pelaksanaan pekerjaan utama." }, { phase: "Revisi & serah terima", period: "Minggu 4", detail: "Penyempurnaan dan penyerahan hasil." }] }),
+        ...(i % 2 ? [team3(["Manajer proyek", "Tenaga ahli", "Admin"])] : []),
+        S("points", { heading: "Syarat & Ketentuan", intro: "", layout: "list", items: [pt("Uang muka 50%", "Dibayarkan saat penandatanganan kesepakatan."), pt("Pelunasan", "Dilakukan saat serah terima hasil pekerjaan."), pt("Masa berlaku", "Penawaran berlaku 30 hari sejak tanggal proposal.")] }),
+        approvalP(issuer, city, d.text, "Direktur"),
+        contactP(issuer),
+      ];
+    case "sponsorship":
+      return [
+        S("about", { heading: "Tentang Acara", body: `${title} adalah acara tahunan yang diselenggarakan oleh ${issuer} di ${city}, dengan target lebih dari ${(i + 2) * 500} pengunjung. Kami mengundang mitra sponsor untuk tumbuh bersama audiens kami.`, image: IMG(4) }),
+        S("points", { heading: "Mengapa Menjadi Sponsor?", intro: "", layout: "grid", items: [pt("Paparan merek", "Logo tampil di panggung, banner, dan media sosial."), pt("Audiens tepat sasaran", "Peserta muda dan aktif di media sosial."), pt("Aktivasi langsung", "Booth untuk sampling dan penjualan produk."), pt("Liputan media", "Publikasi bersama media partner.")] }),
+        S("pricing", { heading: "Paket Sponsor", intro: "", items: [
+          { name: "Platinum", price: rp(25000000 * k), period: "", features: "Logo utama di semua materi\nBooth 3×3 m\nSesi presentasi 10 menit\nPenyebutan oleh MC", highlight: "ya" },
+          { name: "Gold", price: rp(12000000 * k), period: "", features: "Logo besar di banner\nBooth 2×2 m\nPenyebutan oleh MC", highlight: "" },
+          { name: "Silver", price: rp(5000000 * k), period: "", features: "Logo di banner & media sosial\nPembagian brosur", highlight: "" } ] }),
+        S("timeline", { heading: "Rangkaian Acara", items: [{ phase: "Publikasi", period: "H-30", detail: "Kampanye media sosial dan poster." }, { phase: "Hari pelaksanaan", period: d.text, detail: `Acara utama di ${pick(VENUES)}, ${city}.` }, { phase: "Laporan sponsor", period: "H+7", detail: "Dokumentasi dan laporan paparan merek." }] }),
+        S("budget", { heading: "Rencana Anggaran", intro: "", items: [{ item: "Sewa tempat", qty: "1", unit: "hari", price: rp(8000000 * k) }, { item: "Panggung & sound system", qty: "1", unit: "paket", price: rp(12000000 * k) }, { item: "Publikasi & desain", qty: "1", unit: "paket", price: rp(3000000 * k) }, { item: "Konsumsi panitia", qty: "50", unit: "orang", price: "35000" }], tax: 0, note: "" }),
+        approvalP(issuer, city, d.text, "Ketua Panitia", "Kami menantikan dukungan Anda. Silakan pilih paket atau sampaikan catatan di bawah ini."),
+        contactP(issuer),
+      ];
+    case "kegiatan":
+    case "organisasi":
+      return [
+        S("about", { heading: "Latar Belakang", body: `Kegiatan ${title.toLowerCase()} digagas oleh ${issuer} sebagai wujud kepedulian dan kebersamaan. Kegiatan ini diharapkan memberi manfaat nyata bagi masyarakat sekitar.`, image: "" }),
+        S("points", { heading: "Tujuan Kegiatan", intro: "", layout: "grid", items: [pt("Mempererat silaturahmi", "Menguatkan kebersamaan antarwarga dan anggota."), pt("Memberi manfaat", "Membantu kebutuhan masyarakat sasaran."), pt("Mengembangkan potensi", "Melatih kepemimpinan dan kerja sama tim.")] }),
+        S("timeline", { heading: "Susunan Acara", items: [{ phase: "Pembukaan", period: "08.00–09.00", detail: "Sambutan ketua panitia dan tamu undangan." }, { phase: "Acara inti", period: "09.00–12.00", detail: `Pelaksanaan ${title.toLowerCase()}.` }, { phase: "Penutupan", period: "12.00–13.00", detail: "Doa bersama, dokumentasi, dan ramah tamah." }] }),
+        team3(["Ketua Panitia", "Sekretaris", "Bendahara", "Koordinator Acara"]),
+        S("budget", { heading: "Rencana Anggaran Biaya", intro: "", items: [{ item: "Konsumsi peserta", qty: String(60 + i * 10), unit: "orang", price: "25000" }, { item: "Perlengkapan & dekorasi", qty: "1", unit: "paket", price: rp(1500000 * k) }, { item: "Dokumentasi", qty: "1", unit: "paket", price: rp(750000 * k) }, { item: "Hadiah / bingkisan", qty: "20", unit: "buah", price: "50000" }], tax: 0, note: "Laporan pertanggungjawaban akan disampaikan setelah kegiatan." }),
+        ...(cat === "organisasi" ? [S("pricing", { heading: "Bentuk Dukungan", intro: "Kami menerima dukungan dalam bentuk berikut:", items: [{ name: "Donatur Utama", price: rp(5000000), period: "", features: "Nama/logo di spanduk utama\nUcapan terima kasih di acara", highlight: "ya" }, { name: "Donatur", price: rp(1000000), period: "", features: "Nama di spanduk\nSertifikat penghargaan", highlight: "" }, { name: "Dukungan Barang", price: "", period: "sesuai kesepakatan", features: "Konsumsi, hadiah, atau perlengkapan", highlight: "" }] })] : []),
+        approvalP(issuer, city, d.text, "Ketua Panitia", "Demikian proposal ini kami sampaikan. Atas perhatian dan dukungannya kami ucapkan terima kasih."),
+        contactP(issuer),
+      ];
+    case "kerjasama":
+      return [
+        S("about", { heading: "Ringkasan", body: `${issuer} mengajukan ${title.toLowerCase()} yang saling menguntungkan. Proposal ini menjelaskan bentuk kerja sama, manfaat bagi kedua pihak, dan ketentuan pelaksanaannya.`, image: "" }),
+        S("points", { heading: "Bentuk Kerja Sama", intro: "", layout: "list", items: [pt("Penyediaan", "Pihak pertama menyediakan produk/layanan sesuai kesepakatan."), pt("Promosi bersama", "Kedua pihak saling mempromosikan di kanal masing-masing."), pt("Evaluasi berkala", "Rapat evaluasi setiap tiga bulan.")] }),
+        S("points", { heading: "Manfaat bagi Kedua Pihak", intro: "", layout: "grid", items: [pt("Pihak Pertama", "Perluasan pasar dan peningkatan penjualan."), pt("Pihak Kedua", "Akses produk/layanan dengan harga khusus."), pt("Bersama", "Penguatan citra dan jaringan usaha.")] }),
+        S("pricing", { heading: "Skema Kemitraan", intro: "", items: [{ name: "Mitra Reguler", price: rp(3000000 * k), period: "/tahun", features: "Harga mitra\nMateri promosi", highlight: "" }, { name: "Mitra Utama", price: rp(10000000 * k), period: "/tahun", features: "Harga mitra terbaik\nPrioritas stok\nPelatihan tim", highlight: "ya" }] }),
+        S("timeline", { heading: "Tahapan", items: [{ phase: "Penjajakan", period: "Bulan 1", detail: "Diskusi dan penyusunan nota kesepahaman." }, { phase: "Uji coba", period: "Bulan 2–3", detail: "Pelaksanaan awal dengan skala terbatas." }, { phase: "Kerja sama penuh", period: "Bulan 4 dst.", detail: "Pelaksanaan penuh dan evaluasi berkala." }] }),
+        S("points", { heading: "Ketentuan", intro: "", layout: "list", items: [pt("Jangka waktu", "Kerja sama berlaku 1 tahun dan dapat diperpanjang."), pt("Pembayaran", "Sesuai termin yang disepakati bersama."), pt("Pengakhiran", "Pemberitahuan tertulis 30 hari sebelumnya.")] }),
+        approvalP(issuer, city, d.text, "Direktur"),
+        contactP(issuer),
+      ];
+    case "investasi":
+    case "pitch-deck": {
+      const pitch = cat === "pitch-deck";
+      const nama = title.split(" — ")[0];
+      return [
+        ...(pitch ? [poster(nama, title.split(" — ")[1] ?? "", "Solusi sederhana untuk masalah sehari-hari jutaan orang", t.dark)] : []),
+        S("about", { heading: "Ringkasan Eksekutif", body: `${pitch ? nama : issuer} ${pitch ? "membangun" : "mengembangkan"} ${pitch ? (title.split(" — ")[1] ?? "").toLowerCase() : title.toLowerCase()} dengan pertumbuhan yang konsisten. Kami membuka peluang ${pitch ? "investasi tahap awal" : "investasi"} untuk mempercepat pertumbuhan.`, image: IMG(5) }),
+        S("points", { heading: pitch ? "Masalah" : "Peluang Pasar", intro: "", layout: "grid", items: pitch ? [pt("Proses masih manual", "Pelaku usaha mencatat dengan kertas dan rawan salah."), pt("Akses terbatas", "Solusi yang ada mahal dan rumit."), pt("Data tidak terpakai", "Keputusan diambil tanpa data.")] : [pt("Permintaan tinggi", `Kebutuhan pasar di ${city} terus meningkat.`), pt("Pesaing sedikit", "Belum banyak pemain dengan kualitas serupa."), pt("Pelanggan setia", "Tingkat pembelian ulang yang tinggi.")] }),
+        S("points", { heading: pitch ? "Solusi Kami" : "Keunggulan", intro: "", layout: "grid", items: [pt("Mudah digunakan", "Bisa dipakai siapa saja tanpa pelatihan rumit."), pt("Terjangkau", "Harga sesuai kemampuan usaha kecil."), pt("Teruji", `Sudah dipakai oleh ${(i + 1) * 120}+ pelanggan.`)] }),
+        ...(pitch ? [S("pricing", { heading: "Model Bisnis", intro: "", items: [{ name: "Gratis", price: "0", period: "", features: "Fitur dasar\nUntuk mencoba", highlight: "" }, { name: "Pro", price: "49000", period: "/bulan", features: "Semua fitur\nLaporan lengkap\nDukungan prioritas", highlight: "ya" }, { name: "Bisnis", price: "149000", period: "/bulan", features: "Multi cabang\nIntegrasi\nAkun tim", highlight: "" }] })] : []),
+        S("timeline", { heading: pitch ? "Peta Jalan" : "Rencana Pengembangan", items: [{ phase: "Tahap 1", period: "Kuartal 1", detail: pitch ? "Peluncuran fitur utama dan 1.000 pengguna." : "Persiapan tempat dan perizinan." }, { phase: "Tahap 2", period: "Kuartal 2–3", detail: pitch ? "Ekspansi ke 5 kota dan kemitraan." : "Operasional dan pemasaran." }, { phase: "Tahap 3", period: "Kuartal 4", detail: pitch ? "Fitur premium dan profitabilitas." : "Balik modal dan ekspansi berikutnya." }] }),
+        S("budget", { heading: pitch ? "Penggunaan Dana" : "Kebutuhan Modal", intro: "", items: pitch ? [{ item: "Pengembangan produk", qty: "1", unit: "tahun", price: rp(300000000 * k) }, { item: "Pemasaran & akuisisi pengguna", qty: "1", unit: "tahun", price: rp(200000000 * k) }, { item: "Operasional", qty: "1", unit: "tahun", price: rp(100000000 * k) }] : [{ item: "Tempat & renovasi", qty: "1", unit: "paket", price: rp(60000000 * k) }, { item: "Peralatan produksi", qty: "1", unit: "paket", price: rp(45000000 * k) }, { item: "Modal kerja 3 bulan", qty: "3", unit: "bulan", price: rp(10000000 * k) }], tax: 0, note: pitch ? "Pendanaan tahap awal; rincian valuasi dibahas pada pertemuan lanjutan." : "Skema bagi hasil dibahas bersama calon investor." }),
+        team3(pitch ? ["CEO", "CTO", "Kepala Pemasaran"] : ["Pemilik", "Manajer Operasional", "Keuangan"]),
+        approvalP(pitch ? nama : issuer, city, d.text, pitch ? "CEO & Pendiri" : "Pemilik", "Tertarik berinvestasi atau ingin berdiskusi? Sampaikan minat Anda di bawah ini."),
+        contactP(pitch ? nama : issuer),
+      ];
+    }
+    case "proyek":
+      return [
+        S("about", { heading: "Gambaran Proyek", body: `${issuer} mengajukan proposal ${title.toLowerCase()} lengkap dengan ruang lingkup, jadwal, rencana anggaran biaya (RAB), dan tenaga ahli yang terlibat.`, image: IMG(6) }),
+        S("points", { heading: "Ruang Lingkup Pekerjaan", intro: "", layout: "list", items: [pt("Survei & perencanaan", "Pengukuran lokasi dan penyusunan gambar kerja."), pt("Pelaksanaan", "Pekerjaan utama sesuai spesifikasi teknis."), pt("Pengawasan mutu", "Pemeriksaan berkala oleh tenaga ahli."), pt("Serah terima", "Berita acara dan masa pemeliharaan.")] }),
+        S("timeline", { heading: "Jadwal Pelaksanaan", items: [{ phase: "Persiapan", period: "Minggu 1–2", detail: "Mobilisasi tim dan material." }, { phase: "Pelaksanaan", period: "Minggu 3–10", detail: "Pekerjaan utama." }, { phase: "Finishing", period: "Minggu 11–12", detail: "Penyelesaian dan pembersihan." }, { phase: "Serah terima", period: "Minggu 13", detail: "Serah terima pertama." }] }),
+        S("budget", { heading: "Rencana Anggaran Biaya (RAB)", intro: "", items: [{ item: "Pekerjaan persiapan", qty: "1", unit: "ls", price: rp(15000000 * k) }, { item: "Pekerjaan utama", qty: "1", unit: "ls", price: rp(120000000 * k) }, { item: "Material pendukung", qty: "1", unit: "ls", price: rp(35000000 * k) }, { item: "Tenaga kerja", qty: "90", unit: "HOK", price: "150000" }], tax: 11, note: "Harga sudah termasuk biaya pengiriman dan pemasangan." }),
+        team3(["Manajer Proyek", "Ahli Teknik", "Pengawas Lapangan"]),
+        S("points", { heading: "Ketentuan", intro: "", layout: "list", items: [pt("Termin pembayaran", "30% uang muka, 40% progres 50%, 30% serah terima."), pt("Masa pemeliharaan", "90 hari setelah serah terima pertama."), pt("Garansi", "Perbaikan tanpa biaya untuk cacat pekerjaan.")] }),
+        approvalP(issuer, city, d.text, "Direktur"),
+        contactP(issuer),
+      ];
+    case "hibah":
+      return [
+        S("about", { heading: "Latar Belakang", body: `${issuer} menginisiasi program ${title.toLowerCase()} untuk menjawab kebutuhan masyarakat di ${city}. Kami memohon dukungan dana dari mitra CSR dan donatur untuk mewujudkan program ini.`, image: IMG(3) }),
+        S("points", { heading: "Tujuan Program", intro: "", layout: "grid", items: [pt("Akses yang setara", "Membuka akses layanan bagi masyarakat yang membutuhkan."), pt("Berkelanjutan", "Program dikelola bersama warga agar terus berjalan."), pt("Terukur", "Dampak dilaporkan secara berkala dan transparan.")] }),
+        S("points", { heading: "Penerima Manfaat", intro: "", layout: "list", items: [pt(`${(i + 2) * 50} penerima manfaat langsung`, "Warga dan keluarga di wilayah sasaran."), pt("Relawan lokal", "Pemuda setempat sebagai pengelola program."), pt("Mitra pendukung", "Nama dan logo mitra tercantum di laporan program.")] }),
+        S("timeline", { heading: "Rencana Pelaksanaan", items: [{ phase: "Persiapan", period: "Bulan 1", detail: "Pendataan penerima dan pengadaan." }, { phase: "Pelaksanaan", period: "Bulan 2–5", detail: "Program berjalan bersama relawan." }, { phase: "Evaluasi & laporan", period: "Bulan 6", detail: "Laporan dampak dan keuangan untuk donatur." }] }),
+        S("budget", { heading: "Kebutuhan Dana", intro: "", items: [{ item: "Pengadaan sarana", qty: "1", unit: "paket", price: rp(25000000 * k) }, { item: "Operasional program", qty: "6", unit: "bulan", price: rp(2500000 * k) }, { item: "Pelatihan relawan", qty: "2", unit: "kali", price: rp(3000000) }, { item: "Monitoring & laporan", qty: "1", unit: "paket", price: rp(2000000) }], tax: 0, note: "Laporan penggunaan dana disampaikan secara terbuka kepada donatur." }),
+        team3(["Ketua Yayasan", "Koordinator Program", "Bendahara"]),
+        approvalP(issuer, city, d.text, "Ketua", "Bersediakah Anda mendukung program ini? Sampaikan keputusan atau pertanyaan Anda di bawah ini."),
+        contactP(issuer),
+      ];
+    case "penelitian":
+      return [
+        S("about", { heading: "Latar Belakang", body: `Penelitian berjudul "${title}" disusun oleh ${issuer.toLowerCase()} sebagai syarat penyelesaian studi. Topik ini dipilih karena relevan dengan kondisi di ${city} dan belum banyak diteliti.`, image: "" }),
+        S("points", { heading: "Rumusan Masalah", intro: "", layout: "list", items: [pt("Bagaimana kondisi saat ini?", "Gambaran umum objek penelitian."), pt("Faktor apa yang berpengaruh?", "Identifikasi variabel utama."), pt("Apa rekomendasi yang dapat diberikan?", "Saran berbasis hasil penelitian.")] }),
+        S("points", { heading: "Tujuan & Manfaat", intro: "", layout: "grid", items: [pt("Tujuan", "Menjawab rumusan masalah secara ilmiah."), pt("Manfaat teoretis", "Menambah referensi bagi penelitian sejenis."), pt("Manfaat praktis", "Masukan bagi pelaku dan pengambil kebijakan.")] }),
+        S("points", { heading: "Metodologi", intro: "", layout: "list", items: [pt("Pendekatan", i % 2 ? "Kuantitatif dengan kuesioner." : "Kualitatif dengan wawancara mendalam."), pt("Sampel", `${(i + 3) * 20} responden dengan teknik purposive sampling.`), pt("Analisis data", i % 2 ? "Regresi linier berganda." : "Analisis tematik.")] }),
+        S("timeline", { heading: "Jadwal Penelitian", items: [{ phase: "Studi pustaka", period: "Bulan 1", detail: "Kajian teori dan penelitian terdahulu." }, { phase: "Pengumpulan data", period: "Bulan 2–3", detail: "Penyebaran instrumen dan wawancara." }, { phase: "Analisis & penulisan", period: "Bulan 4–5", detail: "Pengolahan data dan penyusunan laporan." }, { phase: "Sidang", period: "Bulan 6", detail: "Seminar hasil dan ujian." }] }),
+        S("budget", { heading: "Anggaran Penelitian", intro: "", items: [{ item: "Pencetakan kuesioner", qty: String((i + 3) * 20), unit: "eksemplar", price: "5000" }, { item: "Transportasi lapangan", qty: "10", unit: "hari", price: "75000" }, { item: "Uji laboratorium / perangkat lunak", qty: "1", unit: "paket", price: rp(1500000) }, { item: "Penjilidan laporan", qty: "5", unit: "eksemplar", price: "60000" }], tax: 0, note: "" }),
+        S("team", { heading: "Peneliti & Pembimbing", items: [{ name: "Nama Mahasiswa", role: "Peneliti", photo: "/placeholder/portrait.svg" }, { name: "Nama Dosen, M.Sc.", role: "Pembimbing I", photo: "/placeholder/hero.svg" }, { name: "Nama Dosen, M.M.", role: "Pembimbing II", photo: "/placeholder/portrait.svg" }] }),
+        approvalP("Mahasiswa", city, d.text, "Peneliti", "Lembar pengesahan: dosen pembimbing dapat memberikan persetujuan atau catatan revisi di bawah ini."),
+        contactP("peneliti"),
+      ];
+  }
+  throw new Error(`kategori tidak dikenal: ${cat}`);
+}
+
+const outP = [];
+for (const [cat, topics] of Object.entries(TOPICS)) {
+  topics.forEach((topic, i) => {
+    const [title, styleKey, issuer] = topic;
+    const st = STYLE[styleKey];
+    const pal = st.palettes[(i + cat.length) % st.palettes.length];
+    const [palName, text, accent, bg, surface] = pal;
+    const fonts = st.fonts[(i + outP.length) % st.fonts.length];
+    const dark = isDark(bg);
+    const theme = { fontHeading: fonts[0], fontBody: fonts[1], colorPrimary: text, colorAccent: accent, colorBackground: bg, colorSurface: surface, radius: st.radius, headingCase: "normal" };
+    if (st.ornaments) theme.ornament = st.ornaments[i % st.ornaments.length];
+    const motif = st.motifs[(i + 1) % st.motifs.length];
+    const id = `prop-${cat}-${String(i + 1).padStart(2, "0")}`;
+    const art = writeArt(`${id}.svg`, motif, { base: dark ? bg : surface, deco: accent, deco2: text }, st.grain);
+    const t = { id, style: styleKey, art, tone: dark ? "gelap" : "terang", dark, theme };
+    const d = nextDate(9);
+    const city = pick(CITIES);
+    const no = `No. ${String(10 + i * 7).padStart(3, "0")}/${PROP_LABEL[cat].replace(/[^A-Za-z]/g, "").slice(0, 3).toUpperCase()}/${ROMAWI[(dateIdx - 1) % 12]}/2027`;
+    const sections = [
+      cover({ eyebrow: PROP_EYEBROW[cat], title, subtitle: `${issuer} · ${no}`, greeting: cat === "penelitian" ? "Diajukan kepada" : "Disiapkan untuk", guestFallback: cat === "penelitian" ? "Bapak/Ibu Dosen Pembimbing" : "Bapak/Ibu Pimpinan", image: art, tone: t.tone, buttonText: "Baca Proposal" }),
+      ...proposalRecipe(cat, i, topic, t, d, city),
+    ];
+    outP.push({
+      id,
+      kind: "proposal",
+      name: `${PROP_LABEL[cat]} · ${title}`,
+      category: cat,
+      style: styleKey,
+      description: `Proposal ${PROP_LABEL[cat].toLowerCase()} bergaya ${st.label.toLowerCase()} (${palName}) — ${title.toLowerCase()}.`,
+      tags: [st.label.toLowerCase(), PROP_LABEL[cat].toLowerCase(), "proposal", palName.toLowerCase()],
+      theme,
+      sections,
+    });
+  });
+}
+fs.writeFileSync(path.join(ROOT, "templates", "proposal-100.json"), JSON.stringify(outP) + "\n");
+console.log(`${outP.length} template proposal dibuat`);

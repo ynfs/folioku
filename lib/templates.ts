@@ -24,6 +24,7 @@ import retroCompany from "@/templates/tpl-retro-company.json";
 import retroStudioFoto from "@/templates/tpl-retro-studio-foto.json";
 // 100 template hasil generator (lihat scripts/generate-koleksi.mjs)
 import koleksi from "@/templates/koleksi-100.json";
+import koleksiProposal from "@/templates/proposal-100.json";
 
 // ---------------- Klasifikasi ----------------
 
@@ -31,7 +32,12 @@ import koleksi from "@/templates/koleksi-100.json";
 export const PRODUCTS: { value: ProductKind; label: string; short: string; description: string }[] = [
   { value: "portfolio", label: "Portofolio & Company Profile", short: "Portofolio", description: "Situs portofolio pribadi atau profil perusahaan." },
   { value: "invitation", label: "Undangan Digital", short: "Undangan", description: "Undangan pernikahan, ulang tahun, khitanan, wisuda, dan acara." },
+  { value: "proposal", label: "Proposal", short: "Proposal", description: "Proposal penawaran, sponsorship, kegiatan, kerja sama, dan investasi." },
 ];
+
+/** Nama produk di URL (?jenis=…) dan kata untuk teks antarmuka. */
+export const kindSlug = (k: ProductKind) => (k === "invitation" ? "undangan" : k === "proposal" ? "proposal" : "portofolio");
+export const productWord = (k: ProductKind | undefined) => (k === "invitation" ? "undangan" : k === "proposal" ? "proposal" : "portofolio");
 
 /** Kategori (tingkat 2): jenis acara untuk undangan, bidang untuk portofolio. */
 export const CATEGORIES: { value: TemplateCategory; label: string; kind: ProductKind }[] = [
@@ -44,6 +50,16 @@ export const CATEGORIES: { value: TemplateCategory; label: string; kind: Product
   { value: "syukuran", label: "Syukuran & Pengajian", kind: "invitation" },
   { value: "acara", label: "Acara & Event", kind: "invitation" },
   { value: "grand-opening", label: "Grand Opening", kind: "invitation" },
+  { value: "penawaran", label: "Penawaran Jasa & Harga", kind: "proposal" },
+  { value: "sponsorship", label: "Sponsorship", kind: "proposal" },
+  { value: "kegiatan", label: "Kegiatan & Acara", kind: "proposal" },
+  { value: "kerjasama", label: "Kerja Sama & Kemitraan", kind: "proposal" },
+  { value: "investasi", label: "Bisnis & Investasi", kind: "proposal" },
+  { value: "pitch-deck", label: "Pitch Deck Startup", kind: "proposal" },
+  { value: "proyek", label: "Proyek & Tender", kind: "proposal" },
+  { value: "hibah", label: "Dana Hibah & CSR", kind: "proposal" },
+  { value: "penelitian", label: "Penelitian & Akademik", kind: "proposal" },
+  { value: "organisasi", label: "Sekolah & Organisasi", kind: "proposal" },
   { value: "personal", label: "Personal & Kreatif", kind: "portfolio" },
   { value: "fotografer", label: "Fotografer", kind: "portfolio" },
   { value: "teknologi", label: "Teknologi & Developer", kind: "portfolio" },
@@ -129,7 +145,7 @@ const ORIGINAL = [
   retroReuni,
 ] as unknown as Template[];
 
-export const TEMPLATES: Template[] = [...ORIGINAL.map((t) => ({ ...t, ...LEGACY[t.id] })), ...(koleksi as unknown as Template[])].map((t) => ({
+export const TEMPLATES: Template[] = [...ORIGINAL.map((t) => ({ ...t, ...LEGACY[t.id] })), ...(koleksi as unknown as Template[]), ...(koleksiProposal as unknown as Template[])].map((t) => ({
   ...t,
   kind: t.kind ?? "portfolio",
   builtin: true,
@@ -138,7 +154,9 @@ export const TEMPLATES: Template[] = [...ORIGINAL.map((t) => ({ ...t, ...LEGACY[
 export const kindOf = (t: { kind?: ProductKind }): ProductKind => t.kind ?? "portfolio";
 
 export function parseKind(v: unknown): ProductKind {
-  return v === "invitation" || v === "undangan" ? "invitation" : "portfolio";
+  if (v === "invitation" || v === "undangan") return "invitation";
+  if (v === "proposal") return "proposal";
+  return "portfolio";
 }
 
 export const categoryLabel = (v: string) => CATEGORIES.find((c) => c.value === v)?.label ?? v;

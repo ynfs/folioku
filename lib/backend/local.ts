@@ -247,7 +247,7 @@ export const localBackend: Backend = {
     const p = db.projects.find((x) => x.slug === slug && x.published);
     if (!p) return null;
     const owner = db.users.find((u) => u.id === p.ownerId);
-    return { slug, name: p.name, data: p.data, ownerName: owner?.name ?? "" };
+    return { slug, kind: p.kind ?? "portfolio", name: p.name, data: p.data, ownerName: owner?.name ?? "" };
   },
 
   async uploadImage(_userId, file) {
@@ -326,7 +326,8 @@ export const localBackend: Backend = {
   async listWishes(slug) {
     const db = await readDB();
     const p = db.projects.find((x) => x.slug === slug && x.published);
-    if (!p) return [];
+    // Respon proposal bersifat rahasia: hanya pemilik yang boleh melihat.
+    if (!p || p.kind === "proposal") return [];
     return db.rsvps
       .filter((r) => r.projectId === p.id && r.message)
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt))

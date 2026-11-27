@@ -6,7 +6,7 @@ import { DeleteProjectButton } from "@/components/ui/DeleteProjectButton";
 import { ProductTabs } from "@/components/ui/ProductTabs";
 import { backend, requireUser } from "@/lib/backend";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
-import { kindOf, parseKind } from "@/lib/templates";
+import { kindOf, kindSlug, parseKind, productWord } from "@/lib/templates";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
@@ -17,16 +17,17 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
   const { jenis } = await props.searchParams;
   const kind = parseKind(jenis);
   const isInv = kind === "invitation";
+  const hasResponses = kind !== "portfolio";
   const all = await backend.listProjects(user.id);
   const projects = all.filter((p) => kindOf(p) === kind);
-  const word = isInv ? "undangan" : "portofolio";
-  const newHref = `/templates?jenis=${isInv ? "undangan" : "portofolio"}`;
+  const word = productWord(kind);
+  const newHref = `/templates?jenis=${kindSlug(kind)}`;
 
   return (
     <>
       <AppHeader />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
-        <ProductTabs active={kind} hrefFor={(k) => (k === "invitation" ? "/dashboard?jenis=undangan" : "/dashboard")} />
+        <ProductTabs active={kind} hrefFor={(k) => (k === "portfolio" ? "/dashboard" : `/dashboard?jenis=${kindSlug(k)}`)} />
         <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="text-3xl font-extrabold">Halo, {user.name || "kamu"}</h1>
@@ -35,7 +36,7 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
             </p>
           </div>
           <Link href={newHref} className="btn-brand">
-            + {isInv ? "Undangan baru" : "Portofolio baru"}
+            + {word.charAt(0).toUpperCase() + word.slice(1)} baru
           </Link>
         </div>
 
@@ -85,9 +86,9 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
                     </Link>
                     <DeleteProjectButton id={p.id} />
                   </div>
-                  {isInv && (
+                  {hasResponses && (
                     <Link href={`/dashboard/undangan/${p.id}`} className="btn-ghost mt-2 w-full">
-                      Tamu & RSVP
+                      {isInv ? "Tamu & RSVP" : "Klien & Persetujuan"}
                     </Link>
                   )}
                   {user.role === "admin" && (

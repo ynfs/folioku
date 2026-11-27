@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PrintButton } from "@/components/sections/proposal-client";
 import { SiteProvider } from "@/components/sections/site-context";
 import { HOME, mapAllSections, pageSections, resolvePageLinks } from "@/lib/pages";
 import { Portfolio } from "@/lib/renderer/Portfolio";
@@ -33,7 +34,8 @@ export function PublicPage({ pub, pageId = HOME, guest = "" }: { pub: Publicatio
     <SiteProvider value={{ slug: pub.slug, guest, editing: false }}>
       <main className="flex-1" style={{ background: data.theme.colorBackground }}>
         <Portfolio data={data} />
-        <footer className="py-6 text-center text-xs opacity-60" style={{ color: data.theme.colorPrimary }}>
+        {pub.kind === "proposal" && <PrintButton />}
+        <footer className="no-print py-6 text-center text-xs opacity-60" style={{ color: data.theme.colorPrimary }}>
           Dibuat dengan{" "}
           <Link href="/" className="font-semibold underline">
             Safantara

@@ -58,11 +58,11 @@ export function Cover({ p }: { p: P }) {
           className="mt-2 inline-block rounded-lg border px-6 py-3 text-xl font-semibold backdrop-blur-sm"
           style={light ? { borderColor: "var(--c-text)", background: "color-mix(in srgb, var(--c-bg) 70%, transparent)" } : { borderColor: "rgba(255,255,255,.4)", background: "rgba(255,255,255,.1)" }}
         >
-          {guest || "Tamu Undangan"}
+          {guest || s(p.guestFallback) || "Tamu Undangan"}
         </p>
       </div>
       {s(p.buttonText) && (
-        <a href={s(p.buttonLink) ? safeHref(s(p.buttonLink)) : "#"} onClick={open} className="pf-btn mt-10 inline-block px-8 py-3 font-semibold">
+        <a href={s(p.buttonLink) ? safeHref(s(p.buttonLink)) : "#"} onClick={open} className="pf-btn no-print mt-10 inline-block px-8 py-3 font-semibold">
           ✉ {s(p.buttonText)}
         </a>
       )}

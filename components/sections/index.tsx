@@ -3,6 +3,8 @@ import type { PropValue, Section } from "@/lib/types";
 import { CanvasView, safeHref } from "./canvas";
 import { Ceremony, Couple, Dresscode, EventSection, Story } from "./invitation";
 import { Countdown, Cover, Gift, Music, RsvpSection } from "./invitation-client";
+import { Budget, Points, Pricing, Team, Timeline } from "./proposal";
+import { Approval } from "./proposal-client";
 
 // Komponen section siap pakai. Semuanya murni (tanpa state) sehingga bisa
 // dirender di server (halaman publik) maupun di browser (editor).
@@ -246,6 +248,12 @@ const COMPONENTS = {
   music: Music,
   ceremony: Ceremony,
   dresscode: Dresscode,
+  points: Points,
+  timeline: Timeline,
+  budget: Budget,
+  pricing: Pricing,
+  team: Team,
+  approval: Approval,
 } as const;
 
 export function SectionView({ section }: { section: Section }) {

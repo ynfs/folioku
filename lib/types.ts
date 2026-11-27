@@ -40,7 +40,14 @@ export type SectionType =
   | "gift"
   | "music"
   | "ceremony"
-  | "dresscode";
+  | "dresscode"
+  // ---- khusus proposal ----
+  | "budget"
+  | "pricing"
+  | "timeline"
+  | "points"
+  | "team"
+  | "approval";
 
 /** Elemen di bagian "Desain Bebas" (kanvas ala Figma). Satuan posisi = piksel desain
  *  pada frame selebar CANVAS_WIDTH, lalu diskalakan proporsional saat ditampilkan. */
@@ -106,7 +113,7 @@ export interface PortfolioData {
 }
 
 /** Produk Safantara: portofolio/company profile atau undangan digital. */
-export type ProductKind = "portfolio" | "invitation";
+export type ProductKind = "portfolio" | "invitation" | "proposal";
 
 /**
  * Kategori template.
@@ -125,6 +132,17 @@ export type TemplateCategory =
   | "syukuran"
   | "acara"
   | "grand-opening"
+  // proposal
+  | "penawaran"
+  | "sponsorship"
+  | "kegiatan"
+  | "kerjasama"
+  | "investasi"
+  | "pitch-deck"
+  | "proyek"
+  | "hibah"
+  | "penelitian"
+  | "organisasi"
   // portofolio
   | "personal"
   | "fotografer"
@@ -204,6 +222,7 @@ export interface Project {
 
 export interface Publication {
   slug: string;
+  kind: ProductKind;
   name: string;
   data: PortfolioData;
   ownerName: string;

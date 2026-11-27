@@ -48,7 +48,9 @@ alter table public.templates add column if not exists description text not null 
 alter table public.templates add column if not exists published boolean not null default false;
 alter table public.templates add column if not exists created_by uuid references public.users (id) on delete set null;
 alter table public.templates add column if not exists updated_at timestamptz not null default now();
-alter table public.templates add column if not exists kind text not null default 'portfolio' check (kind in ('portfolio', 'invitation'));
+alter table public.templates add column if not exists kind text not null default 'portfolio';
+alter table public.templates drop constraint if exists templates_kind_check;
+alter table public.templates add constraint templates_kind_check check (kind in ('portfolio', 'invitation', 'proposal'));
 alter table public.templates add column if not exists style text;
 
 -- ---------- rsvps: konfirmasi kehadiran & ucapan tamu undangan ----------
@@ -74,7 +76,9 @@ create table if not exists public.projects (
   updated_at timestamptz not null default now()
 );
 create index if not exists projects_owner_idx on public.projects (owner_id, updated_at desc);
-alter table public.projects add column if not exists kind text not null default 'portfolio' check (kind in ('portfolio', 'invitation'));
+alter table public.projects add column if not exists kind text not null default 'portfolio';
+alter table public.projects drop constraint if exists projects_kind_check;
+alter table public.projects add constraint projects_kind_check check (kind in ('portfolio', 'invitation', 'proposal'));
 
 -- ---------- publications: slug publik dan status publish ----------
 create table if not exists public.publications (
@@ -152,8 +156,10 @@ drop policy if exists rsvps_insert_public on public.rsvps;
 create policy rsvps_insert_public on public.rsvps for insert
   with check (exists (select 1 from public.publications p where p.project_id = rsvps.project_id and p.published));
 drop policy if exists rsvps_read on public.rsvps;
+-- Ucapan undangan boleh dibaca publik; respon proposal hanya untuk pemilik.
 create policy rsvps_read on public.rsvps for select
-  using (exists (select 1 from public.publications p where p.project_id = rsvps.project_id and p.published)
+  using (exists (select 1 from public.publications p join public.projects pr on pr.id = p.project_id
+                 where p.project_id = rsvps.project_id and p.published and pr.kind <> 'proposal')
          or exists (select 1 from public.projects pr where pr.id = rsvps.project_id and pr.owner_id = auth.uid()));
 drop policy if exists rsvps_owner_delete on public.rsvps;
 create policy rsvps_owner_delete on public.rsvps for delete

@@ -48,6 +48,11 @@ export default async function AdminPage() {
               <input type="hidden" name="kind" value="invitation" />
               <button className="btn-brand">+ Kanvas kosong (undangan)</button>
             </form>
+            <form action={createTemplateAction}>
+              <input type="hidden" name="source" value="blank" />
+              <input type="hidden" name="kind" value="proposal" />
+              <button className="btn-brand">+ Kanvas kosong (proposal)</button>
+            </form>
             <form action={createTemplateAction} className="flex items-end gap-2">
               <div>
                 <label className="label" htmlFor="source">
@@ -118,7 +123,7 @@ export default async function AdminPage() {
               {TEMPLATES.map((t) => (
                 <tr key={t.id} className="border-b border-app-line last:border-0">
                   <td className="px-4 py-2 font-semibold">{t.name}</td>
-                  <td className="px-4 py-2 text-app-muted">{t.kind === "invitation" ? "Undangan" : "Portofolio"}</td>
+                  <td className="px-4 py-2 text-app-muted">{PRODUCTS.find((p) => p.value === (t.kind ?? "portfolio"))?.short}</td>
                   <td className="px-4 py-2 text-app-muted">{categoryLabel(t.category)}</td>
                   <td className="px-4 py-2 text-app-muted">{styleLabel(t.style)}</td>
                   <td className="px-4 py-2 text-app-muted">{stats.usage[t.id] ?? 0}</td>
@@ -165,7 +170,7 @@ function TemplateCard({ t, usage, children }: { t: Template; usage: number; chil
           )}
         </div>
         <p className="mt-1 text-xs text-app-muted">
-          {t.kind === "invitation" ? "Undangan" : "Portofolio"} · {CATEGORIES.find((c) => c.value === t.category)?.label ?? t.category} · dipakai {usage}
+          {PRODUCTS.find((p) => p.value === (t.kind ?? "portfolio"))?.short} · {CATEGORIES.find((c) => c.value === t.category)?.label ?? t.category} · dipakai {usage}
         </p>
         {children}
       </div>

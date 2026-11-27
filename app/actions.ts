@@ -58,7 +58,7 @@ export async function createProjectAction(form: FormData) {
   if (!template) throw new Error("Template tidak ditemukan");
 
   const project = await backend.createProject(user.id, {
-    name: `${template.kind === "invitation" ? "Undangan" : "Portofolio"} ${template.name}`,
+    name: `${{ invitation: "Undangan", proposal: "Proposal", portfolio: "Portofolio" }[template.kind ?? "portfolio"]} ${template.name}`,
     templateId: template.id,
     kind: template.kind ?? "portfolio",
     data: { theme: structuredClone(template.theme), sections: structuredClone(template.sections), pages: structuredClone(template.pages ?? []) },
@@ -159,7 +159,7 @@ export async function createTemplateAction(form: FormData) {
     const project = await backend.getProject(projectId, user.id);
     if (!project) throw new Error("Proyek tidak ditemukan");
     const kind = project.kind ?? "portfolio";
-    base = { name: project.name, category: kind === "invitation" ? "pernikahan" : "modern", kind, description: "", tags: [], data: project.data };
+    base = { name: project.name, category: kind === "invitation" ? "pernikahan" : kind === "proposal" ? "penawaran" : "personal", kind, description: "", tags: [], data: project.data };
   } else if (source !== "blank") {
     const t = await findTemplate(source, { allowDraft: true });
     if (!t) throw new Error("Template sumber tidak ditemukan");
@@ -167,8 +167,8 @@ export async function createTemplateAction(form: FormData) {
   } else {
     const kind = parseKind(form.get("kind"));
     base = {
-      name: kind === "invitation" ? "Template undangan baru" : "Template baru",
-      category: kind === "invitation" ? "pernikahan" : "kreatif",
+      name: kind === "invitation" ? "Template undangan baru" : kind === "proposal" ? "Template proposal baru" : "Template baru",
+      category: kind === "invitation" ? "pernikahan" : kind === "proposal" ? "penawaran" : "personal",
       kind,
       description: "",
       tags: [],

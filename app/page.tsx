@@ -2,7 +2,7 @@ import Link from "next/link";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { ProductTabs } from "@/components/ui/ProductTabs";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
-import { TEMPLATES, kindOf, parseKind } from "@/lib/templates";
+import { TEMPLATES, kindOf, kindSlug, parseKind } from "@/lib/templates";
 import type { ProductKind } from "@/lib/types";
 
 const CONTENT: Record<
@@ -19,6 +19,18 @@ const CONTENT: Record<
       { title: "Edit sesukamu", text: "Ubah teks, gambar, warna, dan font. Desain bebas ala Figma." },
       { title: "Publikasikan", text: "Dapatkan link portofolio publik untuk dibagikan ke klien." },
     ],
+  },
+  proposal: {
+    eyebrow: "Proposal online",
+    title: "Proposal profesional yang mudah disetujui",
+    text: "Penawaran jasa, sponsorship, kegiatan, kerja sama, hingga pitch deck. Kirim link proposal yang dipersonalisasi untuk tiap klien, pantau persetujuannya, dan unduh sebagai PDF.",
+    cta: "Pilih template proposal",
+    steps: [
+      { title: "Pilih jenis proposal", text: "10 kategori: penawaran, sponsorship, kegiatan, hibah, investasi, dan lainnya." },
+      { title: "Isi anggaran & jadwal", text: "Tabel anggaran dengan total otomatis, paket harga, jadwal, dan tim." },
+      { title: "Kirim & pantau", text: "Link per klien, klien menyetujui langsung di halaman, unduh PDF." },
+    ],
+    features: ["Nama klien di sampul", "Rincian anggaran + PPN otomatis", "Paket harga & sponsor", "Jadwal pelaksanaan", "Persetujuan online", "Unduh PDF", "Desain bebas ala Figma"],
   },
   invitation: {
     eyebrow: "Undangan digital",
@@ -47,7 +59,7 @@ export default async function Home(props: PageProps<"/">) {
   const { produk } = await props.searchParams;
   const kind = parseKind(produk);
   const c = CONTENT[kind];
-  const jenis = kind === "invitation" ? "undangan" : "portofolio";
+  const jenis = kindSlug(kind);
   const samples = TEMPLATES.filter((t) => kindOf(t) === kind).slice(0, 3);
 
   return (
@@ -55,7 +67,7 @@ export default async function Home(props: PageProps<"/">) {
       <AppHeader />
       <main className="flex-1">
         <div className="mx-auto max-w-6xl px-4 pt-8 text-center">
-          <ProductTabs active={kind} hrefFor={(k) => (k === "invitation" ? "/?produk=undangan" : "/")} />
+          <ProductTabs active={kind} hrefFor={(k) => (k === "portfolio" ? "/" : `/?produk=${kindSlug(k)}`)} />
         </div>
 
         <section className="mx-auto max-w-6xl px-4 py-16 text-center">

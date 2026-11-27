@@ -61,6 +61,16 @@ Gaya vintage 60-an/70-an untuk semua jenis (filter **✦ Retro Klasik** di galer
 - Font retro: Fraunces, Shrikhand, Righteous, Abril Fatface; ornamen pemisah retro (bintang, gelombang, matahari)
 - Sampul undangan punya pilihan **nada** gelap/terang agar teks tetap terbaca di latar terang
 
+### Proposal
+Produk ketiga untuk proposal online yang bisa disetujui langsung oleh klien. 100 template di 10 kategori.
+- **Rincian Anggaran**: tabel uraian × jumlah × harga dengan subtotal, PPN, dan total otomatis (format Rupiah)
+- **Paket Harga / Sponsor**: kartu paket dengan label Unggulan; harga 0 tampil sebagai "Gratis"
+- **Jadwal Pelaksanaan**, **Poin bernomor** (tujuan, ruang lingkup, syarat & ketentuan), **Tim**
+- **Persetujuan**: klien memilih Setuju / Perlu diskusi / Tidak setuju + catatan; respon **hanya terlihat pemilik** (tidak tampil publik)
+- **Personalisasi per klien**: `/p/nama-proposal?to=PT Maju Jaya` → "Disiapkan untuk PT Maju Jaya"
+- **Unduh PDF**: tombol cetak di halaman publik dengan gaya cetak khusus (formulir & tombol disembunyikan, tanda tangan tetap tercetak)
+- Dashboard **Klien & Persetujuan**: tingkat persetujuan, tabel keputusan + CSV, link & pesan WhatsApp per klien
+
 ### Desain Bebas (ala Figma)
 Bagian **Desain Bebas** adalah kanvas tempat elemen bisa ditaruh di mana saja:
 - Elemen: teks, gambar, bentuk, tombol (tambah lewat toolbar hitam di atas kanvas)
@@ -96,9 +106,9 @@ Frame memakai lebar desain 1200px dan mengecil proporsional di layar yang lebih 
 
 ## Klasifikasi Template
 
-Total **123 template bawaan** (23 rancangan khusus + 100 dari generator `scripts/generate-koleksi.mjs`), diklasifikasikan dalam tiga tingkat:
+Total **223 template bawaan** (23 rancangan khusus + 200 dari generator `scripts/generate-koleksi.mjs`), diklasifikasikan dalam tiga tingkat:
 
-1. **Jenis** — Undangan Digital atau Portofolio & Company Profile
+1. **Jenis** — Undangan Digital, Portofolio & Company Profile, atau Proposal
 2. **Kategori** — jenis acara (undangan) atau bidang usaha/profesi (portofolio)
 3. **Gaya** — tampilan visual, berlaku untuk kedua jenis
 
@@ -130,6 +140,20 @@ Galeri (`/templates`) punya filter kategori dan gaya beserta jumlahnya, pencaria
 | Kesehatan & Kecantikan | 3 | 3 |
 | Pendidikan & Les | 3 | 3 |
 | Seni & Musik | 3 | 3 |
+
+### Proposal (100)
+| Kategori | Total |
+|---|---|
+| Penawaran Jasa & Harga | 10 |
+| Sponsorship | 10 |
+| Kegiatan & Acara | 10 |
+| Kerja Sama & Kemitraan | 10 |
+| Bisnis & Investasi | 10 |
+| Pitch Deck Startup | 10 |
+| Proyek & Tender | 10 |
+| Dana Hibah & CSR | 10 |
+| Penelitian & Akademik | 10 |
+| Sekolah & Organisasi | 10 |
 
 ### Gaya
 | Gaya | Baru | Total |

@@ -24,7 +24,7 @@ export interface SectionDef {
   label: string;
   description: string;
   /** Produk yang paling cocok (dipakai untuk mengurutkan daftar "Tambah bagian"). */
-  for?: "portfolio" | "invitation";
+  for?: "portfolio" | "invitation" | "proposal";
   fields: Field[];
   defaults: Record<string, PropValue>;
 }
@@ -51,6 +51,7 @@ export const SECTION_DEFS: Record<SectionType, SectionDef> = {
       { key: "title", label: "Judul (mis. nama mempelai)", kind: "text" },
       { key: "subtitle", label: "Tanggal / keterangan", kind: "text" },
       { key: "greeting", label: "Sapaan tamu", kind: "text" },
+      { key: "guestFallback", label: "Nama bawaan bila link tanpa nama (?to=)", kind: "text" },
       { key: "image", label: "Foto latar", kind: "image" },
       {
         key: "tone",
@@ -312,6 +313,190 @@ export const SECTION_DEFS: Record<SectionType, SectionDef> = {
     defaults: { src: "", title: "" },
   },
 
+  // ================= Proposal =================
+  points: {
+    type: "points",
+    for: "proposal",
+    label: "Poin Bernomor",
+    description: "Tujuan, ruang lingkup, manfaat, syarat & ketentuan",
+    fields: [
+      { key: "heading", label: "Judul", kind: "text" },
+      { key: "intro", label: "Pengantar", kind: "textarea" },
+      {
+        key: "layout",
+        label: "Tata letak",
+        kind: "select",
+        options: [
+          { value: "grid", label: "Kartu (2 kolom)" },
+          { value: "list", label: "Daftar bernomor" },
+        ],
+      },
+      {
+        key: "items",
+        label: "Poin",
+        kind: "list",
+        itemLabel: "Poin",
+        itemFields: [
+          { key: "title", label: "Judul poin", kind: "text" },
+          { key: "detail", label: "Penjelasan", kind: "textarea" },
+        ],
+      },
+    ],
+    defaults: {
+      heading: "Tujuan",
+      intro: "",
+      layout: "grid",
+      items: [
+        { title: "Meningkatkan penjualan", detail: "Target kenaikan 30% dalam 6 bulan." },
+        { title: "Memperkuat merek", detail: "Identitas visual yang konsisten di semua kanal." },
+        { title: "Efisiensi proses", detail: "Alur kerja yang lebih cepat dan terukur." },
+      ],
+    },
+  },
+  timeline: {
+    type: "timeline",
+    for: "proposal",
+    label: "Jadwal Pelaksanaan",
+    description: "Tahapan kerja beserta periodenya",
+    fields: [
+      { key: "heading", label: "Judul", kind: "text" },
+      {
+        key: "items",
+        label: "Tahap",
+        kind: "list",
+        itemLabel: "Tahap",
+        itemFields: [
+          { key: "phase", label: "Nama tahap", kind: "text" },
+          { key: "period", label: "Periode (mis. Minggu 1–2)", kind: "text" },
+          { key: "detail", label: "Kegiatan", kind: "textarea" },
+        ],
+      },
+    ],
+    defaults: {
+      heading: "Jadwal Pelaksanaan",
+      items: [
+        { phase: "Persiapan", period: "Minggu 1", detail: "Rapat awal, pengumpulan data, dan rencana kerja." },
+        { phase: "Pelaksanaan", period: "Minggu 2–5", detail: "Pengerjaan utama sesuai ruang lingkup." },
+        { phase: "Evaluasi & serah terima", period: "Minggu 6", detail: "Revisi akhir, laporan, dan serah terima." },
+      ],
+    },
+  },
+  budget: {
+    type: "budget",
+    for: "proposal",
+    label: "Rincian Anggaran",
+    description: "Tabel biaya dengan total otomatis",
+    fields: [
+      { key: "heading", label: "Judul", kind: "text" },
+      { key: "intro", label: "Pengantar", kind: "textarea" },
+      {
+        key: "items",
+        label: "Uraian biaya",
+        kind: "list",
+        itemLabel: "Uraian",
+        itemFields: [
+          { key: "item", label: "Uraian", kind: "text" },
+          { key: "qty", label: "Jumlah", kind: "text" },
+          { key: "unit", label: "Satuan (mis. paket, orang, hari)", kind: "text" },
+          { key: "price", label: "Harga satuan (Rp)", kind: "text" },
+        ],
+      },
+      { key: "tax", label: "Pajak / PPN", kind: "size", min: 0, max: 15, step: 1, unit: "%" },
+      { key: "note", label: "Catatan", kind: "textarea" },
+    ],
+    defaults: {
+      heading: "Rincian Anggaran",
+      intro: "",
+      items: [
+        { item: "Perencanaan & riset", qty: "1", unit: "paket", price: "2500000" },
+        { item: "Pelaksanaan", qty: "4", unit: "minggu", price: "3000000" },
+        { item: "Laporan akhir", qty: "1", unit: "dokumen", price: "1000000" },
+      ],
+      tax: 11,
+      note: "Harga berlaku 30 hari sejak proposal diterbitkan.",
+    },
+  },
+  pricing: {
+    type: "pricing",
+    for: "proposal",
+    label: "Paket Harga",
+    description: "Pilihan paket layanan atau paket sponsor",
+    fields: [
+      { key: "heading", label: "Judul", kind: "text" },
+      { key: "intro", label: "Pengantar", kind: "textarea" },
+      {
+        key: "items",
+        label: "Paket",
+        kind: "list",
+        itemLabel: "Paket",
+        itemFields: [
+          { key: "name", label: "Nama paket", kind: "text" },
+          { key: "price", label: "Harga (Rp, angka saja)", kind: "text" },
+          { key: "period", label: "Keterangan harga (mis. /bulan)", kind: "text" },
+          { key: "features", label: "Fasilitas (satu per baris)", kind: "textarea" },
+          { key: "highlight", label: "Tandai unggulan (isi: ya)", kind: "text" },
+        ],
+      },
+    ],
+    defaults: {
+      heading: "Pilihan Paket",
+      intro: "",
+      items: [
+        { name: "Dasar", price: "3500000", period: "", features: "Konsultasi awal\n1x revisi\nLaporan ringkas", highlight: "" },
+        { name: "Profesional", price: "7500000", period: "", features: "Semua di paket Dasar\n3x revisi\nPendampingan 1 bulan", highlight: "ya" },
+        { name: "Lengkap", price: "12000000", period: "", features: "Semua di paket Profesional\nRevisi tanpa batas\nPendampingan 3 bulan", highlight: "" },
+      ],
+    },
+  },
+  team: {
+    type: "team",
+    for: "proposal",
+    label: "Tim",
+    description: "Orang-orang yang akan mengerjakan",
+    fields: [
+      { key: "heading", label: "Judul", kind: "text" },
+      {
+        key: "items",
+        label: "Anggota",
+        kind: "list",
+        itemLabel: "Anggota",
+        itemFields: [
+          { key: "name", label: "Nama", kind: "text" },
+          { key: "role", label: "Peran", kind: "text" },
+          { key: "photo", label: "Foto", kind: "image" },
+        ],
+      },
+    ],
+    defaults: {
+      heading: "Tim Kami",
+      items: [
+        { name: "Nama Anggota 1", role: "Ketua tim", photo: "/placeholder/portrait.svg" },
+        { name: "Nama Anggota 2", role: "Pelaksana", photo: "/placeholder/hero.svg" },
+        { name: "Nama Anggota 3", role: "Keuangan", photo: "/placeholder/portrait.svg" },
+      ],
+    },
+  },
+  approval: {
+    type: "approval",
+    for: "proposal",
+    label: "Persetujuan",
+    description: "Klien menyetujui atau meminta diskusi langsung di halaman",
+    fields: [
+      { key: "heading", label: "Judul", kind: "text" },
+      { key: "text", label: "Teks", kind: "textarea" },
+      { key: "signer", label: "Nama penanda tangan (pengaju)", kind: "text" },
+      { key: "signerRole", label: "Jabatan penanda tangan", kind: "text" },
+      { key: "place", label: "Tempat & tanggal", kind: "text" },
+    ],
+    defaults: {
+      heading: "Persetujuan",
+      text: "Jika proposal ini sesuai, silakan berikan persetujuan atau catatan Anda di bawah. Kami akan segera menghubungi Anda.",
+      signer: "Nama Pengaju",
+      signerRole: "Direktur",
+      place: "Jakarta, 1 Juni 2027",
+    },
+  },
+
   // ================= Umum / portofolio =================
   canvas: {
     type: "canvas",
@@ -540,6 +725,12 @@ export const SECTION_DEFS: Record<SectionType, SectionDef> = {
 
 export const SECTION_ORDER: SectionType[] = [
   "canvas",
+  "points",
+  "timeline",
+  "budget",
+  "pricing",
+  "team",
+  "approval",
   "cover",
   "couple",
   "event",
