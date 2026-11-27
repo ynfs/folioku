@@ -17,7 +17,7 @@ function orderFor(kind: ProductKind): SectionType[] {
   return [...SECTION_ORDER.filter(fits), ...SECTION_ORDER.filter((t) => !fits(t))];
 }
 import { ElementPanel, LayersList } from "./ElementPanel";
-import { FieldInput, IconBtn } from "./fields";
+import { FieldInput, IconBtn, ImageInput } from "./fields";
 import { currentSections, useEditor } from "./store";
 
 // ---------- Panel kiri: daftar section ----------
@@ -267,9 +267,44 @@ export function ThemePanel() {
           <option value="uppercase">HURUF BESAR</option>
         </select>
       </div>
+
+      <div>
+        <p className="label">Ornamen pemisah judul (undangan)</p>
+        <div className="mb-2 grid grid-cols-3 gap-1.5">
+          <button
+            type="button"
+            onClick={() => updateTheme("ornament", "")}
+            className={`rounded-lg border px-1 py-1.5 text-lg ${!theme.ornament ? "border-app-fg" : "border-app-line"}`}
+            title="Simbol bawaan"
+          >
+            ❦
+          </button>
+          {ORNAMENTS.map((o) => (
+            <button
+              key={o.src}
+              type="button"
+              title={o.label}
+              onClick={() => updateTheme("ornament", o.src)}
+              className={`rounded-lg border bg-white px-1 py-1.5 ${theme.ornament === o.src ? "border-app-fg" : "border-app-line"}`}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={o.src} alt={o.label} className="mx-auto h-5 w-full object-contain" />
+            </button>
+          ))}
+        </div>
+        <ImageInput id="t-ornament" label="atau unggah ornamen sendiri" value={theme.ornament ?? ""} onChange={(v) => updateTheme("ornament", v)} />
+      </div>
     </div>
   );
 }
+
+const ORNAMENTS = [
+  { src: "/ornamen/jawa-divider.svg", label: "Jawa (kawung)" },
+  { src: "/ornamen/sunda-divider.svg", label: "Sunda (mega mendung)" },
+  { src: "/ornamen/minang-divider.svg", label: "Minang (songket)" },
+  { src: "/ornamen/bali-divider.svg", label: "Bali (jepun)" },
+  { src: "/ornamen/batak-divider.svg", label: "Batak (gorga)" },
+];
 
 function FontSelect({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   const id = `font-${label}`;

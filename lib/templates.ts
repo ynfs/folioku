@@ -11,6 +11,11 @@ import undanganRustic from "@/templates/tpl-undangan-rustic.json";
 import undanganUltah from "@/templates/tpl-undangan-ultah.json";
 import undanganKhitanan from "@/templates/tpl-undangan-khitanan.json";
 import undanganAcara from "@/templates/tpl-undangan-acara.json";
+import adatJawa from "@/templates/tpl-adat-jawa.json";
+import adatSunda from "@/templates/tpl-adat-sunda.json";
+import adatMinang from "@/templates/tpl-adat-minang.json";
+import adatBali from "@/templates/tpl-adat-bali.json";
+import adatBatak from "@/templates/tpl-adat-batak.json";
 
 // Template bawaan disimpan sebagai file JSON di folder /templates.
 // Untuk menambah template: buat file JSON baru dengan format yang sama lalu
@@ -25,6 +30,11 @@ export const TEMPLATES = (
     modernGelap,
     kreatif,
     undanganElegan,
+    adatJawa,
+    adatSunda,
+    adatMinang,
+    adatBali,
+    adatBatak,
     undanganRustic,
     undanganUltah,
     undanganKhitanan,
@@ -46,6 +56,7 @@ export const CATEGORIES: { value: TemplateCategory; label: string; kind: Product
   { value: "editorial", label: "Editorial", kind: "portfolio" },
   { value: "kreatif", label: "Kreatif", kind: "portfolio" },
   { value: "pernikahan", label: "Pernikahan", kind: "invitation" },
+  { value: "adat", label: "Pernikahan Adat", kind: "invitation" },
   { value: "ulang-tahun", label: "Ulang Tahun", kind: "invitation" },
   { value: "khitanan", label: "Khitanan & Aqiqah", kind: "invitation" },
   { value: "acara", label: "Acara & Event", kind: "invitation" },

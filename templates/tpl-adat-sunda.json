@@ -1,0 +1,300 @@
+{
+  "id": "tpl-adat-sunda",
+  "kind": "invitation",
+  "name": "Pernikahan Adat Sunda",
+  "category": "adat",
+  "description": "Hijau tosca yang sejuk dengan motif awan bertingkat, prosesi Sawer hingga Huap Lingkung.",
+  "tags": [
+    "pernikahan",
+    "adat",
+    "sunda"
+  ],
+  "theme": {
+    "fontHeading": "Playfair Display",
+    "fontBody": "Manrope",
+    "colorPrimary": "#0E3B3A",
+    "colorAccent": "#1F6F64",
+    "colorBackground": "#F4FAF8",
+    "colorSurface": "#DCEFE9",
+    "radius": "lg",
+    "headingCase": "normal",
+    "ornament": "/ornamen/sunda-divider.svg"
+  },
+  "sections": [
+    {
+      "id": "sec-adat-sampul-13",
+      "type": "cover",
+      "props": {
+        "eyebrow": "Wilujeng Sumping",
+        "title": "Neng Euis & Kang Asep",
+        "subtitle": "Minggu, 20 Juni 2027",
+        "greeting": "Ka Bapak/Ibu/Saderek",
+        "image": "/ornamen/sunda-cover.svg",
+        "buttonText": "Buka Undangan",
+        "buttonLink": ""
+      }
+    },
+    {
+      "id": "sec-adat-musik-14",
+      "type": "music",
+      "props": {
+        "src": "",
+        "title": ""
+      }
+    },
+    {
+      "id": "sec-adat-petuah-15",
+      "type": "testimonial",
+      "props": {
+        "quote": "Silih asih, silih asah, silih asuh.",
+        "author": "Falsafah Sunda",
+        "role": "Saling menyayangi, saling mengasah, saling menjaga"
+      }
+    },
+    {
+      "id": "sec-adat-mempelai-16",
+      "type": "couple",
+      "props": {
+        "heading": "Mempelai",
+        "intro": "Kalayan nyuhunkeun rahmat sareng ridho Gusti Nu Maha Agung, kami bermaksud menyelenggarakan pernikahan putra-putri kami:",
+        "name1": "Euis",
+        "full1": "Euis Nurhasanah, S.Pd.",
+        "parents1": "Putri dari Bapak Ujang Sutisna\n& Ibu Nining",
+        "name2": "Asep",
+        "full2": "Asep Mulyana, S.Kom.",
+        "parents2": "Putra dari Bapak Dadang\n& Ibu Imas",
+        "photo1": "/placeholder/portrait.svg",
+        "photo2": "/placeholder/hero.svg",
+        "ig1": "",
+        "ig2": ""
+      }
+    },
+    {
+      "id": "sec-adat-prosesi-17",
+      "type": "ceremony",
+      "props": {
+        "heading": "Upacara Adat Sunda",
+        "intro": "Rangkaian adat Sunda yang sarat makna nasihat dan doa bagi kedua mempelai.",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Ngeuyeuk Seureuh",
+            "description": "Malam sebelum akad, berisi nasihat orang tua tentang kehidupan berumah tangga.",
+            "start": "2027-06-19T19:00",
+            "place": "Kediaman mempelai wanita"
+          },
+          {
+            "name": "Siraman",
+            "description": "Memandikan calon pengantin sebagai lambang membersihkan diri.",
+            "start": "2027-06-19T09:00",
+            "place": "Kediaman mempelai wanita"
+          },
+          {
+            "name": "Akad Nikah",
+            "description": "Ikrar suci pernikahan kedua mempelai.",
+            "start": "2027-06-20T08:00",
+            "place": "Masjid Raya"
+          },
+          {
+            "name": "Sawer Panganten",
+            "description": "Menaburkan beras, kunyit, dan koin diiringi kidung nasihat sebagai doa rezeki.",
+            "start": "",
+            "place": ""
+          },
+          {
+            "name": "Nincak Endog",
+            "description": "Mempelai pria menginjak telur sebagai simbol kesiapan membina keturunan.",
+            "start": "",
+            "place": ""
+          },
+          {
+            "name": "Huap Lingkung",
+            "description": "Saling menyuapi sebagai tanda kasih dan berbagi dalam suka maupun duka.",
+            "start": "",
+            "place": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-acara-18",
+      "type": "event",
+      "props": {
+        "heading": "Waktu & Tempat",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Akad Nikah",
+            "start": "2027-06-20T08:00",
+            "end": "09.30",
+            "place": "Masjid Raya",
+            "address": "Jl. Asia Afrika No. 1, Bandung",
+            "map": "https://maps.google.com/?q=Bandung"
+          },
+          {
+            "name": "Resepsi",
+            "start": "2027-06-20T11:00",
+            "end": "14.00",
+            "place": "Gedung Sate Ballroom",
+            "address": "Jl. Diponegoro No. 22, Bandung",
+            "map": "https://maps.google.com/?q=Bandung"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-mundur-19",
+      "type": "countdown",
+      "props": {
+        "heading": "Menuju hari bahagia",
+        "target": "2027-06-20T08:00",
+        "zone": "WIB",
+        "doneText": "Hari bahagia telah tiba"
+      }
+    },
+    {
+      "id": "sec-adat-busana-20",
+      "type": "dresscode",
+      "props": {
+        "heading": "Dress Code",
+        "text": "Tamu dianjurkan mengenakan kebaya, batik, atau pakaian formal dengan nuansa hijau dan krem.",
+        "colors": [
+          {
+            "color": "#1F6F64",
+            "label": "Hijau tosca"
+          },
+          {
+            "color": "#DCEFE9",
+            "label": "Mint"
+          },
+          {
+            "color": "#F4EBDD",
+            "label": "Krem"
+          }
+        ],
+        "image": ""
+      }
+    },
+    {
+      "id": "sec-adat-galeri-21",
+      "type": "gallery",
+      "props": {
+        "heading": "Galeri",
+        "columns": 3,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-4.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-5.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-6.svg",
+            "caption": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-rsvp-22",
+      "type": "rsvp",
+      "props": {
+        "heading": "Konfirmasi Kehadiran",
+        "text": "Merupakan suatu kehormatan apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
+        "maxGuests": 2,
+        "showWishes": "ya"
+      }
+    },
+    {
+      "id": "sec-adat-amplop-23",
+      "type": "gift",
+      "props": {
+        "heading": "Tanda Kasih",
+        "text": "Doa restu Anda adalah hadiah terindah. Jika ingin memberi tanda kasih, dapat melalui:",
+        "items": [
+          {
+            "bank": "Nama Bank",
+            "number": "0000000000",
+            "holder": "Nama Pemilik",
+            "qr": ""
+          }
+        ],
+        "address": ""
+      }
+    },
+    {
+      "id": "sec-adat-penutup-24",
+      "type": "canvas",
+      "props": {
+        "height": 460,
+        "background": "theme:text",
+        "backgroundImage": "/ornamen/sunda-cover.svg",
+        "elements": [
+          {
+            "id": "el-sunda-1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Salam penutup",
+            "x": 100,
+            "y": 120,
+            "w": 1000,
+            "h": 90,
+            "text": "Hatur Nuhun",
+            "fontFamily": "heading",
+            "fontSize": 60,
+            "fontWeight": 700,
+            "align": "center",
+            "lineHeight": 1.1,
+            "color": "#FFFFFF"
+          },
+          {
+            "id": "el-sunda-2",
+            "rotation": 0,
+            "opacity": 0.9,
+            "type": "text",
+            "name": "Ucapan terima kasih",
+            "x": 200,
+            "y": 230,
+            "w": 800,
+            "h": 90,
+            "text": "Atas kehadiran dan doa restu Bapak/Ibu/Saudara/i, kami ucapkan terima kasih.\nEuis & Asep",
+            "fontFamily": "body",
+            "fontSize": 20,
+            "align": "center",
+            "lineHeight": 1.5,
+            "color": "#FFFFFF"
+          },
+          {
+            "id": "el-sunda-3",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "image",
+            "name": "Ornamen",
+            "x": 480,
+            "y": 350,
+            "w": 240,
+            "h": 40,
+            "src": "/ornamen/sunda-divider.svg",
+            "fit": "contain",
+            "radius": 0
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -15,6 +15,8 @@ export const FONTS: { name: string; kind: "sans" | "serif" | "display" | "mono" 
   { name: "Archivo Black", kind: "display" },
   { name: "Syne", kind: "display" },
   { name: "Bricolage Grotesque", kind: "display" },
+  { name: "Cinzel", kind: "display" },
+  { name: "Great Vibes", kind: "display" },
   { name: "IBM Plex Mono", kind: "mono" },
   { name: "Space Mono", kind: "mono" },
 ];
@@ -39,7 +41,7 @@ export function googleFontsHref(names: string[]): string | null {
     .map((n) => {
       const fam = n.replace(/ /g, "+");
       // Font yang hanya punya satu ketebalan
-      if (["Archivo Black", "DM Serif Display", "Libre Baskerville", "Space Mono"].includes(n)) {
+      if (["Archivo Black", "DM Serif Display", "Libre Baskerville", "Space Mono", "Great Vibes"].includes(n)) {
         return `family=${fam}`;
       }
       return `family=${fam}:wght@400;500;600;700`;

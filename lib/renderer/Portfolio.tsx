@@ -20,6 +20,7 @@ export function themeVars(theme: Theme): CSSProperties {
     "--c-surface": theme.colorSurface || theme.colorBackground,
     "--radius": RADIUS[theme.radius ?? "sm"],
     "--hcase": theme.headingCase === "uppercase" ? "uppercase" : "none",
+    ...(theme.ornament && /^(\/|https:\/\/)[^"'()\s]+$/.test(theme.ornament) ? { "--ornament": `url("${theme.ornament}")`, "--ornament-glyph": "\"\"" } : {}),
   } as CSSProperties;
 }
 

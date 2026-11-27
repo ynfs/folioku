@@ -38,7 +38,11 @@ Platform pembuat **portofolio/company profile** dan **undangan digital** berbasi
 - Ekspor ke PDF
 
 ### Undangan Digital
-Untuk pernikahan, ulang tahun, khitanan/aqiqah, dan acara/event. 5 template bawaan.
+Untuk pernikahan, pernikahan adat, ulang tahun, khitanan/aqiqah, dan acara/event. 10 template bawaan.
+- **Pernikahan adat**: Jawa, Sunda, Minangkabau, Bali, Batak — tiap tema punya warna, ornamen SVG (kawung, mega mendung, songket, jepun, gorga), sapaan, dan susunan prosesi sendiri
+- **Prosesi Adat**: linimasa rangkaian upacara (nama, makna, waktu, tempat) — sesuaikan dengan tradisi keluarga
+- **Dress Code**: anjuran busana dengan contoh warna
+- **Ornamen pemisah judul** bisa dipilih di panel Tema atau diunggah sendiri
 - **Sampul** dengan nama tamu otomatis dari link: `/p/nama-undangan?to=Budi` → "Kepada Yth. Budi". Teks `{{tamu}}` di bagian mana pun juga diganti nama tamu
 - **Mempelai**, **Acara** (tanggal, jam, zona WIB/WITA/WIT, peta, simpan ke Google Calendar), **Hitung mundur**, **Kisah**, **Galeri**
 - **RSVP & ucapan**: tamu mengisi kehadiran, jumlah orang, dan ucapan; ucapan tampil di undangan

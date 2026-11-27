@@ -1,0 +1,300 @@
+{
+  "id": "tpl-adat-minang",
+  "kind": "invitation",
+  "name": "Baralek Adat Minang",
+  "category": "adat",
+  "description": "Merah, hitam, dan emas bermotif songket dengan siluet rumah bergonjong.",
+  "tags": [
+    "pernikahan",
+    "adat",
+    "minang"
+  ],
+  "theme": {
+    "fontHeading": "Cinzel",
+    "fontBody": "Lora",
+    "colorPrimary": "#2B0A0A",
+    "colorAccent": "#A4161A",
+    "colorBackground": "#FFF8EF",
+    "colorSurface": "#F6E3C3",
+    "radius": "sm",
+    "headingCase": "normal",
+    "ornament": "/ornamen/minang-divider.svg"
+  },
+  "sections": [
+    {
+      "id": "sec-adat-sampul-25",
+      "type": "cover",
+      "props": {
+        "eyebrow": "Baralek Gadang",
+        "title": "Putri & Rizki",
+        "subtitle": "Sabtu, 10 Juli 2027",
+        "greeting": "Kapado Yth. Bapak/Ibu/Dunsanak",
+        "image": "/ornamen/minang-cover.svg",
+        "buttonText": "Buka Undangan",
+        "buttonLink": ""
+      }
+    },
+    {
+      "id": "sec-adat-musik-26",
+      "type": "music",
+      "props": {
+        "src": "",
+        "title": ""
+      }
+    },
+    {
+      "id": "sec-adat-petuah-27",
+      "type": "testimonial",
+      "props": {
+        "quote": "Adat basandi syarak, syarak basandi Kitabullah.",
+        "author": "Falsafah Minangkabau",
+        "role": ""
+      }
+    },
+    {
+      "id": "sec-adat-mempelai-28",
+      "type": "couple",
+      "props": {
+        "heading": "Mempelai",
+        "intro": "Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan baralek putra-putri kami:",
+        "name1": "Putri",
+        "full1": "Putri Rahmadani, S.E.",
+        "parents1": "Putri dari Bapak Syafrudin\n& Ibu Yusnimar",
+        "name2": "Rizki",
+        "full2": "Rizki Pratama Sutan Mudo",
+        "parents2": "Putra dari Bapak Zulkifli\n& Ibu Erniwati",
+        "photo1": "/placeholder/portrait.svg",
+        "photo2": "/placeholder/hero.svg",
+        "ig1": "",
+        "ig2": ""
+      }
+    },
+    {
+      "id": "sec-adat-prosesi-29",
+      "type": "ceremony",
+      "props": {
+        "heading": "Prosesi Adat Minangkabau",
+        "intro": "Rangkaian adat Minang yang menyatukan dua keluarga besar dalam ikatan kekerabatan.",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Maresek",
+            "description": "Penjajakan awal oleh pihak keluarga perempuan kepada keluarga laki-laki.",
+            "start": "",
+            "place": ""
+          },
+          {
+            "name": "Maminang",
+            "description": "Peminangan resmi dan bertukar tanda antara kedua keluarga.",
+            "start": "",
+            "place": ""
+          },
+          {
+            "name": "Malam Bainai",
+            "description": "Memerahkan kuku calon pengantin dengan daun inai disertai doa dan restu keluarga.",
+            "start": "2027-07-09T19:30",
+            "place": "Rumah Gadang"
+          },
+          {
+            "name": "Akad Nikah",
+            "description": "Ikrar pernikahan secara agama Islam.",
+            "start": "2027-07-10T08:00",
+            "place": "Masjid Raya"
+          },
+          {
+            "name": "Basandiang",
+            "description": "Kedua mempelai bersanding di pelaminan menerima ucapan selamat tamu.",
+            "start": "2027-07-10T11:00",
+            "place": "Rumah Gadang"
+          },
+          {
+            "name": "Manjalang Mintuo",
+            "description": "Mempelai wanita berkunjung ke rumah mertua membawa jamba (hantaran).",
+            "start": "",
+            "place": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-acara-30",
+      "type": "event",
+      "props": {
+        "heading": "Waktu & Tempat",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Akad Nikah",
+            "start": "2027-07-10T08:00",
+            "end": "09.30",
+            "place": "Masjid Raya",
+            "address": "Jl. Khatib Sulaiman, Padang",
+            "map": "https://maps.google.com/?q=Padang"
+          },
+          {
+            "name": "Baralek (Resepsi)",
+            "start": "2027-07-10T11:00",
+            "end": "Selesai",
+            "place": "Rumah Gadang Keluarga",
+            "address": "Jl. Raya Bukittinggi No. 7",
+            "map": "https://maps.google.com/?q=Bukittinggi"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-mundur-31",
+      "type": "countdown",
+      "props": {
+        "heading": "Menuju hari bahagia",
+        "target": "2027-07-10T08:00",
+        "zone": "WIB",
+        "doneText": "Hari bahagia telah tiba"
+      }
+    },
+    {
+      "id": "sec-adat-busana-32",
+      "type": "dresscode",
+      "props": {
+        "heading": "Dress Code",
+        "text": "Tamu dianjurkan mengenakan baju kurung, songket, atau pakaian formal bernuansa merah dan emas.",
+        "colors": [
+          {
+            "color": "#A4161A",
+            "label": "Merah"
+          },
+          {
+            "color": "#C9A227",
+            "label": "Emas"
+          },
+          {
+            "color": "#1A0505",
+            "label": "Hitam"
+          }
+        ],
+        "image": ""
+      }
+    },
+    {
+      "id": "sec-adat-galeri-33",
+      "type": "gallery",
+      "props": {
+        "heading": "Galeri",
+        "columns": 3,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-4.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-5.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-6.svg",
+            "caption": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-rsvp-34",
+      "type": "rsvp",
+      "props": {
+        "heading": "Konfirmasi Kehadiran",
+        "text": "Merupakan suatu kehormatan apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
+        "maxGuests": 2,
+        "showWishes": "ya"
+      }
+    },
+    {
+      "id": "sec-adat-amplop-35",
+      "type": "gift",
+      "props": {
+        "heading": "Tanda Kasih",
+        "text": "Doa restu Anda adalah hadiah terindah. Jika ingin memberi tanda kasih, dapat melalui:",
+        "items": [
+          {
+            "bank": "Nama Bank",
+            "number": "0000000000",
+            "holder": "Nama Pemilik",
+            "qr": ""
+          }
+        ],
+        "address": ""
+      }
+    },
+    {
+      "id": "sec-adat-penutup-36",
+      "type": "canvas",
+      "props": {
+        "height": 460,
+        "background": "theme:text",
+        "backgroundImage": "/ornamen/minang-cover.svg",
+        "elements": [
+          {
+            "id": "el-minang-1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Salam penutup",
+            "x": 100,
+            "y": 120,
+            "w": 1000,
+            "h": 90,
+            "text": "Tarimo Kasih",
+            "fontFamily": "heading",
+            "fontSize": 60,
+            "fontWeight": 700,
+            "align": "center",
+            "lineHeight": 1.1,
+            "color": "#FFFFFF"
+          },
+          {
+            "id": "el-minang-2",
+            "rotation": 0,
+            "opacity": 0.9,
+            "type": "text",
+            "name": "Ucapan terima kasih",
+            "x": 200,
+            "y": 230,
+            "w": 800,
+            "h": 90,
+            "text": "Atas kehadiran dan doa restu Bapak/Ibu/Saudara/i, kami ucapkan terima kasih.\nPutri & Rizki",
+            "fontFamily": "body",
+            "fontSize": 20,
+            "align": "center",
+            "lineHeight": 1.5,
+            "color": "#FFFFFF"
+          },
+          {
+            "id": "el-minang-3",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "image",
+            "name": "Ornamen",
+            "x": 480,
+            "y": 350,
+            "w": 240,
+            "h": 40,
+            "src": "/ornamen/minang-divider.svg",
+            "fit": "contain",
+            "radius": 0
+          }
+        ]
+      }
+    }
+  ]
+}

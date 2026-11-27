@@ -16,6 +16,8 @@ export interface Theme {
   colorSurface?: string;
   radius?: Radius;
   headingCase?: HeadingCase;
+  /** Gambar ornamen pemisah judul (mis. motif adat). Kosong = simbol ❦ */
+  ornament?: string;
 }
 
 export type SectionType =
@@ -36,7 +38,9 @@ export type SectionType =
   | "story"
   | "rsvp"
   | "gift"
-  | "music";
+  | "music"
+  | "ceremony"
+  | "dresscode";
 
 /** Elemen di bagian "Desain Bebas" (kanvas ala Figma). Satuan posisi = piksel desain
  *  pada frame selebar CANVAS_WIDTH, lalu diskalakan proporsional saat ditampilkan. */
@@ -115,7 +119,8 @@ export type TemplateCategory =
   | "pernikahan"
   | "ulang-tahun"
   | "khitanan"
-  | "acara";
+  | "acara"
+  | "adat";
 
 export interface Template extends PortfolioData {
   id: string;

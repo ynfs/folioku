@@ -1,0 +1,300 @@
+{
+  "id": "tpl-adat-bali",
+  "kind": "invitation",
+  "name": "Pawiwahan Adat Bali",
+  "category": "adat",
+  "description": "Emas tanah dan bunga jepun dengan siluet gerbang terbelah, prosesi Mekala-kalaan hingga Mejauman.",
+  "tags": [
+    "pernikahan",
+    "adat",
+    "bali"
+  ],
+  "theme": {
+    "fontHeading": "Cormorant Garamond",
+    "fontBody": "DM Sans",
+    "colorPrimary": "#2E2412",
+    "colorAccent": "#9A7B3F",
+    "colorBackground": "#FFFBF2",
+    "colorSurface": "#F1E6CC",
+    "radius": "sm",
+    "headingCase": "normal",
+    "ornament": "/ornamen/bali-divider.svg"
+  },
+  "sections": [
+    {
+      "id": "sec-adat-sampul-37",
+      "type": "cover",
+      "props": {
+        "eyebrow": "Om Swastyastu",
+        "title": "Ayu & Wayan",
+        "subtitle": "Rabu, 18 Agustus 2027",
+        "greeting": "Kepada Yth. Bapak/Ibu/Saudara/i",
+        "image": "/ornamen/bali-cover.svg",
+        "buttonText": "Buka Undangan",
+        "buttonLink": ""
+      }
+    },
+    {
+      "id": "sec-adat-musik-38",
+      "type": "music",
+      "props": {
+        "src": "",
+        "title": ""
+      }
+    },
+    {
+      "id": "sec-adat-petuah-39",
+      "type": "testimonial",
+      "props": {
+        "quote": "Om Ano Bhadrah Kratavo Yantu Visvatah.",
+        "author": "Doa pembuka",
+        "role": "Semoga pikiran yang baik datang dari segala penjuru"
+      }
+    },
+    {
+      "id": "sec-adat-mempelai-40",
+      "type": "couple",
+      "props": {
+        "heading": "Mempelai",
+        "intro": "Atas asung kertha wara nugraha Ida Sang Hyang Widhi Wasa, kami mengundang Bapak/Ibu/Saudara/i pada upacara pawiwahan putra-putri kami:",
+        "name1": "Ayu",
+        "full1": "Ni Luh Ayu Saraswati",
+        "parents1": "Putri dari I Made Sudarsana\n& Ni Ketut Sriani",
+        "name2": "Wayan",
+        "full2": "I Wayan Arta Wijaya",
+        "parents2": "Putra dari I Nyoman Suarjana\n& Ni Made Sukerti",
+        "photo1": "/placeholder/portrait.svg",
+        "photo2": "/placeholder/hero.svg",
+        "ig1": "",
+        "ig2": ""
+      }
+    },
+    {
+      "id": "sec-adat-prosesi-41",
+      "type": "ceremony",
+      "props": {
+        "heading": "Upacara Pawiwahan",
+        "intro": "Rangkaian upacara pawiwahan adat Bali yang dipimpin pemangku sesuai dresta setempat.",
+        "zone": "WITA",
+        "items": [
+          {
+            "name": "Ngekeb",
+            "description": "Calon pengantin wanita dipingit dan dirias sebagai persiapan lahir batin.",
+            "start": "2027-08-17T16:00",
+            "place": "Rumah mempelai wanita"
+          },
+          {
+            "name": "Mungkah Lawang",
+            "description": "Utusan mempelai pria mengetuk pintu kamar sebagai tanda penjemputan.",
+            "start": "",
+            "place": ""
+          },
+          {
+            "name": "Mesegehan Agung",
+            "description": "Upacara penyambutan pengantin wanita di rumah mempelai pria.",
+            "start": "",
+            "place": ""
+          },
+          {
+            "name": "Mekala-kalaan",
+            "description": "Upacara penyucian kedua mempelai dengan rangkaian simbol penuh makna.",
+            "start": "2027-08-18T09:00",
+            "place": "Merajan keluarga"
+          },
+          {
+            "name": "Mewidhi Widana",
+            "description": "Persembahyangan memohon restu Ida Sang Hyang Widhi Wasa dan leluhur.",
+            "start": "2027-08-18T10:30",
+            "place": "Merajan keluarga"
+          },
+          {
+            "name": "Mejauman",
+            "description": "Kunjungan ke keluarga mempelai wanita untuk berpamitan secara adat.",
+            "start": "",
+            "place": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-acara-42",
+      "type": "event",
+      "props": {
+        "heading": "Waktu & Tempat",
+        "zone": "WITA",
+        "items": [
+          {
+            "name": "Upacara Pawiwahan",
+            "start": "2027-08-18T09:00",
+            "end": "12.00",
+            "place": "Kediaman Mempelai Pria",
+            "address": "Banjar Kaja, Ubud, Gianyar",
+            "map": "https://maps.google.com/?q=Ubud"
+          },
+          {
+            "name": "Resepsi",
+            "start": "2027-08-18T18:00",
+            "end": "21.00",
+            "place": "Wantilan Desa",
+            "address": "Ubud, Gianyar, Bali",
+            "map": "https://maps.google.com/?q=Ubud"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-mundur-43",
+      "type": "countdown",
+      "props": {
+        "heading": "Menuju hari bahagia",
+        "target": "2027-08-18T09:00",
+        "zone": "WITA",
+        "doneText": "Hari bahagia telah tiba"
+      }
+    },
+    {
+      "id": "sec-adat-busana-44",
+      "type": "dresscode",
+      "props": {
+        "heading": "Dress Code",
+        "text": "Tamu dianjurkan mengenakan pakaian adat madya Bali atau pakaian formal bernuansa putih dan kuning.",
+        "colors": [
+          {
+            "color": "#FFFFFF",
+            "label": "Putih"
+          },
+          {
+            "color": "#E9C46A",
+            "label": "Kuning"
+          },
+          {
+            "color": "#9A7B3F",
+            "label": "Emas tanah"
+          }
+        ],
+        "image": ""
+      }
+    },
+    {
+      "id": "sec-adat-galeri-45",
+      "type": "gallery",
+      "props": {
+        "heading": "Galeri",
+        "columns": 3,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-4.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-5.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-6.svg",
+            "caption": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-rsvp-46",
+      "type": "rsvp",
+      "props": {
+        "heading": "Konfirmasi Kehadiran",
+        "text": "Merupakan suatu kehormatan apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
+        "maxGuests": 2,
+        "showWishes": "ya"
+      }
+    },
+    {
+      "id": "sec-adat-amplop-47",
+      "type": "gift",
+      "props": {
+        "heading": "Tanda Kasih",
+        "text": "Doa restu Anda adalah hadiah terindah. Jika ingin memberi tanda kasih, dapat melalui:",
+        "items": [
+          {
+            "bank": "Nama Bank",
+            "number": "0000000000",
+            "holder": "Nama Pemilik",
+            "qr": ""
+          }
+        ],
+        "address": ""
+      }
+    },
+    {
+      "id": "sec-adat-penutup-48",
+      "type": "canvas",
+      "props": {
+        "height": 460,
+        "background": "theme:text",
+        "backgroundImage": "/ornamen/bali-cover.svg",
+        "elements": [
+          {
+            "id": "el-bali-1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Salam penutup",
+            "x": 100,
+            "y": 120,
+            "w": 1000,
+            "h": 90,
+            "text": "Om Shanti Shanti Shanti Om",
+            "fontFamily": "heading",
+            "fontSize": 60,
+            "fontWeight": 700,
+            "align": "center",
+            "lineHeight": 1.1,
+            "color": "#FFFFFF"
+          },
+          {
+            "id": "el-bali-2",
+            "rotation": 0,
+            "opacity": 0.9,
+            "type": "text",
+            "name": "Ucapan terima kasih",
+            "x": 200,
+            "y": 230,
+            "w": 800,
+            "h": 90,
+            "text": "Atas kehadiran dan doa restu Bapak/Ibu/Saudara/i, kami ucapkan terima kasih.\nAyu & Wayan",
+            "fontFamily": "body",
+            "fontSize": 20,
+            "align": "center",
+            "lineHeight": 1.5,
+            "color": "#FFFFFF"
+          },
+          {
+            "id": "el-bali-3",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "image",
+            "name": "Ornamen",
+            "x": 480,
+            "y": 350,
+            "w": 240,
+            "h": 40,
+            "src": "/ornamen/bali-divider.svg",
+            "fit": "contain",
+            "radius": 0
+          }
+        ]
+      }
+    }
+  ]
+}

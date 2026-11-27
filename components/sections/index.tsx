@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- gambar bisa berasal dari URL apa pun milik klien */
 import type { PropValue, Section } from "@/lib/types";
 import { CanvasView, safeHref } from "./canvas";
-import { Couple, EventSection, Story } from "./invitation";
+import { Ceremony, Couple, Dresscode, EventSection, Story } from "./invitation";
 import { Countdown, Cover, Gift, Music, RsvpSection } from "./invitation-client";
 
 // Komponen section siap pakai. Semuanya murni (tanpa state) sehingga bisa
@@ -244,6 +244,8 @@ const COMPONENTS = {
   rsvp: RsvpSection,
   gift: Gift,
   music: Music,
+  ceremony: Ceremony,
+  dresscode: Dresscode,
 } as const;
 
 export function SectionView({ section }: { section: Section }) {

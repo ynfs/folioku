@@ -22,9 +22,7 @@ export function InvHeading({ children }: { children: React.ReactNode }) {
   return (
     <div className="mb-10">
       <h2 className="pf-h text-3xl font-bold @3xl:text-5xl">{children}</h2>
-      <span className="pf-accent mt-4 block text-xl" aria-hidden>
-        ❦
-      </span>
+      <span className="inv-ornament pf-accent mt-4" aria-hidden />
     </div>
   );
 }
@@ -99,6 +97,60 @@ export function EventSection({ p }: { p: P }) {
           );
         })}
       </div>
+    </InvWrap>
+  );
+}
+
+export function Ceremony({ p }: { p: P }) {
+  const zone = s(p.zone) || "WIB";
+  const items = list(p.items);
+  return (
+    <InvWrap id="prosesi-adat">
+      <InvHeading>{s(p.heading)}</InvHeading>
+      {s(p.intro) && <p className="pf-muted mx-auto mb-12 max-w-2xl leading-relaxed">{s(p.intro)}</p>}
+      <ol className="mx-auto grid max-w-3xl gap-4 text-left @3xl:grid-cols-2">
+        {items.map((it, i) => (
+          <li key={i} className="pf-card relative flex gap-4 border p-5" style={{ background: "var(--c-surface)", borderColor: "color-mix(in srgb, var(--c-accent) 30%, transparent)" }}>
+            <span className="pf-h grid h-11 w-11 shrink-0 place-items-center rounded-full text-lg font-bold" style={{ background: "var(--c-accent)", color: "var(--c-bg)" }}>
+              {i + 1}
+            </span>
+            <div>
+              <h3 className="pf-h text-xl font-bold">{it.name}</h3>
+              {it.description && <p className="pf-muted mt-1 text-sm leading-relaxed">{it.description}</p>}
+              {(it.start || it.place) && (
+                <p className="pf-accent mt-2 text-xs font-semibold">
+                  {it.start ? `${formatTanggal(it.start)} · ${formatJam(it.start)} ${zone}` : ""}
+                  {it.start && it.place ? " · " : ""}
+                  {it.place}
+                </p>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </InvWrap>
+  );
+}
+
+const HEX = /^#[0-9a-f]{3}([0-9a-f]{3})?$/i;
+
+export function Dresscode({ p }: { p: P }) {
+  const colors = list(p.colors).filter((c) => HEX.test((c.color ?? "").trim()));
+  return (
+    <InvWrap id="dress-code" className="pf-surface">
+      <InvHeading>{s(p.heading)}</InvHeading>
+      {s(p.text) && <p className="pf-muted mx-auto max-w-xl leading-relaxed">{s(p.text)}</p>}
+      {colors.length > 0 && (
+        <ul className="mt-8 flex flex-wrap justify-center gap-6">
+          {colors.map((c, i) => (
+            <li key={i} className="flex flex-col items-center">
+              <span className="h-16 w-16 rounded-full border-4 shadow-sm" style={{ background: c.color.trim(), borderColor: "var(--c-bg)" }} />
+              {c.label && <span className="mt-2 text-sm font-semibold">{c.label}</span>}
+            </li>
+          ))}
+        </ul>
+      )}
+      {s(p.image) && <img src={s(p.image)} alt="Contoh busana" className="pf-img mx-auto mt-8 max-h-96 object-contain" />}
     </InvWrap>
   );
 }

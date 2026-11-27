@@ -1,0 +1,300 @@
+{
+  "id": "tpl-adat-batak",
+  "kind": "invitation",
+  "name": "Pesta Adat Batak",
+  "category": "adat",
+  "description": "Merah, hitam, dan putih khas tenun dengan motif gorga, lengkap dari Martumpol hingga Ulaon Unjuk.",
+  "tags": [
+    "pernikahan",
+    "adat",
+    "batak"
+  ],
+  "theme": {
+    "fontHeading": "Cinzel",
+    "fontBody": "Inter",
+    "colorPrimary": "#151111",
+    "colorAccent": "#8B1E1E",
+    "colorBackground": "#FBF8F3",
+    "colorSurface": "#F0E6DA",
+    "radius": "sm",
+    "headingCase": "normal",
+    "ornament": "/ornamen/batak-divider.svg"
+  },
+  "sections": [
+    {
+      "id": "sec-adat-sampul-49",
+      "type": "cover",
+      "props": {
+        "eyebrow": "Horas!",
+        "title": "Daniel & Maria",
+        "subtitle": "Sabtu, 25 September 2027",
+        "greeting": "Kepada Yth. Bapak/Ibu/Saudara/i",
+        "image": "/ornamen/batak-cover.svg",
+        "buttonText": "Buka Undangan",
+        "buttonLink": ""
+      }
+    },
+    {
+      "id": "sec-adat-musik-50",
+      "type": "music",
+      "props": {
+        "src": "",
+        "title": ""
+      }
+    },
+    {
+      "id": "sec-adat-petuah-51",
+      "type": "testimonial",
+      "props": {
+        "quote": "Apa yang telah dipersatukan Allah, tidak boleh diceraikan manusia.",
+        "author": "Matius 19:6",
+        "role": ""
+      }
+    },
+    {
+      "id": "sec-adat-mempelai-52",
+      "type": "couple",
+      "props": {
+        "heading": "Mempelai",
+        "intro": "Dengan penuh sukacita dan atas kasih Tuhan, kami mengundang Bapak/Ibu/Saudara/i pada pernikahan putra-putri kami:",
+        "name1": "Daniel",
+        "full1": "Daniel Sihombing, S.H.",
+        "parents1": "Putra dari Bapak J. Sihombing\n& Ibu R. br. Simanjuntak",
+        "name2": "Maria",
+        "full2": "Maria br. Siregar, S.Farm.",
+        "parents2": "Putri dari Bapak P. Siregar\n& Ibu L. br. Nainggolan",
+        "photo1": "/placeholder/portrait.svg",
+        "photo2": "/placeholder/hero.svg",
+        "ig1": "",
+        "ig2": ""
+      }
+    },
+    {
+      "id": "sec-adat-prosesi-53",
+      "type": "ceremony",
+      "props": {
+        "heading": "Rangkaian Adat Batak Toba",
+        "intro": "Rangkaian adat yang menyatukan kedua keluarga dalam semangat Dalihan Na Tolu.",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Marhusip",
+            "description": "Pembicaraan awal antara kedua keluarga mengenai rencana pernikahan.",
+            "start": "",
+            "place": ""
+          },
+          {
+            "name": "Martumpol",
+            "description": "Ikatan janji kedua calon mempelai di hadapan pengurus gereja.",
+            "start": "2027-09-18T10:00",
+            "place": "Gereja HKBP"
+          },
+          {
+            "name": "Martonggo Raja",
+            "description": "Musyawarah keluarga dan kerabat mempersiapkan pesta adat.",
+            "start": "2027-09-24T19:00",
+            "place": "Rumah keluarga"
+          },
+          {
+            "name": "Pemberkatan Nikah",
+            "description": "Pemberkatan pernikahan kudus di gereja.",
+            "start": "2027-09-25T09:00",
+            "place": "Gereja HKBP"
+          },
+          {
+            "name": "Ulaon Unjuk",
+            "description": "Pesta adat dan penyerahan ulos sebagai lambang kasih dan berkat bagi kedua mempelai.",
+            "start": "2027-09-25T12:00",
+            "place": "Gedung Pesta"
+          },
+          {
+            "name": "Paulak Une",
+            "description": "Kunjungan kedua mempelai ke keluarga pihak perempuan setelah pesta.",
+            "start": "",
+            "place": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-acara-54",
+      "type": "event",
+      "props": {
+        "heading": "Waktu & Tempat",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Pemberkatan Nikah",
+            "start": "2027-09-25T09:00",
+            "end": "11.00",
+            "place": "Gereja HKBP",
+            "address": "Jl. Sudirman No. 5, Medan",
+            "map": "https://maps.google.com/?q=Medan"
+          },
+          {
+            "name": "Ulaon Unjuk (Pesta Adat)",
+            "start": "2027-09-25T12:00",
+            "end": "Selesai",
+            "place": "Gedung Pesta",
+            "address": "Jl. Gatot Subroto No. 88, Medan",
+            "map": "https://maps.google.com/?q=Medan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-mundur-55",
+      "type": "countdown",
+      "props": {
+        "heading": "Menuju hari bahagia",
+        "target": "2027-09-25T09:00",
+        "zone": "WIB",
+        "doneText": "Hari bahagia telah tiba"
+      }
+    },
+    {
+      "id": "sec-adat-busana-56",
+      "type": "dresscode",
+      "props": {
+        "heading": "Dress Code",
+        "text": "Tamu dianjurkan mengenakan pakaian formal atau kebaya; boleh dipadukan dengan ulos.",
+        "colors": [
+          {
+            "color": "#8B1E1E",
+            "label": "Merah"
+          },
+          {
+            "color": "#151111",
+            "label": "Hitam"
+          },
+          {
+            "color": "#F4F1EA",
+            "label": "Putih"
+          }
+        ],
+        "image": ""
+      }
+    },
+    {
+      "id": "sec-adat-galeri-57",
+      "type": "gallery",
+      "props": {
+        "heading": "Galeri",
+        "columns": 3,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-4.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-5.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-6.svg",
+            "caption": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-rsvp-58",
+      "type": "rsvp",
+      "props": {
+        "heading": "Konfirmasi Kehadiran",
+        "text": "Merupakan suatu kehormatan apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
+        "maxGuests": 2,
+        "showWishes": "ya"
+      }
+    },
+    {
+      "id": "sec-adat-amplop-59",
+      "type": "gift",
+      "props": {
+        "heading": "Tanda Kasih",
+        "text": "Doa restu Anda adalah hadiah terindah. Jika ingin memberi tanda kasih, dapat melalui:",
+        "items": [
+          {
+            "bank": "Nama Bank",
+            "number": "0000000000",
+            "holder": "Nama Pemilik",
+            "qr": ""
+          }
+        ],
+        "address": ""
+      }
+    },
+    {
+      "id": "sec-adat-penutup-60",
+      "type": "canvas",
+      "props": {
+        "height": 460,
+        "background": "theme:text",
+        "backgroundImage": "/ornamen/batak-cover.svg",
+        "elements": [
+          {
+            "id": "el-batak-1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Salam penutup",
+            "x": 100,
+            "y": 120,
+            "w": 1000,
+            "h": 90,
+            "text": "Mauliate",
+            "fontFamily": "heading",
+            "fontSize": 60,
+            "fontWeight": 700,
+            "align": "center",
+            "lineHeight": 1.1,
+            "color": "#FFFFFF"
+          },
+          {
+            "id": "el-batak-2",
+            "rotation": 0,
+            "opacity": 0.9,
+            "type": "text",
+            "name": "Ucapan terima kasih",
+            "x": 200,
+            "y": 230,
+            "w": 800,
+            "h": 90,
+            "text": "Atas kehadiran dan doa restu Bapak/Ibu/Saudara/i, kami ucapkan terima kasih.\nDaniel & Maria",
+            "fontFamily": "body",
+            "fontSize": 20,
+            "align": "center",
+            "lineHeight": 1.5,
+            "color": "#FFFFFF"
+          },
+          {
+            "id": "el-batak-3",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "image",
+            "name": "Ornamen",
+            "x": 480,
+            "y": 350,
+            "w": 240,
+            "h": 40,
+            "src": "/ornamen/batak-divider.svg",
+            "fit": "contain",
+            "radius": 0
+          }
+        ]
+      }
+    }
+  ]
+}

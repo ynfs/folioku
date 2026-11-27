@@ -115,3 +115,23 @@ body {
   background: var(--c-accent);
   color: var(--c-bg);
 }
+
+/* Ornamen pemisah judul undangan: gambar dari tema (--ornament) atau simbol ❦ */
+.inv-ornament {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 32px;
+  width: 220px;
+  max-width: 80%;
+  background-image: var(--ornament, none);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  font-size: 1.25rem;
+  line-height: 32px;
+  text-align: center;
+}
+.inv-ornament::before {
+  content: var(--ornament-glyph, "❦");
+}

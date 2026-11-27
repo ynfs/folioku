@@ -1,0 +1,294 @@
+{
+  "id": "tpl-adat-jawa",
+  "kind": "invitation",
+  "name": "Pernikahan Adat Jawa",
+  "category": "adat",
+  "description": "Nuansa sogan dan emas dengan motif kawung, lengkap dengan prosesi Siraman hingga Panggih.",
+  "tags": [
+    "pernikahan",
+    "adat",
+    "jawa"
+  ],
+  "theme": {
+    "fontHeading": "Cormorant Garamond",
+    "fontBody": "Lora",
+    "colorPrimary": "#3B2414",
+    "colorAccent": "#9C6B3C",
+    "colorBackground": "#FBF6EE",
+    "colorSurface": "#F1E4CF",
+    "radius": "sm",
+    "headingCase": "normal",
+    "ornament": "/ornamen/jawa-divider.svg"
+  },
+  "sections": [
+    {
+      "id": "sec-adat-sampul-1",
+      "type": "cover",
+      "props": {
+        "eyebrow": "Pawiwahan",
+        "title": "Raras & Bagas",
+        "subtitle": "Sabtu Legi, 15 Mei 2027",
+        "greeting": "Kagem Bapak/Ibu/Sedherek",
+        "image": "/ornamen/jawa-cover.svg",
+        "buttonText": "Buka Undangan",
+        "buttonLink": ""
+      }
+    },
+    {
+      "id": "sec-adat-musik-2",
+      "type": "music",
+      "props": {
+        "src": "",
+        "title": ""
+      }
+    },
+    {
+      "id": "sec-adat-petuah-3",
+      "type": "testimonial",
+      "props": {
+        "quote": "Witing tresna jalaran saka kulina.",
+        "author": "Pepatah Jawa",
+        "role": "Cinta tumbuh karena terbiasa bersama"
+      }
+    },
+    {
+      "id": "sec-adat-mempelai-4",
+      "type": "couple",
+      "props": {
+        "heading": "Mempelai",
+        "intro": "Kanthi nyuwun berkah lan pangestu, kami bermaksud menyelenggarakan pernikahan putra-putri kami:",
+        "name1": "Raras",
+        "full1": "Raden Ajeng Raras Paramita",
+        "parents1": "Putri dari Bapak Hadi Santoso\n& Ibu Sri Rahayu",
+        "name2": "Bagas",
+        "full2": "Bagas Wicaksono, S.T.",
+        "parents2": "Putra dari Bapak Joko Susilo\n& Ibu Endang Lestari",
+        "photo1": "/placeholder/portrait.svg",
+        "photo2": "/placeholder/hero.svg",
+        "ig1": "",
+        "ig2": ""
+      }
+    },
+    {
+      "id": "sec-adat-prosesi-5",
+      "type": "ceremony",
+      "props": {
+        "heading": "Rangkaian Adat Jawa",
+        "intro": "Pernikahan kami dilangsungkan dengan tata cara adat Jawa sebagai wujud penghormatan kepada orang tua dan leluhur.",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Siraman",
+            "description": "Calon pengantin dimandikan oleh orang tua dan sesepuh sebagai lambang penyucian diri.",
+            "start": "2027-05-14T09:00",
+            "place": "Kediaman mempelai wanita"
+          },
+          {
+            "name": "Midodareni",
+            "description": "Malam terakhir masa lajang; keluarga berkumpul memanjatkan doa untuk calon pengantin.",
+            "start": "2027-05-14T19:00",
+            "place": "Kediaman mempelai wanita"
+          },
+          {
+            "name": "Ijab Kabul",
+            "description": "Akad nikah yang mengikat kedua mempelai secara agama dan negara.",
+            "start": "2027-05-15T08:00",
+            "place": "Masjid Agung"
+          },
+          {
+            "name": "Panggih",
+            "description": "Pertemuan pengantin: balangan gantal, ngidak tigan, sindur binayang, kacar-kucur, dan dahar klimah.",
+            "start": "2027-05-15T10:00",
+            "place": "Pendopo"
+          },
+          {
+            "name": "Sungkeman",
+            "description": "Kedua mempelai bersujud memohon doa restu kepada orang tua.",
+            "start": "",
+            "place": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-acara-6",
+      "type": "event",
+      "props": {
+        "heading": "Waktu & Tempat",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Ijab Kabul",
+            "start": "2027-05-15T08:00",
+            "end": "09.30",
+            "place": "Masjid Agung",
+            "address": "Jl. Jenderal Sudirman No. 1, Surakarta",
+            "map": "https://maps.google.com/?q=Surakarta"
+          },
+          {
+            "name": "Resepsi",
+            "start": "2027-05-15T11:00",
+            "end": "Selesai",
+            "place": "Pendopo Ageng",
+            "address": "Jl. Slamet Riyadi No. 10, Surakarta",
+            "map": "https://maps.google.com/?q=Surakarta"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-mundur-7",
+      "type": "countdown",
+      "props": {
+        "heading": "Menuju hari bahagia",
+        "target": "2027-05-15T08:00",
+        "zone": "WIB",
+        "doneText": "Hari bahagia telah tiba"
+      }
+    },
+    {
+      "id": "sec-adat-busana-8",
+      "type": "dresscode",
+      "props": {
+        "heading": "Dress Code",
+        "text": "Tamu dianjurkan mengenakan batik atau kebaya dengan nuansa warna sogan dan emas.",
+        "colors": [
+          {
+            "color": "#6B4423",
+            "label": "Sogan"
+          },
+          {
+            "color": "#C9A66B",
+            "label": "Emas"
+          },
+          {
+            "color": "#F4EBDD",
+            "label": "Krem"
+          }
+        ],
+        "image": ""
+      }
+    },
+    {
+      "id": "sec-adat-galeri-9",
+      "type": "gallery",
+      "props": {
+        "heading": "Galeri",
+        "columns": 3,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-4.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-5.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-6.svg",
+            "caption": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-adat-rsvp-10",
+      "type": "rsvp",
+      "props": {
+        "heading": "Konfirmasi Kehadiran",
+        "text": "Merupakan suatu kehormatan apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
+        "maxGuests": 2,
+        "showWishes": "ya"
+      }
+    },
+    {
+      "id": "sec-adat-amplop-11",
+      "type": "gift",
+      "props": {
+        "heading": "Tanda Kasih",
+        "text": "Doa restu Anda adalah hadiah terindah. Jika ingin memberi tanda kasih, dapat melalui:",
+        "items": [
+          {
+            "bank": "Nama Bank",
+            "number": "0000000000",
+            "holder": "Nama Pemilik",
+            "qr": ""
+          }
+        ],
+        "address": ""
+      }
+    },
+    {
+      "id": "sec-adat-penutup-12",
+      "type": "canvas",
+      "props": {
+        "height": 460,
+        "background": "theme:text",
+        "backgroundImage": "/ornamen/jawa-cover.svg",
+        "elements": [
+          {
+            "id": "el-jawa-1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Salam penutup",
+            "x": 100,
+            "y": 120,
+            "w": 1000,
+            "h": 90,
+            "text": "Matur Nuwun",
+            "fontFamily": "heading",
+            "fontSize": 60,
+            "fontWeight": 700,
+            "align": "center",
+            "lineHeight": 1.1,
+            "color": "#FFFFFF"
+          },
+          {
+            "id": "el-jawa-2",
+            "rotation": 0,
+            "opacity": 0.9,
+            "type": "text",
+            "name": "Ucapan terima kasih",
+            "x": 200,
+            "y": 230,
+            "w": 800,
+            "h": 90,
+            "text": "Atas kehadiran dan doa restu Bapak/Ibu/Saudara/i, kami ucapkan terima kasih.\nRaras & Bagas",
+            "fontFamily": "body",
+            "fontSize": 20,
+            "align": "center",
+            "lineHeight": 1.5,
+            "color": "#FFFFFF"
+          },
+          {
+            "id": "el-jawa-3",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "image",
+            "name": "Ornamen",
+            "x": 480,
+            "y": 350,
+            "w": 240,
+            "h": 40,
+            "src": "/ornamen/jawa-divider.svg",
+            "fit": "contain",
+            "radius": 0
+          }
+        ]
+      }
+    }
+  ]
+}
