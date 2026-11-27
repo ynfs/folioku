@@ -94,6 +94,63 @@ Frame memakai lebar desain 1200px dan mengecil proporsional di layar yang lebih 
 
 ---
 
+## Klasifikasi Template
+
+Total **123 template bawaan** (23 rancangan khusus + 100 dari generator `scripts/generate-koleksi.mjs`), diklasifikasikan dalam tiga tingkat:
+
+1. **Jenis** — Undangan Digital atau Portofolio & Company Profile
+2. **Kategori** — jenis acara (undangan) atau bidang usaha/profesi (portofolio)
+3. **Gaya** — tampilan visual, berlaku untuk kedua jenis
+
+Galeri (`/templates`) punya filter kategori dan gaya beserta jumlahnya, pencarian, dan halaman bernomor (24 per halaman).
+
+### Undangan Digital (74)
+| Kategori | Baru | Total |
+|---|---|---|
+| Pernikahan | 16 | 19 |
+| Pernikahan Adat | 4 | 9 |
+| Lamaran & Tunangan | 6 | 6 |
+| Ulang Tahun | 8 | 10 |
+| Khitanan & Aqiqah | 6 | 8 |
+| Wisuda | 5 | 5 |
+| Syukuran & Pengajian | 6 | 6 |
+| Acara & Event | 6 | 8 |
+| Grand Opening | 3 | 3 |
+
+### Portofolio & Company Profile (50)
+| Kategori | Baru | Total |
+|---|---|---|
+| Personal & Kreatif | 6 | 10 |
+| Fotografer | 4 | 6 |
+| Teknologi & Developer | 5 | 6 |
+| Penulis & Pembicara | 3 | 4 |
+| Arsitek & Interior | 3 | 4 |
+| Bisnis & UMKM | 6 | 6 |
+| Kuliner & Kafe | 4 | 5 |
+| Kesehatan & Kecantikan | 3 | 3 |
+| Pendidikan & Les | 3 | 3 |
+| Seni & Musik | 3 | 3 |
+
+### Gaya
+| Gaya | Baru | Total |
+|---|---|---|
+| Minimalis | 14 | 15 |
+| Modern | 13 | 13 |
+| Elegan | 7 | 8 |
+| Klasik | 9 | 10 |
+| Retro | 6 | 13 |
+| Rustic | 7 | 8 |
+| Floral | 5 | 5 |
+| Islami | 3 | 4 |
+| Nusantara | 4 | 9 |
+| Ceria | 7 | 8 |
+| Gelap | 9 | 11 |
+| Pastel | 8 | 9 |
+| Editorial | 6 | 7 |
+| Kreatif | 2 | 3 |
+
+Untuk menambah atau mengubah koleksi: edit palet, motif, dan resep di `scripts/generate-koleksi.mjs`, lalu jalankan `node scripts/generate-koleksi.mjs`.
+
 ## Alur Platform
 
 ```
@@ -161,7 +218,9 @@ safantara/
 │   ├── pages.ts             # Multi-halaman dan link antarhalaman
 │   └── templates.ts         # Daftar template bawaan
 ├── supabase/schema.sql      # Tabel, RLS, dan bucket Storage
-├── templates/               # File JSON template bawaan
+├── templates/               # File JSON template bawaan (+ koleksi-100.json)
+├── scripts/generate-koleksi.mjs  # Generator 100 template & gambar sampulnya
+├── public/koleksi/          # Gambar sampul koleksi (SVG)
 ├── public/placeholder/      # Gambar contoh
 ├── proxy.ts                 # Memperbarui sesi Supabase
 └── README.md

@@ -49,6 +49,7 @@ alter table public.templates add column if not exists published boolean not null
 alter table public.templates add column if not exists created_by uuid references public.users (id) on delete set null;
 alter table public.templates add column if not exists updated_at timestamptz not null default now();
 alter table public.templates add column if not exists kind text not null default 'portfolio' check (kind in ('portfolio', 'invitation'));
+alter table public.templates add column if not exists style text;
 
 -- ---------- rsvps: konfirmasi kehadiran & ucapan tamu undangan ----------
 create table if not exists public.rsvps (

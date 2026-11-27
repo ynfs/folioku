@@ -6,7 +6,7 @@ import { AppHeader } from "@/components/ui/AppHeader";
 import { DeleteTemplateButton } from "@/components/ui/DeleteTemplateButton";
 import { backend, requireUser } from "@/lib/backend";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
-import { CATEGORIES, TEMPLATES } from "@/lib/templates";
+import { CATEGORIES, PRODUCTS, STYLES, TEMPLATES, categoryLabel, styleLabel } from "@/lib/templates";
 import type { Template } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Admin" };
@@ -54,12 +54,17 @@ export default async function AdminPage() {
                   atau salin dari
                 </label>
                 <select id="source" name="source" className="input min-w-56">
-                  {[...custom, ...TEMPLATES].map((t) => (
-                    <option key={t.id} value={t.id}>
-                      {t.kind === "invitation" ? "✉ " : ""}
-                      {t.name}
-                      {t.builtin ? " (bawaan)" : ""}
-                    </option>
+                  {PRODUCTS.map((p) => (
+                    <optgroup key={p.value} label={p.label}>
+                      {[...custom, ...TEMPLATES]
+                        .filter((t) => (t.kind ?? "portfolio") === p.value)
+                        .map((t) => (
+                          <option key={t.id} value={t.id}>
+                            {t.name}
+                            {t.builtin ? "" : " (buatan admin)"}
+                          </option>
+                        ))}
+                    </optgroup>
                   ))}
                 </select>
               </div>
@@ -93,16 +98,40 @@ export default async function AdminPage() {
         )}
 
         <h2 className="mt-10 text-xl font-extrabold">Template bawaan</h2>
-        <p className="mt-1 text-sm text-app-muted">Disimpan sebagai file JSON di folder templates/. Salin untuk mengubahnya.</p>
-        <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {TEMPLATES.map((t) => (
-            <TemplateCard key={t.id} t={t} usage={stats.usage[t.id] ?? 0}>
-              <form action={createTemplateAction} className="mt-4">
-                <input type="hidden" name="source" value={t.id} />
-                <button className="btn-ghost w-full">Salin & edit</button>
-              </form>
-            </TemplateCard>
-          ))}
+        <p className="mt-1 text-sm text-app-muted">
+          {TEMPLATES.length} template di folder templates/ (100 di antaranya dibuat oleh <code>scripts/generate-koleksi.mjs</code>). Salin untuk mengubahnya.
+        </p>
+        <ClassificationSummary />
+        <div className="mt-4 overflow-x-auto rounded-2xl border border-app-line bg-white">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-app-line text-xs text-app-muted">
+              <tr>
+                <th className="px-4 py-2 font-semibold">Template</th>
+                <th className="px-4 py-2 font-semibold">Jenis</th>
+                <th className="px-4 py-2 font-semibold">Kategori</th>
+                <th className="px-4 py-2 font-semibold">Gaya</th>
+                <th className="px-4 py-2 font-semibold">Dipakai</th>
+                <th className="px-4 py-2" />
+              </tr>
+            </thead>
+            <tbody>
+              {TEMPLATES.map((t) => (
+                <tr key={t.id} className="border-b border-app-line last:border-0">
+                  <td className="px-4 py-2 font-semibold">{t.name}</td>
+                  <td className="px-4 py-2 text-app-muted">{t.kind === "invitation" ? "Undangan" : "Portofolio"}</td>
+                  <td className="px-4 py-2 text-app-muted">{categoryLabel(t.category)}</td>
+                  <td className="px-4 py-2 text-app-muted">{styleLabel(t.style)}</td>
+                  <td className="px-4 py-2 text-app-muted">{stats.usage[t.id] ?? 0}</td>
+                  <td className="px-4 py-2 text-right">
+                    <form action={createTemplateAction}>
+                      <input type="hidden" name="source" value={t.id} />
+                      <button className="btn-ghost px-2 py-1 text-xs">Salin & edit</button>
+                    </form>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </main>
     </>
@@ -141,5 +170,42 @@ function TemplateCard({ t, usage, children }: { t: Template; usage: number; chil
         {children}
       </div>
     </article>
+  );
+}
+
+/** Ringkasan klasifikasi: jumlah template per jenis, kategori, dan gaya. */
+function ClassificationSummary() {
+  return (
+    <div className="mt-4 grid gap-4 lg:grid-cols-3">
+      {PRODUCTS.map((p) => {
+        const items = TEMPLATES.filter((t) => (t.kind ?? "portfolio") === p.value);
+        return (
+          <div key={p.value} className="rounded-2xl border border-app-line bg-white p-4">
+            <p className="font-bold">
+              {p.label} <span className="text-app-muted">({items.length})</span>
+            </p>
+            <ul className="mt-2 space-y-1 text-sm">
+              {CATEGORIES.filter((c) => c.kind === p.value).map((c) => (
+                <li key={c.value} className="flex justify-between">
+                  <span className="text-app-muted">{c.label}</span>
+                  <span className="font-semibold">{items.filter((t) => t.category === c.value).length}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
+      <div className="rounded-2xl border border-app-line bg-white p-4">
+        <p className="font-bold">Gaya</p>
+        <ul className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+          {STYLES.map((s) => (
+            <li key={s.value} className="flex justify-between">
+              <span className="text-app-muted">{s.label}</span>
+              <span className="font-semibold">{TEMPLATES.filter((t) => t.style === s.value).length}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000"><defs><radialGradient id="vg" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#1C2541" stop-opacity="0"/><stop offset="1" stop-color="#1C2541" stop-opacity=".16"/></radialGradient></defs><rect width="1600" height="1000" fill="#E9E4D4"/>
+    <rect x="60" y="60" width="1480" height="880" fill="none" stroke="#C9A227" stroke-width="7"/>
+    <rect x="86" y="86" width="1428" height="828" fill="none" stroke="#C9A227" stroke-opacity=".6" stroke-width="3"/>
+    <circle cx="60" cy="60" r="10" fill="#C9A227"/><circle cx="1540" cy="60" r="10" fill="#C9A227"/><circle cx="60" cy="940" r="10" fill="#C9A227"/><circle cx="1540" cy="940" r="10" fill="#C9A227"/>
+    <path d="M 600 150 H 1000 M 600 850 H 1000" stroke="#C9A227" stroke-width="4"/><path d="M 800 132 Q 803.2 146.8 818 150 Q 803.2 153.2 800 168 Q 796.8 153.2 782 150 Q 796.8 146.8 800 132 Z" fill="#C9A227" fill-opacity="1"/><path d="M 800 832 Q 803.2 846.8 818 850 Q 803.2 853.2 800 868 Q 796.8 853.2 782 850 Q 796.8 846.8 800 832 Z" fill="#C9A227" fill-opacity="1"/><rect width="100%" height="100%" fill="url(#vg)"/></svg>

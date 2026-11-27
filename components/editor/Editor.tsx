@@ -13,7 +13,7 @@ import {
 } from "@/app/actions";
 import { HOME, findSection, getPages, pageSections, resolvePageLinks } from "@/lib/pages";
 import { Portfolio } from "@/lib/renderer/Portfolio";
-import { CATEGORIES, PRODUCTS } from "@/lib/templates";
+import { CATEGORIES, PRODUCTS, STYLES } from "@/lib/templates";
 import type { PortfolioData, Project, Template } from "@/lib/types";
 import { SiteProvider } from "@/components/sections/site-context";
 import { CanvasEditable, handleCanvasKey } from "./CanvasEditor";
@@ -403,6 +403,7 @@ function TemplateSettings({ template }: { template: Template }) {
   const [meta, setMeta] = useState<TemplateMeta>({
     name: template.name,
     category: template.category,
+    style: template.style,
     description: template.description,
     tags: template.tags,
     published: !!template.published,
@@ -468,6 +469,19 @@ function TemplateSettings({ template }: { template: Template }) {
                     </option>
                   ))}
                 </optgroup>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="label" htmlFor="tpl-style">
+              Gaya
+            </label>
+            <select id="tpl-style" className="input" value={meta.style ?? ""} onChange={(e) => setMeta({ ...meta, style: (e.target.value || undefined) as TemplateMeta["style"] })}>
+              <option value="">— pilih gaya —</option>
+              {STYLES.map((s) => (
+                <option key={s.value} value={s.value}>
+                  {s.label}
+                </option>
               ))}
             </select>
           </div>

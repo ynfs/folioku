@@ -2,7 +2,7 @@ import type { PortfolioData, ProductKind, Project, Publication, Rsvp, Template, 
 
 export type RsvpInput = Pick<Rsvp, "name" | "attendance" | "guests" | "message">;
 
-export type TemplatePatch = Partial<Pick<Template, "name" | "category" | "description" | "tags" | "published" | "theme" | "sections" | "pages" | "kind">>;
+export type TemplatePatch = Partial<Pick<Template, "name" | "category" | "description" | "tags" | "published" | "theme" | "sections" | "pages" | "kind" | "style">>;
 
 export interface AdminStats {
   users: number;

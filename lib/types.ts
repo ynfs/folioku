@@ -108,19 +108,58 @@ export interface PortfolioData {
 /** Produk Safantara: portofolio/company profile atau undangan digital. */
 export type ProductKind = "portfolio" | "invitation";
 
+/**
+ * Kategori template.
+ *  - Undangan: jenis acara
+ *  - Portofolio: bidang/profesi
+ * Nilai lama (modern, minimalis, …) masih diterima untuk template buatan admin lama.
+ */
 export type TemplateCategory =
+  // undangan
+  | "pernikahan"
+  | "adat"
+  | "lamaran"
+  | "ulang-tahun"
+  | "khitanan"
+  | "wisuda"
+  | "syukuran"
+  | "acara"
+  | "grand-opening"
+  // portofolio
+  | "personal"
+  | "fotografer"
+  | "teknologi"
+  | "penulis"
+  | "arsitek"
+  | "bisnis"
+  | "kuliner"
+  | "kesehatan"
+  | "pendidikan"
+  | "seni"
+  // lama
   | "modern"
   | "minimalis"
   | "klasik"
   | "retro"
   | "editorial"
-  | "kreatif"
-  // undangan
-  | "pernikahan"
-  | "ulang-tahun"
-  | "khitanan"
-  | "acara"
-  | "adat";
+  | "kreatif";
+
+/** Gaya visual template (klasifikasi lintas kategori). */
+export type TemplateStyle =
+  | "minimalis"
+  | "modern"
+  | "elegan"
+  | "klasik"
+  | "retro"
+  | "rustic"
+  | "floral"
+  | "islami"
+  | "nusantara"
+  | "ceria"
+  | "gelap"
+  | "pastel"
+  | "editorial"
+  | "kreatif";
 
 export interface Template extends PortfolioData {
   id: string;
@@ -130,6 +169,8 @@ export interface Template extends PortfolioData {
   tags: string[];
   /** Jenis produk; kosong = portofolio */
   kind?: ProductKind;
+  /** Gaya visual */
+  style?: TemplateStyle;
   /** true untuk template bawaan (file JSON), false untuk buatan admin */
   builtin?: boolean;
   /** Template buatan admin hanya tampil di galeri jika diterbitkan */

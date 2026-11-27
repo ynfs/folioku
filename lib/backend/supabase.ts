@@ -2,7 +2,7 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
-import type { Page, PortfolioData, ProductKind, Project, Role, Rsvp, Section, Template, TemplateCategory, Theme, Wish } from "@/lib/types";
+import type { Page, PortfolioData, ProductKind, Project, Role, Rsvp, Section, Template, TemplateCategory, TemplateStyle, Theme, Wish } from "@/lib/types";
 import type { AuthResult, Backend } from "./types";
 
 interface TemplateRow {
@@ -13,11 +13,12 @@ interface TemplateRow {
   tags: string[] | null;
   data: { theme: Theme; sections: Section[]; pages?: Page[] };
   kind: ProductKind | null;
+  style: TemplateStyle | null;
   published: boolean;
   updated_at: string;
 }
 
-const TEMPLATE_COLUMNS = "id, name, category, description, tags, kind, data, published, updated_at";
+const TEMPLATE_COLUMNS = "id, name, category, style, description, tags, kind, data, published, updated_at";
 
 function toTemplate(r: TemplateRow): Template {
   return {
@@ -27,6 +28,7 @@ function toTemplate(r: TemplateRow): Template {
     description: r.description ?? "",
     tags: r.tags ?? [],
     kind: r.kind ?? "portfolio",
+    style: r.style ?? undefined,
     theme: r.data.theme,
     sections: r.data.sections,
     pages: r.data.pages ?? [],
@@ -251,6 +253,7 @@ export const supabaseBackend: Backend = {
         description: t.description,
         tags: t.tags,
         kind: t.kind ?? "portfolio",
+        style: t.style ?? null,
         data: { theme: t.theme, sections: t.sections, pages: t.pages ?? [] },
         published: !!t.published,
         created_by: userId,
@@ -264,7 +267,7 @@ export const supabaseBackend: Backend = {
   async updateTemplate(id, patch) {
     const sb = await supabaseServer();
     const row: Record<string, unknown> = { updated_at: new Date().toISOString() };
-    for (const k of ["name", "category", "description", "tags", "published", "kind"] as const) {
+    for (const k of ["name", "category", "description", "tags", "published", "kind", "style"] as const) {
       if (patch[k] !== undefined) row[k] = patch[k];
     }
     if (patch.theme || patch.sections || patch.pages) {

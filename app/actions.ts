@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 import { randomUUID } from "node:crypto";
 import { backend, requireUser } from "@/lib/backend";
 import { blankCanvas } from "@/lib/sections";
-import { CATEGORIES, TEMPLATES, parseKind } from "@/lib/templates";
+import { CATEGORIES, STYLES, TEMPLATES, parseKind } from "@/lib/templates";
 import { findTemplate } from "@/lib/templates-server";
-import type { PortfolioData, ProductKind, Template, TemplateCategory } from "@/lib/types";
+import type { PortfolioData, ProductKind, Template, TemplateCategory, TemplateStyle } from "@/lib/types";
 
 export type FormState = { error?: string } | undefined;
 
@@ -154,7 +154,7 @@ export async function createTemplateAction(form: FormData) {
   const source = String(form.get("source") ?? "blank");
   const projectId = String(form.get("projectId") ?? "");
 
-  let base: { name: string; category: TemplateCategory; kind: ProductKind; description: string; tags: string[]; data: PortfolioData };
+  let base: { name: string; category: TemplateCategory; kind: ProductKind; style?: TemplateStyle; description: string; tags: string[]; data: PortfolioData };
   if (projectId) {
     const project = await backend.getProject(projectId, user.id);
     if (!project) throw new Error("Proyek tidak ditemukan");
@@ -163,7 +163,7 @@ export async function createTemplateAction(form: FormData) {
   } else if (source !== "blank") {
     const t = await findTemplate(source, { allowDraft: true });
     if (!t) throw new Error("Template sumber tidak ditemukan");
-    base = { name: `${t.name} (salinan)`, category: t.category, kind: t.kind ?? "portfolio", description: t.description, tags: t.tags, data: { theme: t.theme, sections: t.sections, pages: t.pages } };
+    base = { name: `${t.name} (salinan)`, category: t.category, kind: t.kind ?? "portfolio", style: t.style, description: t.description, tags: t.tags, data: { theme: t.theme, sections: t.sections, pages: t.pages } };
   } else {
     const kind = parseKind(form.get("kind"));
     base = {
@@ -181,6 +181,7 @@ export async function createTemplateAction(form: FormData) {
     name: base.name,
     category: base.category,
     kind: base.kind,
+    style: base.style,
     description: base.description,
     tags: base.tags,
     theme: structuredClone(base.data.theme),
@@ -208,6 +209,7 @@ export async function saveTemplateAction(id: string, data: PortfolioData): Promi
 export interface TemplateMeta {
   name: string;
   category: TemplateCategory;
+  style?: TemplateStyle;
   description: string;
   tags: string[];
   published: boolean;
@@ -223,6 +225,7 @@ export async function updateTemplateMetaAction(id: string, meta: TemplateMeta): 
     category: meta.category,
     // Jenis produk mengikuti kategori (mis. "pernikahan" → undangan).
     kind: CATEGORIES.find((c) => c.value === meta.category)?.kind ?? "portfolio",
+    ...(meta.style && STYLES.some((s) => s.value === meta.style) ? { style: meta.style } : {}),
     description: meta.description.trim().slice(0, 200),
     tags: meta.tags.map((t) => t.trim().toLowerCase()).filter(Boolean).slice(0, 10),
     published: !!meta.published,

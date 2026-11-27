@@ -338,6 +338,6 @@ export const localBackend: Backend = {
 const MAX_RSVP_PER_PROJECT = 5000;
 
 function toTemplate(t: StoredTemplate): Template {
-  const { id, name, category, description, tags, kind, theme, sections, pages, published, updatedAt } = t;
-  return { id, name, category, description, tags, kind: kind ?? "portfolio", theme, sections, pages: pages ?? [], published: !!published, builtin: false, updatedAt };
+  const { id, name, category, style, description, tags, kind, theme, sections, pages, published, updatedAt } = t;
+  return { id, name, category, style, description, tags, kind: kind ?? "portfolio", theme, sections, pages: pages ?? [], published: !!published, builtin: false, updatedAt };
 }
