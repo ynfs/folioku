@@ -1,0 +1,132 @@
+{
+  "id": "tpl-retro-studio-foto",
+  "kind": "portfolio",
+  "name": "Studio Foto Retro",
+  "category": "retro",
+  "description": "Bingkai film strip sepia dan huruf mesin tik — untuk fotografer dengan sentuhan analog.",
+  "tags": [
+    "retro klasik",
+    "vintage",
+    "fotografer",
+    "film"
+  ],
+  "theme": {
+    "fontHeading": "DM Serif Display",
+    "fontBody": "Space Mono",
+    "colorPrimary": "#F3E6CC",
+    "colorAccent": "#E8B44A",
+    "colorBackground": "#1A1412",
+    "colorSurface": "#2B211C",
+    "radius": "none",
+    "headingCase": "normal"
+  },
+  "sections": [
+    {
+      "id": "sec-retro-f-hero-42",
+      "type": "hero",
+      "props": {
+        "eyebrow": "Studio foto analog",
+        "title": "Kenangan dalam Bingkai",
+        "subtitle": "Foto keluarga, prewedding, dan potret bergaya klasik",
+        "description": "",
+        "image": "/ornamen/retro-film-cover.svg",
+        "align": "cover",
+        "buttonText": "Lihat galeri",
+        "buttonLink": "#galeri"
+      }
+    },
+    {
+      "id": "sec-retro-f-galeri-43",
+      "type": "gallery",
+      "props": {
+        "heading": "Roll terbaru",
+        "columns": 3,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": "Frame 01"
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": "Frame 02"
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": "Frame 03"
+          },
+          {
+            "image": "/placeholder/img-4.svg",
+            "caption": "Frame 04"
+          },
+          {
+            "image": "/placeholder/img-5.svg",
+            "caption": "Frame 05"
+          },
+          {
+            "image": "/placeholder/img-6.svg",
+            "caption": "Frame 06"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-retro-f-tentang-44",
+      "type": "about",
+      "props": {
+        "heading": "Di balik kamera",
+        "body": "Kami memotret dengan sabar, mengandalkan cahaya alami dan sentuhan warna film yang hangat. Setiap foto dicetak dan dikemas seperti album keluarga zaman dulu.",
+        "image": "/placeholder/portrait.svg"
+      }
+    },
+    {
+      "id": "sec-retro-f-paket-45",
+      "type": "skills",
+      "props": {
+        "heading": "Paket foto",
+        "items": [
+          {
+            "name": "Potret keluarga",
+            "detail": "1 jam, 20 foto cetak"
+          },
+          {
+            "name": "Prewedding klasik",
+            "detail": "Setengah hari, 2 lokasi"
+          },
+          {
+            "name": "Pas foto vintage",
+            "detail": "Selesai 1 hari"
+          },
+          {
+            "name": "Album kenangan",
+            "detail": "Cetak & jilid"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-retro-f-testi-46",
+      "type": "testimonial",
+      "props": {
+        "quote": "Fotonya terasa seperti album milik orang tua kami. Hangat sekali.",
+        "author": "Klien prewedding",
+        "role": ""
+      }
+    },
+    {
+      "id": "sec-retro-f-kontak-47",
+      "type": "contact",
+      "props": {
+        "heading": "Pesan sesi foto",
+        "text": "Hubungi kami untuk jadwal dan pilihan paket.",
+        "email": "studio@email.com",
+        "phone": "0812-0000-0000",
+        "links": [
+          {
+            "label": "Instagram",
+            "url": "https://instagram.com/"
+          }
+        ]
+      }
+    }
+  ]
+}

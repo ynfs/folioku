@@ -21,6 +21,7 @@ const OPEN_EVENT = "safantara:open";
 export function Cover({ p }: { p: P }) {
   const { guest } = useSite();
   const ref = useRef<HTMLElement>(null);
+  const light = s(p.tone) === "terang";
 
   function open(e: React.MouseEvent) {
     window.dispatchEvent(new Event(OPEN_EVENT));
@@ -34,9 +35,14 @@ export function Cover({ p }: { p: P }) {
   }
 
   return (
-    <section ref={ref} className="relative isolate flex min-h-[640px] flex-col items-center justify-center overflow-hidden px-6 py-20 text-center text-white @3xl:min-h-[760px]">
+    <section
+      ref={ref}
+      className="relative isolate flex min-h-[640px] flex-col items-center justify-center overflow-hidden px-6 py-20 text-center @3xl:min-h-[760px]"
+      style={{ color: light ? "var(--c-text)" : "#FFFFFF" }}
+    >
       {s(p.image) && <img src={s(p.image)} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover" />}
-      <div className="absolute inset-0 -z-10 bg-black/50" />
+      {/* Nada gelap: lapisan hitam & teks putih. Nada terang: lapisan tipis & teks warna tema. */}
+      <div className={`absolute inset-0 -z-10 ${light ? "bg-white/15" : "bg-black/50"}`} />
       {s(p.topImage) && <img src={s(p.topImage)} alt="" className="mb-6 h-36 w-auto drop-shadow-lg @3xl:h-48" />}
       {s(p.tagline) && (
         <p lang="jv" className="aksara mb-4 text-3xl leading-relaxed @3xl:text-4xl" style={{ color: "var(--c-accent)" }}>
@@ -48,7 +54,10 @@ export function Cover({ p }: { p: P }) {
       {s(p.subtitle) && <p className="mt-4 text-lg opacity-90">{s(p.subtitle)}</p>}
       <div className="mt-12">
         {s(p.greeting) && <p className="text-sm opacity-80">{s(p.greeting)}</p>}
-        <p className="mt-2 inline-block rounded-lg border border-white/40 bg-white/10 px-6 py-3 text-xl font-semibold backdrop-blur-sm">
+        <p
+          className="mt-2 inline-block rounded-lg border px-6 py-3 text-xl font-semibold backdrop-blur-sm"
+          style={light ? { borderColor: "var(--c-text)", background: "color-mix(in srgb, var(--c-bg) 70%, transparent)" } : { borderColor: "rgba(255,255,255,.4)", background: "rgba(255,255,255,.1)" }}
+        >
           {guest || "Tamu Undangan"}
         </p>
       </div>

@@ -10,13 +10,16 @@ import { galleryTemplates } from "@/lib/templates-server";
 export const metadata: Metadata = { title: "Galeri template" };
 
 export default async function TemplatesPage(props: PageProps<"/templates">) {
-  const { gaya, jenis } = await props.searchParams;
+  const { gaya, jenis, koleksi } = await props.searchParams;
+  const retro = koleksi === "retro";
   const kind = parseKind(jenis);
   const base = `/templates?jenis=${kind === "invitation" ? "undangan" : "portofolio"}`;
   const cats = CATEGORIES.filter((c) => c.kind === kind);
   const active = typeof gaya === "string" && cats.some((c) => c.value === gaya) ? gaya : "";
   const all = (await galleryTemplates()).filter((t) => kindOf(t) === kind);
-  const list = active ? all.filter((t) => t.category === active) : all;
+  const byCat = active ? all.filter((t) => t.category === active) : all;
+  // Koleksi gaya lintas kategori, mis. "Retro Klasik"
+  const list = retro ? byCat.filter((t) => t.tags.includes("retro klasik")) : byCat;
 
   return (
     <>
@@ -27,7 +30,8 @@ export default async function TemplatesPage(props: PageProps<"/templates">) {
         <p className="mt-1 text-app-muted">Pilih gaya yang paling cocok, nanti semuanya bisa kamu ubah.</p>
 
         <div className="mt-6 flex flex-wrap gap-2">
-          <FilterChip href={base} active={!active} label="Semua" />
+          <FilterChip href={base} active={!active && !retro} label="Semua" />
+          <FilterChip href={`${base}&koleksi=retro`} active={retro && !active} label="✦ Retro Klasik" />
           {cats.map((c) => (
             <FilterChip key={c.value} href={`${base}&gaya=${c.value}`} active={active === c.value} label={c.label} />
           ))}

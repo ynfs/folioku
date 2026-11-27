@@ -1,0 +1,215 @@
+{
+  "id": "tpl-retro-company",
+  "kind": "portfolio",
+  "name": "Company Profile Retro Klasik",
+  "category": "retro",
+  "description": "Kertas kraft, cap bulat, dan huruf Abril Fatface — untuk usaha keluarga dengan cerita panjang.",
+  "tags": [
+    "retro klasik",
+    "vintage",
+    "company profile",
+    "usaha"
+  ],
+  "theme": {
+    "fontHeading": "Abril Fatface",
+    "fontBody": "Lora",
+    "colorPrimary": "#3A2414",
+    "colorAccent": "#9C4A1F",
+    "colorBackground": "#F4EAD5",
+    "colorSurface": "#E7D3AE",
+    "radius": "sm",
+    "headingCase": "normal"
+  },
+  "sections": [
+    {
+      "id": "sec-retro-c-hero-35",
+      "type": "hero",
+      "props": {
+        "eyebrow": "Sejak 1968",
+        "title": "Kopi Tiga Saudara",
+        "subtitle": "Racikan keluarga, tiga generasi",
+        "description": "Disangrai perlahan dengan cara lama, disajikan untuk penikmat kopi masa kini.",
+        "image": "/ornamen/retro-kraft-cover.svg",
+        "align": "cover",
+        "buttonText": "Lihat produk",
+        "buttonLink": "#karya"
+      }
+    },
+    {
+      "id": "sec-retro-c-cap-36",
+      "type": "canvas",
+      "props": {
+        "height": 360,
+        "background": "theme:bg",
+        "backgroundImage": "",
+        "elements": [
+          {
+            "id": "el-co1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Cap luar",
+            "x": 110,
+            "y": 50,
+            "w": 260,
+            "h": 260,
+            "fill": "transparent",
+            "borderWidth": 8,
+            "borderColor": "theme:accent",
+            "radius": 999
+          },
+          {
+            "id": "el-co2",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Cap dalam",
+            "x": 140,
+            "y": 80,
+            "w": 200,
+            "h": 200,
+            "fill": "transparent",
+            "borderWidth": 3,
+            "borderColor": "theme:accent",
+            "radius": 999
+          },
+          {
+            "id": "el-co3",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Tahun",
+            "x": 140,
+            "y": 140,
+            "w": 200,
+            "h": 80,
+            "text": "EST.\n1968",
+            "fontFamily": "heading",
+            "fontSize": 40,
+            "align": "center",
+            "lineHeight": 1,
+            "color": "theme:accent"
+          },
+          {
+            "id": "el-co4",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Kalimat",
+            "x": 440,
+            "y": 95,
+            "w": 680,
+            "h": 120,
+            "text": "Rasa yang sama sejak pertama kali dibuka di sudut pasar kota.",
+            "fontFamily": "heading",
+            "fontSize": 44,
+            "lineHeight": 1.15,
+            "color": "theme:text"
+          },
+          {
+            "id": "el-co5",
+            "rotation": 0,
+            "opacity": 0.8,
+            "type": "text",
+            "name": "Penjelasan",
+            "x": 440,
+            "y": 225,
+            "w": 640,
+            "h": 60,
+            "text": "Biji kopi pilihan dari petani lokal, disangrai di tungku kayu warisan kakek.",
+            "fontFamily": "body",
+            "fontSize": 19,
+            "lineHeight": 1.5,
+            "color": "theme:text"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-retro-c-tentang-37",
+      "type": "about",
+      "props": {
+        "heading": "Cerita kami",
+        "body": "Bermula dari warung kecil di tahun 1968, tiga bersaudara meracik kopi untuk para pedagang pasar. Kini usaha keluarga ini dijalankan generasi ketiga tanpa meninggalkan cara lama yang membuat rasanya istimewa.",
+        "image": "/placeholder/portrait.svg"
+      }
+    },
+    {
+      "id": "sec-retro-c-layanan-38",
+      "type": "skills",
+      "props": {
+        "heading": "Yang kami tawarkan",
+        "items": [
+          {
+            "name": "Kopi bubuk",
+            "detail": "Robusta & arabika"
+          },
+          {
+            "name": "Biji sangrai",
+            "detail": "Sangrai sedang & gelap"
+          },
+          {
+            "name": "Kedai",
+            "detail": "Suasana tempo dulu"
+          },
+          {
+            "name": "Grosir",
+            "detail": "Untuk kafe & hotel"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-retro-c-produk-39",
+      "type": "projects",
+      "props": {
+        "heading": "Produk unggulan",
+        "items": [
+          {
+            "title": "Robusta Tungku",
+            "description": "Pahit tegas dengan aroma kayu bakar.",
+            "image": "/placeholder/img-1.svg",
+            "link": ""
+          },
+          {
+            "title": "Arabika Gunung",
+            "description": "Asam lembut, wangi buah.",
+            "image": "/placeholder/img-2.svg",
+            "link": ""
+          },
+          {
+            "title": "Kopi Susu Botol",
+            "description": "Resep kedai dalam kemasan praktis.",
+            "image": "/placeholder/img-3.svg",
+            "link": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-retro-c-testi-40",
+      "type": "testimonial",
+      "props": {
+        "quote": "Rasanya persis seperti kopi yang dulu diseduh kakek saya.",
+        "author": "Pelanggan setia",
+        "role": "Sejak 1980-an"
+      }
+    },
+    {
+      "id": "sec-retro-c-kontak-41",
+      "type": "contact",
+      "props": {
+        "heading": "Mampir atau pesan",
+        "text": "Kedai buka setiap hari 07.00–21.00. Pesanan grosir melalui WhatsApp.",
+        "email": "halo@kopitigasaudara.id",
+        "phone": "0812-0000-1968",
+        "links": [
+          {
+            "label": "Instagram",
+            "url": "https://instagram.com/"
+          }
+        ]
+      }
+    }
+  ]
+}

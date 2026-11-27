@@ -52,6 +52,15 @@ export const SECTION_DEFS: Record<SectionType, SectionDef> = {
       { key: "subtitle", label: "Tanggal / keterangan", kind: "text" },
       { key: "greeting", label: "Sapaan tamu", kind: "text" },
       { key: "image", label: "Foto latar", kind: "image" },
+      {
+        key: "tone",
+        label: "Nada sampul",
+        kind: "select",
+        options: [
+          { value: "gelap", label: "Gelap (teks putih)" },
+          { value: "terang", label: "Terang (teks warna tema)" },
+        ],
+      },
       { key: "buttonText", label: "Teks tombol", kind: "text" },
       { key: "buttonLink", label: "Tombol menuju (kosong = bagian berikutnya)", kind: "url" },
     ],

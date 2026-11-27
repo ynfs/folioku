@@ -1,0 +1,151 @@
+{
+  "id": "tpl-retro-khitanan",
+  "kind": "invitation",
+  "name": "Tasyakuran Retro Klasik",
+  "category": "khitanan",
+  "description": "Teal dan krem dengan jendela lengkung serta bintang emas — klasik dan teduh.",
+  "tags": [
+    "retro klasik",
+    "vintage",
+    "khitanan",
+    "aqiqah"
+  ],
+  "theme": {
+    "fontHeading": "Abril Fatface",
+    "fontBody": "Lora",
+    "colorPrimary": "#1F3A38",
+    "colorAccent": "#1F5C5A",
+    "colorBackground": "#FBF3E4",
+    "colorSurface": "#E8F0EC",
+    "radius": "lg",
+    "headingCase": "normal",
+    "ornament": "/ornamen/retro-divider-bintang.svg"
+  },
+  "sections": [
+    {
+      "id": "sec-retro-k-sampul-20",
+      "type": "cover",
+      "props": {
+        "topImage": "",
+        "tagline": "",
+        "eyebrow": "Tasyakuran Khitanan",
+        "title": "Ahmad Rafa",
+        "subtitle": "Ahad, 18 April 2027",
+        "greeting": "Kepada Yth.",
+        "image": "/ornamen/retro-teal-cover.svg",
+        "tone": "terang",
+        "buttonText": "Buka Undangan",
+        "buttonLink": ""
+      }
+    },
+    {
+      "id": "sec-retro-k-salam-21",
+      "type": "about",
+      "props": {
+        "heading": "Assalamu’alaikum Wr. Wb.",
+        "body": "Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan tasyakuran khitanan putra kami:\n\nAhmad Rafa Pratama\nPutra dari Bapak Yusuf & Ibu Aminah\n\nMerupakan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir.",
+        "image": "/placeholder/portrait.svg"
+      }
+    },
+    {
+      "id": "sec-retro-k-acara-22",
+      "type": "event",
+      "props": {
+        "heading": "Waktu & Tempat",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Tasyakuran",
+            "start": "2027-04-18T10:00",
+            "end": "Selesai",
+            "place": "Kediaman Keluarga",
+            "address": "Jl. Cempaka No. 9, Semarang",
+            "map": "https://maps.google.com/?q=Semarang"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-retro-k-mundur-23",
+      "type": "countdown",
+      "props": {
+        "heading": "Menuju hari tasyakuran",
+        "target": "2027-04-18T10:00",
+        "zone": "WIB",
+        "doneText": "Acara sedang berlangsung / telah selesai"
+      }
+    },
+    {
+      "id": "sec-retro-k-rsvp-24",
+      "type": "rsvp",
+      "props": {
+        "heading": "Konfirmasi Kehadiran",
+        "text": "Mohon doa dan kehadirannya.",
+        "maxGuests": 2,
+        "showWishes": "ya"
+      }
+    },
+    {
+      "id": "sec-retro-k-amplop-25",
+      "type": "gift",
+      "props": {
+        "heading": "Tanda Kasih",
+        "text": "Jika ingin memberi tanda kasih, dapat melalui:",
+        "items": [
+          {
+            "bank": "Nama Bank",
+            "number": "0000000000",
+            "holder": "Nama Pemilik",
+            "qr": ""
+          }
+        ],
+        "address": ""
+      }
+    },
+    {
+      "id": "sec-retro-kh-penutup-26",
+      "type": "canvas",
+      "props": {
+        "height": 420,
+        "background": "theme:surface",
+        "backgroundImage": "/ornamen/retro-teal-cover.svg",
+        "elements": [
+          {
+            "id": "el-kh-c1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Penutup",
+            "x": 100,
+            "y": 130,
+            "w": 1000,
+            "h": 100,
+            "text": "Jazakumullah Khairan",
+            "fontFamily": "heading",
+            "fontSize": 72,
+            "align": "center",
+            "lineHeight": 1.05,
+            "color": "theme:text"
+          },
+          {
+            "id": "el-kh-c2",
+            "rotation": 0,
+            "opacity": 0.85,
+            "type": "text",
+            "name": "Ucapan",
+            "x": 200,
+            "y": 250,
+            "w": 800,
+            "h": 70,
+            "text": "Atas doa dan kehadirannya, kami ucapkan terima kasih.\nKeluarga Bapak Yusuf",
+            "fontFamily": "body",
+            "fontSize": 20,
+            "align": "center",
+            "lineHeight": 1.5,
+            "color": "theme:text"
+          }
+        ]
+      }
+    }
+  ]
+}

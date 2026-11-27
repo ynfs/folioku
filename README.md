@@ -53,6 +53,14 @@ Untuk pernikahan, pernikahan adat, ulang tahun, khitanan/aqiqah, dan acara/event
 - Dashboard **Tamu & RSVP**: ringkasan kehadiran, tabel RSVP + unduh CSV, pembuat link per tamu, salin pesan, dan kirim lewat WhatsApp
 - Formulir RSVP dilindungi kolom jebakan bot dan batas kiriman per IP
 
+### Koleksi Retro Klasik
+Gaya vintage 60-an/70-an untuk semua jenis (filter **✦ Retro Klasik** di galeri):
+- Undangan: Pernikahan Retro 70-an, Pesta Ulang Tahun Disko, Tasyakuran Retro Klasik, Reuni & Acara Retro
+- Portofolio: Company Profile Retro Klasik (kertas kraft & cap), Studio Foto Retro (film strip)
+- Aset SVG original: sunburst, lengkung pelangi, gelombang disko, jendela lengkung, poster halftone, kraft, film strip — dengan tekstur grain
+- Font retro: Fraunces, Shrikhand, Righteous, Abril Fatface; ornamen pemisah retro (bintang, gelombang, matahari)
+- Sampul undangan punya pilihan **nada** gelap/terang agar teks tetap terbaca di latar terang
+
 ### Desain Bebas (ala Figma)
 Bagian **Desain Bebas** adalah kanvas tempat elemen bisa ditaruh di mana saja:
 - Elemen: teks, gambar, bentuk, tombol (tambah lewat toolbar hitam di atas kanvas)

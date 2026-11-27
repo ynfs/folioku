@@ -1,0 +1,267 @@
+{
+  "id": "tpl-retro-ultah",
+  "kind": "invitation",
+  "name": "Pesta Ulang Tahun Disko",
+  "category": "ulang-tahun",
+  "description": "Gelombang pelangi ala lantai disko 70-an dan huruf Shrikhand — siap berdansa!",
+  "tags": [
+    "retro klasik",
+    "vintage",
+    "ulang tahun",
+    "disko"
+  ],
+  "theme": {
+    "fontHeading": "Shrikhand",
+    "fontBody": "Poppins",
+    "colorPrimary": "#FFF4E0",
+    "colorAccent": "#FFB347",
+    "colorBackground": "#2A1545",
+    "colorSurface": "#3A1D5C",
+    "radius": "lg",
+    "headingCase": "normal",
+    "ornament": "/ornamen/retro-divider-bintang.svg"
+  },
+  "sections": [
+    {
+      "id": "sec-retro-u-sampul-12",
+      "type": "cover",
+      "props": {
+        "topImage": "",
+        "tagline": "",
+        "eyebrow": "Kamu diundang ke",
+        "title": "Disko Party Dinda 25!",
+        "subtitle": "Sabtu, 20 Maret 2027 · 19.00",
+        "greeting": "Spesial untuk",
+        "image": "/ornamen/retro-disko-cover.svg",
+        "tone": "gelap",
+        "buttonText": "Ayo Berdansa",
+        "buttonLink": ""
+      }
+    },
+    {
+      "id": "sec-retro-u-musik-13",
+      "type": "music",
+      "props": {
+        "src": "",
+        "title": ""
+      }
+    },
+    {
+      "id": "sec-retro-ut-poster-14",
+      "type": "canvas",
+      "props": {
+        "height": 460,
+        "background": "theme:bg",
+        "backgroundImage": "",
+        "elements": [
+          {
+            "id": "el-ut-s0",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Garis 1",
+            "x": 0,
+            "y": 360,
+            "w": 1200,
+            "h": 18,
+            "fill": "#FF7AA2",
+            "radius": 0
+          },
+          {
+            "id": "el-ut-s1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Garis 2",
+            "x": 0,
+            "y": 386,
+            "w": 1200,
+            "h": 18,
+            "fill": "#FFB347",
+            "radius": 0
+          },
+          {
+            "id": "el-ut-s2",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Garis 3",
+            "x": 0,
+            "y": 412,
+            "w": 1200,
+            "h": 18,
+            "fill": "#7BDFF2",
+            "radius": 0
+          },
+          {
+            "id": "el-ut-b1",
+            "rotation": 45,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Bintang",
+            "x": 110,
+            "y": 70,
+            "w": 70,
+            "h": 70,
+            "fill": "#FF7AA2",
+            "radius": 6
+          },
+          {
+            "id": "el-ut-b2",
+            "rotation": 45,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Bintang kecil",
+            "x": 1020,
+            "y": 110,
+            "w": 40,
+            "h": 40,
+            "fill": "#FFB347",
+            "radius": 4
+          },
+          {
+            "id": "el-ut-t1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Judul besar",
+            "x": 100,
+            "y": 120,
+            "w": 1000,
+            "h": 130,
+            "text": "Let's Groove!",
+            "fontFamily": "heading",
+            "fontSize": 92,
+            "fontWeight": 400,
+            "align": "center",
+            "lineHeight": 1,
+            "color": "theme:text"
+          },
+          {
+            "id": "el-ut-t2",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Sub judul",
+            "x": 200,
+            "y": 262,
+            "w": 800,
+            "h": 40,
+            "text": "Seperempat abad Dinda",
+            "fontFamily": "body",
+            "fontSize": 22,
+            "fontWeight": 600,
+            "align": "center",
+            "letterSpacing": 4,
+            "uppercase": true,
+            "color": "theme:accent"
+          },
+          {
+            "id": "el-ut-t3",
+            "rotation": 0,
+            "opacity": 0.75,
+            "type": "text",
+            "name": "Keterangan",
+            "x": 250,
+            "y": 308,
+            "w": 700,
+            "h": 36,
+            "text": "Lampu kerlap-kerlip, musik lawas, dan teman-teman terbaik",
+            "fontFamily": "body",
+            "fontSize": 18,
+            "italic": true,
+            "align": "center",
+            "color": "theme:text"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-retro-u-acara-15",
+      "type": "event",
+      "props": {
+        "heading": "Kapan & di mana",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Disko Party",
+            "start": "2027-03-20T19:00",
+            "end": "23.00",
+            "place": "Rooftop Bintang",
+            "address": "Jl. Braga No. 25, Bandung",
+            "map": "https://maps.google.com/?q=Bandung"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-retro-u-mundur-16",
+      "type": "countdown",
+      "props": {
+        "heading": "Lantai dansa dibuka dalam",
+        "target": "2027-03-20T19:00",
+        "zone": "WIB",
+        "doneText": "Pestanya sudah dimulai! 🪩"
+      }
+    },
+    {
+      "id": "sec-retro-u-busana-17",
+      "type": "dresscode",
+      "props": {
+        "heading": "Dress Code",
+        "text": "Gaya disko 70-an: celana cutbray, kemeja motif, payet, dan kacamata bulat!",
+        "colors": [
+          {
+            "color": "#FF7AA2",
+            "label": "Pink"
+          },
+          {
+            "color": "#FFB347",
+            "label": "Oranye"
+          },
+          {
+            "color": "#7BDFF2",
+            "label": "Biru muda"
+          },
+          {
+            "color": "#E5C07B",
+            "label": "Emas"
+          }
+        ],
+        "image": ""
+      }
+    },
+    {
+      "id": "sec-retro-u-galeri-18",
+      "type": "gallery",
+      "props": {
+        "heading": "Momen Seru",
+        "columns": 3,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-retro-u-rsvp-19",
+      "type": "rsvp",
+      "props": {
+        "heading": "Kamu datang?",
+        "text": "Kabari aku ya, biar tempat dansanya cukup!",
+        "maxGuests": 2,
+        "showWishes": "ya"
+      }
+    }
+  ]
+}

@@ -304,6 +304,10 @@ const ORNAMENTS = [
   { src: "/ornamen/minang-divider.svg", label: "Minang (songket)" },
   { src: "/ornamen/bali-divider.svg", label: "Bali (jepun)" },
   { src: "/ornamen/batak-divider.svg", label: "Batak (gorga)" },
+  { src: "/ornamen/jawa-gunungan-divider.svg", label: "Jawa (gunungan)" },
+  { src: "/ornamen/retro-divider-bintang.svg", label: "Retro (bintang)" },
+  { src: "/ornamen/retro-divider-gelombang.svg", label: "Retro (gelombang)" },
+  { src: "/ornamen/retro-divider-matahari.svg", label: "Retro (matahari)" },
 ];
 
 function FontSelect({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {

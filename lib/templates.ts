@@ -16,6 +16,12 @@ import adatSunda from "@/templates/tpl-adat-sunda.json";
 import adatMinang from "@/templates/tpl-adat-minang.json";
 import adatBali from "@/templates/tpl-adat-bali.json";
 import adatBatak from "@/templates/tpl-adat-batak.json";
+import retroPernikahan from "@/templates/tpl-retro-pernikahan.json";
+import retroUltah from "@/templates/tpl-retro-ultah.json";
+import retroKhitanan from "@/templates/tpl-retro-khitanan.json";
+import retroReuni from "@/templates/tpl-retro-reuni.json";
+import retroCompany from "@/templates/tpl-retro-company.json";
+import retroStudioFoto from "@/templates/tpl-retro-studio-foto.json";
 
 // Template bawaan disimpan sebagai file JSON di folder /templates.
 // Untuk menambah template: buat file JSON baru dengan format yang sama lalu
@@ -23,6 +29,8 @@ import adatBatak from "@/templates/tpl-adat-batak.json";
 export const TEMPLATES = (
   [
     kanvas,
+    retroCompany,
+    retroStudioFoto,
     minimalis,
     klasik,
     retro,
@@ -30,6 +38,7 @@ export const TEMPLATES = (
     modernGelap,
     kreatif,
     undanganElegan,
+    retroPernikahan,
     adatJawa,
     adatSunda,
     adatMinang,
@@ -37,8 +46,11 @@ export const TEMPLATES = (
     adatBatak,
     undanganRustic,
     undanganUltah,
+    retroUltah,
     undanganKhitanan,
+    retroKhitanan,
     undanganAcara,
+    retroReuni,
   ] as unknown as Template[]
 ).map((t) => ({ ...t, kind: t.kind ?? "portfolio", builtin: true }));
 

@@ -69,7 +69,8 @@ export function EventSection({ p }: { p: P }) {
   return (
     <InvWrap id="acara" className="pf-surface">
       <InvHeading>{s(p.heading)}</InvHeading>
-      <div className="grid gap-6 @3xl:grid-cols-2">
+      {/* Satu acara: kartu di tengah; dua atau lebih: dua kolom */}
+      <div className={`grid gap-6 ${list(p.items).length === 1 ? "mx-auto max-w-xl" : "@3xl:grid-cols-2"}`}>
         {list(p.items).map((it, i) => {
           const cal = calendarLink(it.name, it.start, zone, [it.place, it.address].filter(Boolean).join(", "));
           return (

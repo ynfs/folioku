@@ -1,0 +1,368 @@
+{
+  "id": "tpl-retro-pernikahan",
+  "kind": "invitation",
+  "name": "Pernikahan Retro 70-an",
+  "category": "pernikahan",
+  "description": "Sunburst mustard dan oranye bata, huruf Fraunces yang lembut — hangat dan penuh nostalgia.",
+  "tags": [
+    "retro klasik",
+    "vintage",
+    "pernikahan"
+  ],
+  "theme": {
+    "fontHeading": "Fraunces",
+    "fontBody": "DM Sans",
+    "colorPrimary": "#4A2512",
+    "colorAccent": "#C8562B",
+    "colorBackground": "#FBF1DE",
+    "colorSurface": "#F3E3C3",
+    "radius": "lg",
+    "headingCase": "normal",
+    "ornament": "/ornamen/retro-divider-matahari.svg"
+  },
+  "sections": [
+    {
+      "id": "sec-retro-p-sampul-1",
+      "type": "cover",
+      "props": {
+        "topImage": "",
+        "tagline": "",
+        "eyebrow": "Save the Date",
+        "title": "Lina & Bayu",
+        "subtitle": "Sabtu, 12 Juni 2027",
+        "greeting": "Kepada Yth. Bapak/Ibu/Saudara/i",
+        "image": "/ornamen/retro-matahari-cover.svg",
+        "tone": "terang",
+        "buttonText": "Buka Undangan",
+        "buttonLink": ""
+      }
+    },
+    {
+      "id": "sec-retro-p-musik-2",
+      "type": "music",
+      "props": {
+        "src": "",
+        "title": ""
+      }
+    },
+    {
+      "id": "sec-retro-pn-poster-3",
+      "type": "canvas",
+      "props": {
+        "height": 460,
+        "background": "theme:bg",
+        "backgroundImage": "",
+        "elements": [
+          {
+            "id": "el-pn-s0",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Garis 1",
+            "x": 0,
+            "y": 360,
+            "w": 1200,
+            "h": 18,
+            "fill": "#C8562B",
+            "radius": 0
+          },
+          {
+            "id": "el-pn-s1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Garis 2",
+            "x": 0,
+            "y": 386,
+            "w": 1200,
+            "h": 18,
+            "fill": "#E2A33B",
+            "radius": 0
+          },
+          {
+            "id": "el-pn-s2",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Garis 3",
+            "x": 0,
+            "y": 412,
+            "w": 1200,
+            "h": 18,
+            "fill": "#7A3E1D",
+            "radius": 0
+          },
+          {
+            "id": "el-pn-b1",
+            "rotation": 45,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Bintang",
+            "x": 110,
+            "y": 70,
+            "w": 70,
+            "h": 70,
+            "fill": "#C8562B",
+            "radius": 6
+          },
+          {
+            "id": "el-pn-b2",
+            "rotation": 45,
+            "opacity": 1,
+            "type": "shape",
+            "name": "Bintang kecil",
+            "x": 1020,
+            "y": 110,
+            "w": 40,
+            "h": 40,
+            "fill": "#E2A33B",
+            "radius": 4
+          },
+          {
+            "id": "el-pn-t1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Judul besar",
+            "x": 100,
+            "y": 120,
+            "w": 1000,
+            "h": 130,
+            "text": "Dua Hati, Satu Cerita",
+            "fontFamily": "heading",
+            "fontSize": 92,
+            "fontWeight": 400,
+            "align": "center",
+            "lineHeight": 1,
+            "color": "theme:text"
+          },
+          {
+            "id": "el-pn-t2",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Sub judul",
+            "x": 200,
+            "y": 262,
+            "w": 800,
+            "h": 40,
+            "text": "Lina & Bayu · 12.06.2027",
+            "fontFamily": "body",
+            "fontSize": 22,
+            "fontWeight": 600,
+            "align": "center",
+            "letterSpacing": 4,
+            "uppercase": true,
+            "color": "theme:accent"
+          },
+          {
+            "id": "el-pn-t3",
+            "rotation": 0,
+            "opacity": 0.75,
+            "type": "text",
+            "name": "Keterangan",
+            "x": 250,
+            "y": 308,
+            "w": 700,
+            "h": 36,
+            "text": "Dengan cinta yang sederhana dan tulus",
+            "fontFamily": "body",
+            "fontSize": 18,
+            "italic": true,
+            "align": "center",
+            "color": "theme:text"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-retro-p-mempelai-4",
+      "type": "couple",
+      "props": {
+        "heading": "Kami yang Berbahagia",
+        "intro": "Dengan memohon rahmat Tuhan Yang Maha Esa, kami mengundang Anda di hari bahagia kami:",
+        "name1": "Lina",
+        "script1": "",
+        "full1": "Lina Marlina",
+        "parents1": "Putri dari Bapak Suryo\n& Ibu Wati",
+        "photo1": "/placeholder/portrait.svg",
+        "ig1": "",
+        "name2": "Bayu",
+        "script2": "",
+        "full2": "Bayu Prasetyo",
+        "parents2": "Putra dari Bapak Hartono\n& Ibu Lestari",
+        "photo2": "/placeholder/hero.svg",
+        "ig2": ""
+      }
+    },
+    {
+      "id": "sec-retro-p-mundur-5",
+      "type": "countdown",
+      "props": {
+        "heading": "Menuju hari bahagia",
+        "target": "2027-06-12T09:00",
+        "zone": "WIB",
+        "doneText": "Hari bahagia telah tiba!"
+      }
+    },
+    {
+      "id": "sec-retro-p-acara-6",
+      "type": "event",
+      "props": {
+        "heading": "Waktu & Tempat",
+        "zone": "WIB",
+        "items": [
+          {
+            "name": "Akad Nikah",
+            "start": "2027-06-12T09:00",
+            "end": "10.30",
+            "place": "Masjid Raya",
+            "address": "Jl. Merdeka No. 1, Yogyakarta",
+            "map": "https://maps.google.com/?q=Yogyakarta"
+          },
+          {
+            "name": "Resepsi",
+            "start": "2027-06-12T12:00",
+            "end": "Selesai",
+            "place": "Taman Retro",
+            "address": "Jl. Malioboro No. 70, Yogyakarta",
+            "map": "https://maps.google.com/?q=Yogyakarta"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-retro-p-kisah-7",
+      "type": "story",
+      "props": {
+        "heading": "Kisah Kami",
+        "items": [
+          {
+            "date": "2018",
+            "title": "Kaset pertama",
+            "description": "Kami berkenalan karena sama-sama suka musik lawas.",
+            "image": "/placeholder/img-1.svg"
+          },
+          {
+            "date": "2022",
+            "title": "Lamaran",
+            "description": "Di bawah lampu temaram, sebuah pertanyaan dijawab 'ya'.",
+            "image": "/placeholder/img-2.svg"
+          },
+          {
+            "date": "2027",
+            "title": "Selamanya",
+            "description": "Kini kami memulai lagu baru bersama.",
+            "image": "/placeholder/img-3.svg"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-retro-p-galeri-8",
+      "type": "gallery",
+      "props": {
+        "heading": "Galeri",
+        "columns": 3,
+        "items": [
+          {
+            "image": "/placeholder/img-1.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-2.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-3.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-4.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-5.svg",
+            "caption": ""
+          },
+          {
+            "image": "/placeholder/img-6.svg",
+            "caption": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-retro-p-rsvp-9",
+      "type": "rsvp",
+      "props": {
+        "heading": "Konfirmasi Kehadiran",
+        "text": "Kehadiran dan doa restu Anda sangat berarti bagi kami.",
+        "maxGuests": 2,
+        "showWishes": "ya"
+      }
+    },
+    {
+      "id": "sec-retro-p-amplop-10",
+      "type": "gift",
+      "props": {
+        "heading": "Amplop Digital",
+        "text": "Jika ingin memberi tanda kasih, dapat melalui:",
+        "items": [
+          {
+            "bank": "Nama Bank",
+            "number": "0000000000",
+            "holder": "Nama Pemilik",
+            "qr": ""
+          }
+        ],
+        "address": ""
+      }
+    },
+    {
+      "id": "sec-retro-pn-penutup-11",
+      "type": "canvas",
+      "props": {
+        "height": 420,
+        "background": "theme:surface",
+        "backgroundImage": "/ornamen/retro-lengkung-cover.svg",
+        "elements": [
+          {
+            "id": "el-pn-c1",
+            "rotation": 0,
+            "opacity": 1,
+            "type": "text",
+            "name": "Penutup",
+            "x": 100,
+            "y": 130,
+            "w": 1000,
+            "h": 100,
+            "text": "Terima Kasih!",
+            "fontFamily": "heading",
+            "fontSize": 72,
+            "align": "center",
+            "lineHeight": 1.05,
+            "color": "theme:text"
+          },
+          {
+            "id": "el-pn-c2",
+            "rotation": 0,
+            "opacity": 0.85,
+            "type": "text",
+            "name": "Ucapan",
+            "x": 200,
+            "y": 250,
+            "w": 800,
+            "h": 70,
+            "text": "Sampai jumpa di hari bahagia kami.\nLina & Bayu",
+            "fontFamily": "body",
+            "fontSize": 20,
+            "align": "center",
+            "lineHeight": 1.5,
+            "color": "theme:text"
+          }
+        ]
+      }
+    }
+  ]
+}
