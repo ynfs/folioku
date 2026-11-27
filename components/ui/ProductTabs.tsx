@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { PRODUCTS } from "@/lib/templates";
 import type { ProductKind } from "@/lib/types";
+import { AppIcon, type AppIconName } from "./AppIcons";
 
-const ICON: Record<ProductKind, string> = { portfolio: "▦", invitation: "✉", proposal: "▤" };
+const ICON: Record<ProductKind, AppIconName> = { portfolio: "portofolio", invitation: "undangan", proposal: "proposal" };
 
 /** Tab produk Safantara: Portofolio | Undangan Digital | Proposal. */
 export function ProductTabs({ active, hrefFor }: { active: ProductKind; hrefFor: (k: ProductKind) => string }) {
@@ -17,7 +18,7 @@ export function ProductTabs({ active, hrefFor }: { active: ProductKind; hrefFor:
             active === p.value ? "bg-app-fg text-white shadow-soft" : "text-app-muted hover:bg-app-soft hover:text-app-fg"
           }`}
         >
-          <span aria-hidden>{ICON[p.value]}</span>
+          <AppIcon name={ICON[p.value]} size={22} />
           {p.label}
         </Link>
       ))}

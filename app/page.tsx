@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- ilustrasi SVG lokal */
 import Link from "next/link";
 import { AppHeader, LogoMark } from "@/components/ui/AppHeader";
+import { AppIcon, type AppIconName } from "@/components/ui/AppIcons";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { CONTACT, mailLink, waLink } from "@/lib/contact";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
@@ -12,19 +13,19 @@ const count = (k: ProductKind) => TEMPLATES.filter((t) => kindOf(t) === k).lengt
 const pickTemplate = (id: string, fallback: ProductKind): Template => getTemplate(id) ?? TEMPLATES.find((t) => kindOf(t) === fallback)!;
 const every = (k: ProductKind, step: number, n: number) => TEMPLATES.filter((t) => kindOf(t) === k).filter((_, i) => i % step === 0).slice(0, n);
 
-const PRODUCTS: { kind: ProductKind; slug: string; title: string; text: string; points: string[]; icon: string; sample: string; tint: string }[] = [
+const PRODUCTS: { kind: ProductKind; slug: string; title: string; text: string; points: string[]; icon: AppIconName; sample: string; tint: string }[] = [
   {
-    kind: "invitation", slug: "undangan", title: "Undangan Digital", icon: "✉", sample: "tpl-undangan-elegan", tint: "from-rose-100 to-amber-50",
+    kind: "invitation", slug: "undangan", title: "Undangan Digital", icon: "undangan", sample: "tpl-undangan-elegan", tint: "from-rose-100 to-amber-50",
     text: "Pernikahan, adat Nusantara, ulang tahun, khitanan, wisuda, hingga acara kantor.",
     points: ["Nama tamu otomatis di sampul", "RSVP & buku ucapan", "Amplop digital & musik"],
   },
   {
-    kind: "proposal", slug: "proposal", title: "Proposal", icon: "▤", sample: "prop-sponsorship-01", tint: "from-sky-100 to-emerald-50",
+    kind: "proposal", slug: "proposal", title: "Proposal", icon: "proposal", sample: "prop-sponsorship-01", tint: "from-sky-100 to-emerald-50",
     text: "Penawaran jasa, sponsorship, kegiatan, kerja sama, pitch deck, dan hibah.",
     points: ["Anggaran + PPN otomatis", "Persetujuan klien online", "Unduh sebagai PDF"],
   },
   {
-    kind: "portfolio", slug: "portofolio", title: "Portofolio & Company Profile", icon: "▦", sample: "tpl-retro-company", tint: "from-violet-100 to-orange-50",
+    kind: "portfolio", slug: "portofolio", title: "Portofolio & Company Profile", icon: "portofolio", sample: "tpl-retro-company", tint: "from-violet-100 to-orange-50",
     text: "Situs pribadi, studio kreatif, UMKM, kafe, klinik, hingga sekolah.",
     points: ["Multi-halaman", "Galeri & proyek", "Desain bebas ala Figma"],
   },
@@ -141,7 +142,7 @@ export default function Home() {
                   </div>
                   <div className="flex flex-1 flex-col p-6">
                     <div className="flex items-center gap-3">
-                      <span className="bg-grad grid h-10 w-10 place-items-center rounded-xl text-lg text-white">{p.icon}</span>
+                      <AppIcon name={p.icon} size={44} />
                       <h3 className="font-display text-xl font-bold">{p.title}</h3>
                     </div>
                     <p className="mt-3 text-sm leading-relaxed text-app-muted">{p.text}</p>

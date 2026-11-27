@@ -4,6 +4,7 @@ import { createTemplateAction } from "@/app/actions";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { DeleteProjectButton } from "@/components/ui/DeleteProjectButton";
 import { ProductTabs } from "@/components/ui/ProductTabs";
+import { AppIcon } from "@/components/ui/AppIcons";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { backend, requireUser } from "@/lib/backend";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
@@ -39,12 +40,12 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
         {/* Buat cepat per produk */}
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {[
-            { k: "invitation" as const, icon: "✉", title: "Undangan baru", text: "Pernikahan, ulang tahun, adat, acara", n: all.filter((p) => kindOf(p) === "invitation").length },
-            { k: "proposal" as const, icon: "▤", title: "Proposal baru", text: "Penawaran, sponsorship, kegiatan", n: all.filter((p) => kindOf(p) === "proposal").length },
-            { k: "portfolio" as const, icon: "▦", title: "Portofolio baru", text: "Profil pribadi & company profile", n: all.filter((p) => kindOf(p) === "portfolio").length },
+            { k: "invitation" as const, icon: "undangan" as const, title: "Undangan baru", text: "Pernikahan, ulang tahun, adat, acara", n: all.filter((p) => kindOf(p) === "invitation").length },
+            { k: "proposal" as const, icon: "proposal" as const, title: "Proposal baru", text: "Penawaran, sponsorship, kegiatan", n: all.filter((p) => kindOf(p) === "proposal").length },
+            { k: "portfolio" as const, icon: "portofolio" as const, title: "Portofolio baru", text: "Profil pribadi & company profile", n: all.filter((p) => kindOf(p) === "portfolio").length },
           ].map((q) => (
             <Link key={q.k} href={`/templates?jenis=${kindSlug(q.k)}`} className="card card-hover group flex items-center gap-4 p-5">
-              <span className="bg-grad grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-xl text-white shadow-[0_10px_20px_-10px_rgb(240_83_45/0.8)]">{q.icon}</span>
+              <AppIcon name={q.icon} size={48} />
               <span className="min-w-0 flex-1">
                 <span className="font-display block font-bold">+ {q.title}</span>
                 <span className="block truncate text-sm text-app-muted">{q.text}</span>
