@@ -117,10 +117,10 @@ Galeri (`/templates`) punya filter kategori dan gaya beserta jumlahnya, pencaria
 | Acara & Event | 6 | 8 |
 | Grand Opening | 3 | 3 |
 
-### Portofolio & Company Profile (50)
+### Portofolio & Company Profile (49)
 | Kategori | Baru | Total |
 |---|---|---|
-| Personal & Kreatif | 6 | 10 |
+| Personal & Kreatif | 6 | 9 |
 | Fotografer | 4 | 6 |
 | Teknologi & Developer | 5 | 6 |
 | Penulis & Pembicara | 3 | 4 |
