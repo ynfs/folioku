@@ -38,13 +38,14 @@ const NAV = [
   { href: "/harga", label: "Harga" },
 ];
 
-export async function AppHeader() {
+/** sticky=false: header tidak ikut turun saat menggulir (mis. di galeri template). */
+export async function AppHeader({ sticky = true }: { sticky?: boolean } = {}) {
   const user = await backend.getCurrentUser();
   const initial = (user?.name || user?.email || "?").trim().charAt(0).toUpperCase();
   const link = "rounded-xl px-3 py-2 text-sm font-semibold text-app-fg/80 transition hover:bg-app-soft hover:text-app-fg";
 
   return (
-    <header className="sticky top-0 z-40 border-b border-app-line/70 bg-app-bg/80 backdrop-blur-xl supports-[backdrop-filter]:bg-app-bg/65">
+    <header className={`${sticky ? "sticky top-0" : "relative"} z-40 border-b border-app-line/70 bg-app-bg/80 backdrop-blur-xl supports-[backdrop-filter]:bg-app-bg/65`}>
       <MenuAutoClose />
       <div className="relative mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
         <Logo />

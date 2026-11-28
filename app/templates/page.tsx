@@ -53,7 +53,7 @@ export default async function TemplatesPage(props: PageProps<"/templates">) {
 
   return (
     <>
-      <AppHeader />
+      <AppHeader sticky={false} />
       <main className="w-full flex-1 pb-16">
         {/* Kepala halaman */}
         <section className="relative overflow-hidden border-b border-app-line/70">
@@ -89,8 +89,8 @@ export default async function TemplatesPage(props: PageProps<"/templates">) {
           </div>
         </section>
 
-        {/* Bilah filter: menempel di bawah header saat menggulir */}
-        <div className="sticky top-16 z-30 border-b border-app-line/70 bg-app-bg/90 backdrop-blur-xl">
+        {/* Bilah filter kategori & gaya (tetap di tempat, tidak ikut menggulir) */}
+        <div className="border-b border-app-line/70 bg-white/60">
           <div className="mx-auto max-w-6xl px-4 py-3">
             <div className="scroll-x fade-x -mx-4 flex gap-2 px-4" aria-label="Kategori">
               <FilterChip href={href({ kategori: "", hal: 1 })} active={!kategori} label="Semua" count={all.length} />
