@@ -5,6 +5,7 @@ import { AppHeader } from "@/components/ui/AppHeader";
 import { ProductTabs } from "@/components/ui/ProductTabs";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
+import { isPremiumTemplate } from "@/lib/billing";
 import { CATEGORIES, STYLES, categoryLabel, kindOf, kindSlug, parseKind, productWord, styleLabel } from "@/lib/templates";
 import { galleryTemplates } from "@/lib/templates-server";
 
@@ -102,6 +103,7 @@ export default async function TemplatesPage(props: PageProps<"/templates">) {
               <article key={t.id} className="card card-hover group flex flex-col overflow-hidden">
                 <div className="relative">
                   <PortfolioThumb data={t} height={240} />
+                  {isPremiumTemplate(t) && <PremiumBadge />}
                   {/* Lapisan hover: pratinjau */}
                   <Link
                     href={`/templates/${t.id}`}
@@ -177,5 +179,13 @@ function FilterChip({ href, active, label, count, small }: { href: string; activ
       {label}
       {count !== undefined && <span className={`ml-1.5 ${active ? "text-white/70" : "text-app-muted"}`}>{count}</span>}
     </Link>
+  );
+}
+
+function PremiumBadge() {
+  return (
+    <span data-premium className="pointer-events-none absolute left-3 top-3 z-10 rounded-full bg-[linear-gradient(135deg,#FBBF24,#E36414)] px-2.5 py-1 text-[11px] font-bold text-white shadow-md">
+      ★ Premium
+    </span>
   );
 }

@@ -218,6 +218,8 @@ export interface Project {
   /** Slug publik jika pernah dipublish */
   slug: string | null;
   published: boolean;
+  /** Waktu pertama kali terbit (dasar masa aktif paket gratis) */
+  publishedAt?: string | null;
 }
 
 export interface Publication {
@@ -226,7 +228,42 @@ export interface Publication {
   name: string;
   data: PortfolioData;
   ownerName: string;
+  projectId: string;
+  publishedAt: string | null;
+  ownerIsAdmin: boolean;
+  /** Pesanan lunas milik pemilik yang relevan (paket proyek ini & Pro) */
+  paidOrders: PaidOrder[];
 }
+
+// ---------- Paket berbayar & pembayaran ----------
+
+/** basic/premium/upgrade-premium = per undangan (sekali bayar); pro-* = langganan akun. */
+export type PlanKey = "basic" | "premium" | "upgrade-premium" | "pro-bulanan" | "pro-tahunan";
+
+/** menunggu = belum bayar · diperiksa = bukti terkirim · lunas · ditolak */
+export type OrderStatus = "menunggu" | "diperiksa" | "lunas" | "ditolak";
+
+export interface Order {
+  id: string;
+  userId: string;
+  plan: PlanKey;
+  /** Proyek undangan yang di-upgrade; null untuk langganan Pro */
+  projectId: string | null;
+  /** Kode unik (1–299) yang ditambahkan ke harga agar transfer mudah dicocokkan */
+  uniqueCode: number;
+  status: OrderStatus;
+  proofUrl: string;
+  senderName: string;
+  note: string;
+  createdAt: string;
+  approvedAt: string | null;
+  // Diisi pada tampilan admin / dashboard
+  userName?: string;
+  userEmail?: string;
+  projectName?: string;
+}
+
+export type PaidOrder = Pick<Order, "plan" | "projectId"> & { approvedAt: string };
 
 /** Konfirmasi kehadiran + ucapan dari tamu undangan. */
 export type Attendance = "hadir" | "tidak" | "ragu";

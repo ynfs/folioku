@@ -414,3 +414,33 @@ Jangan pernah mengunggah `.env.local` ke repository publik.
 ## Lisensi
 
 Proyek ini menggunakan lisensi MIT. Lihat file `LICENSE` untuk detailnya.
+
+## Paket berbayar & pembayaran DANA
+
+| Produk | Paket | Harga | Isi |
+|---|---|---|---|
+| Undangan (per undangan, sekali bayar) | Gratis | Rp 0 | aktif 7 hari sejak terbit, watermark, template non-premium |
+| | Basic | Rp 59.000 | tanpa watermark, aktif 6 bulan |
+| | Premium | Rp 129.000 | + template Premium (adat/Jawa, retro, klasik, elegan, gelap, editorial, kreatif), aktif 1 tahun |
+| | Upgrade Basic → Premium | Rp 70.000 | selisih harga |
+| Proposal & portofolio (akun) | Gratis | Rp 0 | 1 proyek terbit, watermark, template non-premium |
+| | Pro bulanan / tahunan | Rp 39.000 / Rp 349.000 | tanpa batas, tanpa watermark, semua template |
+
+Harga & aturan ada di `lib/billing.ts` (fungsi murni). Hak akses selalu dihitung dari pesanan berstatus **lunas** — hanya admin yang bisa mengubahnya.
+
+Alur pembayaran (DANA manual):
+1. Pembeli memilih paket (`/harga` → `/bayar`), lalu mendapat nominal = harga + kode unik 1–299.
+2. Pembeli transfer lewat DANA dan mengunggah bukti di `/bayar/[id]` → status *Sedang diperiksa*.
+3. Admin mencocokkan di **`/admin/pembayaran`** lalu klik **Lunas** (paket langsung aktif) atau **Tolak**.
+4. Riwayat pembeli di `/dashboard/tagihan`; ringkasan pendapatan di panel admin.
+
+Atur tujuan pembayaran lewat variabel lingkungan (lihat `lib/payment.ts`):
+
+```
+DANA_NUMBER=08xxxxxxxxxx
+DANA_NAME=Nama Pemilik Akun
+DANA_QR=/bayar/dana-qr.png   # opsional, simpan gambarnya di public/bayar/
+```
+
+Selama `DANA_NUMBER` kosong, halaman bayar meminta pembeli menghubungi admin via WhatsApp.
+Pembayaran otomatis (DANA Business API atau payment gateway seperti Midtrans/Xendit yang mendukung DANA) bisa ditambahkan nanti tanpa mengubah aturan paket — cukup menandai pesanan lunas dari webhook.

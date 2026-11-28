@@ -5,6 +5,7 @@ import { createTemplateAction, toggleTemplatePublishAction } from "@/app/actions
 import { AppHeader } from "@/components/ui/AppHeader";
 import { DeleteTemplateButton } from "@/components/ui/DeleteTemplateButton";
 import { backend, requireUser } from "@/lib/backend";
+import { formatRupiah, orderAmount } from "@/lib/billing";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
 import { CATEGORIES, PRODUCTS, STYLES, TEMPLATES, categoryLabel, styleLabel } from "@/lib/templates";
 import type { Template } from "@/lib/types";
@@ -15,7 +16,9 @@ export default async function AdminPage() {
   const user = await requireUser("/admin");
   if (user.role !== "admin") redirect("/dashboard");
 
-  const [custom, stats] = await Promise.all([backend.listTemplates({ includeDrafts: true }), backend.adminStats()]);
+  const [custom, stats, orders] = await Promise.all([backend.listTemplates({ includeDrafts: true }), backend.adminStats(), backend.adminListOrders()]);
+  const pending = orders.filter((o) => o.status === "diperiksa").length;
+  const revenue = orders.filter((o) => o.status === "lunas").reduce((s, o) => s + orderAmount(o), 0);
 
   return (
     <>
@@ -30,6 +33,17 @@ export default async function AdminPage() {
           <Stat label="Portofolio terbit" value={stats.published} />
           <Stat label="Template" value={custom.length + TEMPLATES.length} />
         </div>
+
+        {/* Pembayaran */}
+        <Link href="/admin/pembayaran" className="card card-hover mt-4 flex flex-wrap items-center justify-between gap-4 p-5">
+          <span>
+            <span className="font-display block text-lg font-bold">Pembayaran & pendapatan</span>
+            <span className="text-sm text-app-muted">Total pendapatan {formatRupiah(revenue)}</span>
+          </span>
+          <span className={`rounded-full px-3 py-1 text-sm font-bold ${pending ? "bg-amber-100 text-amber-900" : "bg-app-bg text-app-muted"}`}>
+            {pending} perlu dicek →
+          </span>
+        </Link>
 
         {/* Template baru */}
         <section className="mt-10 rounded-2xl border border-app-line bg-white p-6">

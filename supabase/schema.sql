@@ -53,18 +53,6 @@ alter table public.templates drop constraint if exists templates_kind_check;
 alter table public.templates add constraint templates_kind_check check (kind in ('portfolio', 'invitation', 'proposal'));
 alter table public.templates add column if not exists style text;
 
--- ---------- rsvps: konfirmasi kehadiran & ucapan tamu undangan ----------
-create table if not exists public.rsvps (
-  id uuid primary key default gen_random_uuid(),
-  project_id uuid not null references public.projects (id) on delete cascade,
-  name text not null check (char_length(name) between 1 and 60),
-  attendance text not null check (attendance in ('hadir', 'tidak', 'ragu')),
-  guests int not null default 1 check (guests between 1 and 10),
-  message text not null default '' check (char_length(message) <= 500),
-  created_at timestamptz not null default now()
-);
-create index if not exists rsvps_project_idx on public.rsvps (project_id, created_at desc);
-
 -- ---------- projects: salinan template milik klien ----------
 create table if not exists public.projects (
   id uuid primary key default gen_random_uuid(),
@@ -89,6 +77,18 @@ create table if not exists public.publications (
   published_at timestamptz not null default now()
 );
 
+-- ---------- rsvps: konfirmasi kehadiran & ucapan tamu undangan ----------
+create table if not exists public.rsvps (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.projects (id) on delete cascade,
+  name text not null check (char_length(name) between 1 and 60),
+  attendance text not null check (attendance in ('hadir', 'tidak', 'ragu')),
+  guests int not null default 1 check (guests between 1 and 10),
+  message text not null default '' check (char_length(message) <= 500),
+  created_at timestamptz not null default now()
+);
+create index if not exists rsvps_project_idx on public.rsvps (project_id, created_at desc);
+
 -- ---------- assets: gambar yang diunggah klien ----------
 create table if not exists public.assets (
   id uuid primary key default gen_random_uuid(),
@@ -97,6 +97,72 @@ create table if not exists public.assets (
   url text not null,
   created_at timestamptz not null default now()
 );
+
+-- ---------- orders: pesanan paket berbayar (pembayaran DANA) ----------
+-- Hak akses paket dihitung dari pesanan berstatus 'lunas', yang hanya bisa diubah admin.
+create table if not exists public.orders (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.users (id) on delete cascade,
+  plan text not null check (plan in ('basic', 'premium', 'upgrade-premium', 'pro-bulanan', 'pro-tahunan')),
+  project_id uuid references public.projects (id) on delete set null,
+  unique_code int not null check (unique_code between 1 and 299),
+  status text not null default 'menunggu' check (status in ('menunggu', 'diperiksa', 'lunas', 'ditolak')),
+  proof_url text not null default '',
+  sender_name text not null default '' check (char_length(sender_name) <= 80),
+  note text not null default '' check (char_length(note) <= 300),
+  created_at timestamptz not null default now(),
+  approved_at timestamptz,
+  approved_by uuid references public.users (id) on delete set null
+);
+create index if not exists orders_user_idx on public.orders (user_id, created_at desc);
+
+-- Waktu terbit pertama tidak bisa diubah pengguna (dasar masa aktif paket gratis).
+create or replace function public.keep_published_at()
+returns trigger language plpgsql as $$
+begin
+  if tg_op = 'INSERT' then
+    new.published_at := now();
+  else
+    new.published_at := old.published_at;
+  end if;
+  return new;
+end;
+$$;
+drop trigger if exists publications_keep_published_at on public.publications;
+create trigger publications_keep_published_at
+  before insert or update on public.publications
+  for each row execute function public.keep_published_at();
+
+-- Template asal proyek tidak bisa diganti setelah dibuat (dasar cek template premium).
+create or replace function public.keep_template_id()
+returns trigger language plpgsql as $$
+begin
+  new.template_id := old.template_id;
+  return new;
+end;
+$$;
+drop trigger if exists projects_keep_template_id on public.projects;
+create trigger projects_keep_template_id
+  before update on public.projects
+  for each row execute function public.keep_template_id();
+
+-- Hak akses halaman terbit untuk pengunjung (tanpa membuka tabel orders ke publik).
+create or replace function public.publication_access(p_slug text)
+returns json language sql stable security definer set search_path = public as $$
+  select json_build_object(
+    'project_id', p.project_id,
+    'published_at', p.published_at,
+    'owner_role', u.role,
+    'orders', coalesce((
+      select json_agg(json_build_object('plan', o.plan, 'project_id', o.project_id, 'approved_at', o.approved_at))
+      from public.orders o
+      where o.user_id = p.owner_id and o.status = 'lunas' and o.approved_at is not null
+        and (o.project_id = p.project_id or o.plan like 'pro-%')
+    ), '[]'::json))
+  from public.publications p join public.users u on u.id = p.owner_id
+  where p.slug = p_slug and p.published;
+$$;
+grant execute on function public.publication_access(text) to anon, authenticated;
 
 -- Untuk menjadikan akun kamu admin, jalankan:
 --   update public.users set role = 'admin' where id = (select id from auth.users where email = 'email@kamu.com');
@@ -108,6 +174,7 @@ alter table public.projects enable row level security;
 alter table public.publications enable row level security;
 alter table public.assets enable row level security;
 alter table public.rsvps enable row level security;
+alter table public.orders enable row level security;
 
 create or replace function public.is_admin()
 returns boolean language sql stable security definer set search_path = public as $$
@@ -142,9 +209,17 @@ create policy projects_public on public.projects for select
 drop policy if exists projects_admin on public.projects;
 create policy projects_admin on public.projects for select using (public.is_admin());
 
--- publications: pemilik penuh; publik boleh membaca yang terbit
+-- publications: pemilik boleh membaca/menambah/mengubah (tidak menghapus, agar masa aktif
+-- gratis tidak bisa direset); terhapus otomatis bila proyeknya dihapus.
 drop policy if exists publications_owner on public.publications;
-create policy publications_owner on public.publications for all
+drop policy if exists publications_owner_select on public.publications;
+create policy publications_owner_select on public.publications for select using (owner_id = auth.uid());
+drop policy if exists publications_owner_insert on public.publications;
+create policy publications_owner_insert on public.publications for insert
+  with check (owner_id = auth.uid()
+              and exists (select 1 from public.projects pr where pr.id = project_id and pr.owner_id = auth.uid()));
+drop policy if exists publications_owner_update on public.publications;
+create policy publications_owner_update on public.publications for update
   using (owner_id = auth.uid())
   with check (owner_id = auth.uid()
               and exists (select 1 from public.projects pr where pr.id = project_id and pr.owner_id = auth.uid()));
@@ -164,6 +239,25 @@ create policy rsvps_read on public.rsvps for select
 drop policy if exists rsvps_owner_delete on public.rsvps;
 create policy rsvps_owner_delete on public.rsvps for delete
   using (exists (select 1 from public.projects pr where pr.id = rsvps.project_id and pr.owner_id = auth.uid()));
+
+-- orders: pemilik membuat pesanan berstatus 'menunggu' dan mengirim bukti (status 'diperiksa');
+-- hanya admin yang bisa menandai 'lunas' / 'ditolak'.
+drop policy if exists orders_read on public.orders;
+create policy orders_read on public.orders for select using (user_id = auth.uid() or public.is_admin());
+drop policy if exists orders_insert_own on public.orders;
+create policy orders_insert_own on public.orders for insert
+  with check (user_id = auth.uid() and status = 'menunggu' and approved_at is null and approved_by is null
+              and proof_url = '' and note = ''
+              and (project_id is null or exists (select 1 from public.projects pr where pr.id = project_id and pr.owner_id = auth.uid())));
+drop policy if exists orders_proof_own on public.orders;
+create policy orders_proof_own on public.orders for update
+  using (user_id = auth.uid() and status in ('menunggu', 'diperiksa', 'ditolak'))
+  with check (user_id = auth.uid() and status = 'diperiksa' and approved_at is null and approved_by is null);
+drop policy if exists orders_admin on public.orders;
+create policy orders_admin on public.orders for all using (public.is_admin()) with check (public.is_admin());
+-- Kolom yang boleh diubah lewat API; paket, proyek & kode unik tidak bisa diganti.
+revoke update on public.orders from anon, authenticated;
+grant update (proof_url, sender_name, status, note, approved_at, approved_by) on public.orders to authenticated;
 
 -- assets: hanya pemilik
 drop policy if exists assets_owner on public.assets;

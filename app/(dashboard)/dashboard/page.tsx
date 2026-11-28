@@ -7,6 +7,7 @@ import { ProductTabs } from "@/components/ui/ProductTabs";
 import { AppIcon } from "@/components/ui/AppIcons";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { backend, requireUser } from "@/lib/backend";
+import { TIER_LABEL, invitationAccess, proUntil } from "@/lib/billing";
 import { PortfolioThumb } from "@/lib/renderer/Portfolio";
 import { kindOf, kindSlug, parseKind, productWord } from "@/lib/templates";
 
@@ -20,7 +21,8 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
   const kind = parseKind(jenis);
   const isInv = kind === "invitation";
   const hasResponses = kind !== "portfolio";
-  const all = await backend.listProjects(user.id);
+  const [all, paid] = await Promise.all([backend.listProjects(user.id), backend.paidOrders(user.id)]);
+  const isPro = user.role === "admin" || !!proUntil(paid);
   const projects = all.filter((p) => kindOf(p) === kind);
   const word = productWord(kind);
   const newHref = `/templates?jenis=${kindSlug(kind)}`;
@@ -35,6 +37,10 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
             <h1 className="font-display text-4xl font-extrabold">Halo, {user.name || "kamu"} 👋</h1>
             <p className="mt-1 text-app-muted">Mau bikin apa hari ini?</p>
           </div>
+          <Link href="/dashboard/tagihan" className="flex items-center gap-2 rounded-full border border-app-line bg-white px-4 py-2 text-sm font-semibold shadow-soft">
+            <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${isPro ? "bg-[linear-gradient(135deg,#FBBF24,#E36414)] text-white" : "bg-app-bg text-app-muted"}`}>{isPro ? "PRO" : "GRATIS"}</span>
+            Paket & tagihan →
+          </Link>
         </div>
 
         {/* Buat cepat per produk */}
@@ -44,7 +50,7 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
             { k: "proposal" as const, icon: "proposal" as const, title: "Proposal baru", text: "Penawaran, sponsorship, kegiatan", n: all.filter((p) => kindOf(p) === "proposal").length },
             { k: "portfolio" as const, icon: "portofolio" as const, title: "Portofolio baru", text: "Profil pribadi & company profile", n: all.filter((p) => kindOf(p) === "portfolio").length },
           ].map((q) => (
-            <Link key={q.k} href={`/templates?jenis=${kindSlug(q.k)}`} className="card card-hover group flex items-center gap-4 p-5">
+            <Link key={q.k} href={`/templates?jenis=${kindSlug(q.k)}`} className="card card-hover group flex min-w-0 items-center gap-4 p-5">
               <AppIcon name={q.icon} size={48} />
               <span className="min-w-0 flex-1">
                 <span className="font-display block font-bold">+ {q.title}</span>
@@ -106,6 +112,24 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
                     </span>
                   </div>
                   <p className="mt-1 text-xs text-app-muted">Diubah {dateFmt.format(new Date(p.updatedAt))}</p>
+                  {isInv && user.role !== "admin" && (() => {
+                    const a = invitationAccess(paid, p.id, p.publishedAt);
+                    return (
+                      <p className="mt-1 flex items-center gap-2 text-xs">
+                        <span className={`rounded-full px-2 py-0.5 font-bold ${a.tier === "free" ? "bg-app-bg text-app-muted" : "bg-amber-100 text-amber-900"}`}>{TIER_LABEL[a.tier]}</span>
+                        {a.expired ? (
+                          <span className="font-semibold text-red-600">masa aktif habis</span>
+                        ) : (
+                          a.until && <span className="text-app-muted">s.d. {dateFmt.format(a.until)}</span>
+                        )}
+                        {a.tier !== "premium" && (
+                          <Link href={`/bayar?paket=${a.tier === "basic" ? "upgrade-premium" : "premium"}&proyek=${p.id}`} className="ml-auto font-bold text-brand">
+                            Upgrade
+                          </Link>
+                        )}
+                      </p>
+                    );
+                  })()}
                   {p.published && p.slug && (
                     <a href={`/p/${p.slug}`} target="_blank" className="mt-1 truncate text-xs font-semibold text-brand">
                       /p/{p.slug}

@@ -35,6 +35,7 @@ const NAV = [
   { href: "/templates?jenis=undangan", label: "Undangan" },
   { href: "/templates?jenis=proposal", label: "Proposal" },
   { href: "/templates?jenis=portofolio", label: "Portofolio" },
+  { href: "/harga", label: "Harga" },
 ];
 
 export async function AppHeader() {
@@ -139,6 +140,9 @@ export async function AppHeader() {
                 <Link href="/templates" className="block rounded-lg px-3 py-2 text-sm font-semibold hover:bg-app-soft">
                   Buat baru
                 </Link>
+                <Link href="/dashboard/tagihan" className="block rounded-lg px-3 py-2 text-sm font-semibold hover:bg-app-soft">
+                  Paket & tagihan
+                </Link>
                 <form action={signOutAction}>
                   <button className="w-full rounded-lg px-3 py-2 text-left text-sm font-semibold text-red-600 hover:bg-red-50">Keluar</button>
                 </form>
@@ -187,11 +191,17 @@ export async function AppHeader() {
             <Link href="/aplikasi" className="block rounded-lg px-3 py-2 text-sm font-bold text-brand hover:bg-app-soft">
               Semua aplikasi →
             </Link>
+            <Link href="/harga" className="block rounded-lg px-3 py-2.5 font-semibold hover:bg-app-soft">
+              Harga
+            </Link>
             <div className="my-2 border-t border-app-line" />
             {user ? (
               <>
                 <Link href="/dashboard" className="block rounded-lg px-3 py-2.5 font-semibold hover:bg-app-soft">
                   Dashboard
+                </Link>
+                <Link href="/dashboard/tagihan" className="block rounded-lg px-3 py-2.5 font-semibold hover:bg-app-soft">
+                  Paket & tagihan
                 </Link>
                 {user.role === "admin" && (
                   <Link href="/admin" className="block rounded-lg px-3 py-2.5 font-semibold hover:bg-app-soft">

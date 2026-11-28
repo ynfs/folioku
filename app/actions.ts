@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { randomUUID } from "node:crypto";
 import { backend, requireUser } from "@/lib/backend";
+import { ORDER_PAY_HOURS, PLANS, invitationAccess, isPlanKey, isPremiumTemplate, publishBlock } from "@/lib/billing";
 import { blankCanvas } from "@/lib/sections";
 import { CATEGORIES, STYLES, TEMPLATES, parseKind } from "@/lib/templates";
 import { findTemplate } from "@/lib/templates-server";
@@ -117,13 +118,37 @@ export async function deleteProjectAction(form: FormData) {
 
 const RESERVED = new Set(["admin", "api", "app", "login", "daftar", "dashboard", "editor", "templates", "www"]);
 
-export async function publishAction(id: string, rawSlug: string): Promise<{ error?: string; slug?: string }> {
+export async function publishAction(
+  id: string,
+  rawSlug: string,
+): Promise<{ error?: string; slug?: string; upgrade?: { href: string; cta: string } }> {
   const user = await requireUser();
   const slug = rawSlug.trim().toLowerCase();
   if (!/^[a-z0-9](?:[a-z0-9-]{1,38}[a-z0-9])$/.test(slug)) {
     return { error: "Gunakan 3–40 karakter: huruf kecil, angka, dan tanda hubung (-)." };
   }
   if (RESERVED.has(slug)) return { error: "Alamat ini tidak bisa dipakai." };
+
+  // Cek paket: template premium, masa aktif gratis, dan batas proyek terbit.
+  const project = await backend.getProject(id, user.id);
+  if (!project) return { error: "Proyek tidak ditemukan." };
+  const [template, paidOrders, all] = await Promise.all([
+    findTemplate(project.templateId, { allowDraft: true }),
+    backend.paidOrders(user.id),
+    backend.listProjects(user.id),
+  ]);
+  const kind = project.kind ?? "portfolio";
+  const block = publishBlock({
+    kind,
+    projectId: project.id,
+    publishedAt: project.publishedAt,
+    templatePremium: template ? isPremiumTemplate(template) : false,
+    paidOrders,
+    isAdmin: user.role === "admin",
+    otherPublished: all.filter((p) => p.id !== project.id && p.published && (p.kind ?? "portfolio") !== "invitation").length,
+  });
+  if (block) return { error: block.error, upgrade: { href: block.href, cta: block.cta } };
+
   const error = await backend.publish(id, user.id, slug);
   if (error) return { error };
   revalidatePath(`/p/${slug}`);
@@ -135,6 +160,66 @@ export async function unpublishAction(id: string, slug: string | null) {
   const user = await requireUser();
   await backend.unpublish(id, user.id);
   if (slug) revalidatePath(`/p/${slug}`);
+  revalidatePath("/dashboard");
+}
+
+// ---------- Paket & pembayaran ----------
+
+/** Membuat pesanan paket lalu membuka halaman pembayaran DANA. */
+export async function createOrderAction(form: FormData) {
+  const plan = form.get("plan");
+  const rawProject = String(form.get("projectId") ?? "");
+  const user = await requireUser("/harga");
+  if (!isPlanKey(plan)) redirect("/harga");
+  const isInvitationPlan = PLANS[plan].product === "undangan";
+
+  let projectId: string | null = null;
+  if (isInvitationPlan) {
+    const project = rawProject ? await backend.getProject(rawProject, user.id) : null;
+    if (!project || project.kind !== "invitation") redirect(`/bayar?paket=${plan}`);
+    projectId = project.id;
+    if (plan === "upgrade-premium") {
+      const access = invitationAccess(await backend.paidOrders(user.id), project.id, project.publishedAt);
+      if (access.tier !== "basic") redirect(`/bayar?paket=premium&proyek=${project.id}`);
+    }
+  }
+
+  // Pakai lagi pesanan yang masih menunggu pembayaran untuk paket & proyek yang sama.
+  const open = (await backend.listOrders(user.id)).find(
+    (o) => o.plan === plan && o.projectId === projectId && o.status === "menunggu" && Date.now() - Date.parse(o.createdAt) < ORDER_PAY_HOURS * 3_600_000,
+  );
+  const order = open ?? (await backend.createOrder(user.id, { plan, projectId }));
+  revalidatePath("/dashboard/tagihan");
+  redirect(`/bayar/${order.id}`);
+}
+
+/** Bukti transfer harus berupa file yang diunggah pengguna ini lewat /api/upload. */
+function isOwnUpload(url: string, userId: string): boolean {
+  if (/^\/api\/files\/[0-9a-f-]{36}\.(png|jpg|webp|gif)$/.test(url)) return true;
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  return !!base && url.startsWith(`${base}/storage/v1/object/public/assets/${userId}/`);
+}
+
+export async function submitProofAction(orderId: string, proofUrl: string, senderName: string): Promise<{ ok: boolean; error?: string }> {
+  const user = await backend.getCurrentUser();
+  if (!user) return { ok: false, error: "Sesi berakhir. Silakan masuk lagi." };
+  const name = senderName.trim().slice(0, 80);
+  if (!name) return { ok: false, error: "Isi nama atau nomor DANA pengirim." };
+  if (!isOwnUpload(proofUrl, user.id)) return { ok: false, error: "Unggah foto bukti transfer dulu." };
+  const ok = await backend.submitOrderProof(orderId, user.id, { proofUrl, senderName: name });
+  if (!ok) return { ok: false, error: "Pesanan tidak bisa diperbarui." };
+  revalidatePath(`/bayar/${orderId}`);
+  revalidatePath("/admin/pembayaran");
+  return { ok: true };
+}
+
+/** Admin: tandai pesanan lunas (paket langsung aktif) atau tolak. */
+export async function reviewOrderAction(form: FormData) {
+  const admin = await requireAdmin();
+  const status = String(form.get("status"));
+  if (status !== "lunas" && status !== "ditolak") return;
+  await backend.setOrderStatus(String(form.get("id")), admin.id, status, String(form.get("note") ?? "").trim());
+  revalidatePath("/admin/pembayaran");
   revalidatePath("/dashboard");
 }
 

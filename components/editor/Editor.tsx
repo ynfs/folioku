@@ -318,12 +318,14 @@ function ProjectPublish({ project }: { project: Project }) {
   const [state, setState] = useState({ published: project.published, slug: project.slug });
   const [slug, setSlug] = useState(project.slug ?? slugify(project.name));
   const [error, setError] = useState("");
+  const [upgrade, setUpgrade] = useState<{ href: string; cta: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const origin = typeof window !== "undefined" ? window.location.origin : "";
 
   async function publish() {
     setBusy(true);
     setError("");
+    setUpgrade(null);
     // Simpan perubahan terbaru dulu agar yang terbit adalah versi terkini.
     const saved = await saveProjectAction(project.id, useEditor.getState().data);
     if (!saved.ok) {
@@ -333,8 +335,10 @@ function ProjectPublish({ project }: { project: Project }) {
     }
     const res = await publishAction(project.id, slug);
     setBusy(false);
-    if (res.error) setError(res.error);
-    else setState({ published: true, slug: res.slug! });
+    if (res.error) {
+      setError(res.error);
+      setUpgrade(res.upgrade ?? null);
+    } else setState({ published: true, slug: res.slug! });
   }
 
   async function unpublish() {
@@ -369,7 +373,16 @@ function ProjectPublish({ project }: { project: Project }) {
               onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
             />
           </div>
-          {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+          {error && (
+            <div className={`mt-2 text-xs ${upgrade ? "rounded-lg bg-amber-50 p-3 text-amber-900" : "text-red-600"}`}>
+              <p>{error}</p>
+              {upgrade && (
+                <a href={upgrade.href} className="btn-brand mt-2 w-full">
+                  {upgrade.cta} →
+                </a>
+              )}
+            </div>
+          )}
           <button type="button" className="btn-brand mt-3 w-full" disabled={busy} onClick={publish}>
             {busy ? "Memproses…" : state.published ? "Perbarui alamat" : "Publish sekarang"}
           </button>

@@ -2,7 +2,7 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
-import type { Page, PortfolioData, ProductKind, Project, Role, Rsvp, Section, Template, TemplateCategory, TemplateStyle, Theme, Wish } from "@/lib/types";
+import type { Order, OrderStatus, Page, PaidOrder, PlanKey, PortfolioData, ProductKind, Project, Role, Rsvp, Section, Template, TemplateCategory, TemplateStyle, Theme, Wish } from "@/lib/types";
 import type { AuthResult, Backend } from "./types";
 
 interface TemplateRow {
@@ -57,6 +57,12 @@ export async function supabaseServer() {
   });
 }
 
+interface PubRow {
+  slug: string;
+  published: boolean;
+  published_at: string | null;
+}
+
 interface ProjectRow {
   id: string;
   owner_id: string;
@@ -66,10 +72,10 @@ interface ProjectRow {
   data: PortfolioData;
   created_at: string;
   updated_at: string;
-  publications: { slug: string; published: boolean } | { slug: string; published: boolean }[] | null;
+  publications: PubRow | PubRow[] | null;
 }
 
-const PROJECT_COLUMNS = "id, owner_id, template_id, kind, name, data, created_at, updated_at, publications(slug, published)";
+const PROJECT_COLUMNS = "id, owner_id, template_id, kind, name, data, created_at, updated_at, publications(slug, published, published_at)";
 
 function toProject(r: ProjectRow): Project {
   const pub = Array.isArray(r.publications) ? r.publications[0] : r.publications;
@@ -84,6 +90,7 @@ function toProject(r: ProjectRow): Project {
     updatedAt: r.updated_at,
     slug: pub?.slug ?? null,
     published: pub?.published ?? false,
+    publishedAt: pub?.published_at ?? null,
   };
 }
 
@@ -213,7 +220,21 @@ export const supabaseBackend: Backend = {
       users: { name: string } | null;
     };
     if (!row.projects) return null;
-    return { slug: row.slug, kind: row.projects.kind ?? "portfolio", name: row.projects.name, data: row.projects.data, ownerName: row.users?.name ?? "" };
+    // Hak akses (paket) dibaca lewat fungsi security definer agar pengunjung anonim
+    // tidak perlu akses ke tabel orders.
+    const { data: access } = await sb.rpc("publication_access", { p_slug: slug });
+    const a = (access ?? {}) as { project_id?: string; published_at?: string | null; owner_role?: string; orders?: { plan: PlanKey; project_id: string | null; approved_at: string }[] };
+    return {
+      slug: row.slug,
+      kind: row.projects.kind ?? "portfolio",
+      name: row.projects.name,
+      data: row.projects.data,
+      ownerName: row.users?.name ?? "",
+      projectId: a.project_id ?? "",
+      publishedAt: a.published_at ?? null,
+      ownerIsAdmin: a.owner_role === "admin",
+      paidOrders: (a.orders ?? []).map((o) => ({ plan: o.plan, projectId: o.project_id, approvedAt: o.approved_at })),
+    };
   },
 
   async uploadImage(userId, file) {
@@ -338,7 +359,102 @@ export const supabaseBackend: Backend = {
       return { id, name, attendance, message, createdAt };
     });
   },
+
+  async createOrder(userId, { plan, projectId }) {
+    const sb = await supabaseServer();
+    const { data, error } = await sb
+      .from("orders")
+      .insert({ user_id: userId, plan, project_id: projectId, unique_code: 1 + Math.floor(Math.random() * 299) })
+      .select(ORDER_COLUMNS)
+      .single();
+    if (error) throw error;
+    return toOrder(data as unknown as OrderRow);
+  },
+
+  async getOrder(id, userId) {
+    const sb = await supabaseServer();
+    const { data } = await sb.from("orders").select(ORDER_COLUMNS).eq("id", id).eq("user_id", userId).maybeSingle();
+    return data ? toOrder(data as unknown as OrderRow) : null;
+  },
+
+  async listOrders(userId) {
+    const sb = await supabaseServer();
+    const { data } = await sb.from("orders").select(ORDER_COLUMNS).eq("user_id", userId).order("created_at", { ascending: false });
+    return ((data ?? []) as unknown as OrderRow[]).map((r) => toOrder(r));
+  },
+
+  async submitOrderProof(id, userId, { proofUrl, senderName }) {
+    const sb = await supabaseServer();
+    const { data, error } = await sb
+      .from("orders")
+      .update({ proof_url: proofUrl, sender_name: senderName, status: "diperiksa", note: "" })
+      .eq("id", id)
+      .eq("user_id", userId)
+      .neq("status", "lunas")
+      .select("id");
+    return !error && (data?.length ?? 0) > 0;
+  },
+
+  async paidOrders(userId) {
+    const sb = await supabaseServer();
+    const { data } = await sb.from("orders").select("plan, project_id, approved_at").eq("user_id", userId).eq("status", "lunas");
+    return ((data ?? []) as { plan: PlanKey; project_id: string | null; approved_at: string | null }[])
+      .filter((o) => o.approved_at)
+      .map((o): PaidOrder => ({ plan: o.plan, projectId: o.project_id, approvedAt: o.approved_at! }));
+  },
+
+  async adminListOrders() {
+    const sb = await supabaseServer();
+    const { data } = await sb.from("orders").select(`${ORDER_COLUMNS}, users!orders_user_id_fkey(name)`).order("created_at", { ascending: false }).limit(500);
+    return ((data ?? []) as unknown as OrderRow[]).map((r) => toOrder(r));
+  },
+
+  async setOrderStatus(id, adminId, status, note) {
+    const sb = await supabaseServer();
+    const { error } = await sb
+      .from("orders")
+      .update({ status, note: note.slice(0, 300), approved_at: status === "lunas" ? new Date().toISOString() : null, approved_by: status === "lunas" ? adminId : null })
+      .eq("id", id);
+    if (error) throw error;
+  },
 };
+
+interface OrderRow {
+  id: string;
+  user_id: string;
+  plan: PlanKey;
+  project_id: string | null;
+  unique_code: number;
+  status: OrderStatus;
+  proof_url: string;
+  sender_name: string;
+  note: string;
+  created_at: string;
+  approved_at: string | null;
+  users?: { name: string } | null;
+  projects?: { name: string } | null;
+}
+
+const ORDER_COLUMNS = "id, user_id, plan, project_id, unique_code, status, proof_url, sender_name, note, created_at, approved_at, projects(name)";
+
+function toOrder(r: OrderRow, email?: string): Order {
+  return {
+    id: r.id,
+    userId: r.user_id,
+    plan: r.plan,
+    projectId: r.project_id,
+    uniqueCode: r.unique_code,
+    status: r.status,
+    proofUrl: r.proof_url ?? "",
+    senderName: r.sender_name ?? "",
+    note: r.note ?? "",
+    createdAt: r.created_at,
+    approvedAt: r.approved_at,
+    userName: r.users?.name,
+    userEmail: email,
+    projectName: r.projects?.name,
+  };
+}
 
 interface RsvpRow {
   id: string;

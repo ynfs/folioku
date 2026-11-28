@@ -1,4 +1,4 @@
-import type { PortfolioData, ProductKind, Project, Publication, Rsvp, Template, User, Wish } from "@/lib/types";
+import type { Order, PaidOrder, PlanKey, PortfolioData, ProductKind, Project, Publication, Rsvp, Template, User, Wish } from "@/lib/types";
 
 export type RsvpInput = Pick<Rsvp, "name" | "attendance" | "guests" | "message">;
 
@@ -54,4 +54,18 @@ export interface Backend {
   listRsvps(projectId: string, userId: string): Promise<Rsvp[]>;
   /** Ucapan publik untuk ditampilkan di undangan. */
   listWishes(slug: string): Promise<Wish[]>;
+
+  // ---- Paket & pembayaran ----
+  createOrder(userId: string, input: { plan: PlanKey; projectId: string | null }): Promise<Order>;
+  /** Pesanan milik pengguna (null jika bukan miliknya). */
+  getOrder(id: string, userId: string): Promise<Order | null>;
+  listOrders(userId: string): Promise<Order[]>;
+  /** Mengirim bukti transfer; hanya untuk pesanan yang belum lunas. */
+  submitOrderProof(id: string, userId: string, input: { proofUrl: string; senderName: string }): Promise<boolean>;
+  /** Pesanan lunas milik pengguna (dasar hak akses). */
+  paidOrders(userId: string): Promise<PaidOrder[]>;
+  /** Semua pesanan, lengkap dengan nama pembeli & proyek (khusus admin). */
+  adminListOrders(): Promise<Order[]>;
+  /** Admin menandai lunas / menolak. */
+  setOrderStatus(id: string, adminId: string, status: "lunas" | "ditolak", note: string): Promise<void>;
 }

@@ -3,7 +3,7 @@ import { createHmac, randomBytes, randomUUID, scryptSync, timingSafeEqual } from
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { cookies } from "next/headers";
-import type { PortfolioData, Project, Role, Rsvp, Template, User } from "@/lib/types";
+import type { Order, PaidOrder, PortfolioData, Project, Role, Rsvp, Template, User } from "@/lib/types";
 import type { AdminStats, AuthResult, Backend } from "./types";
 
 // MODE LOKAL: semua data disimpan di ./data/db.json dan gambar di ./data/uploads.
@@ -32,6 +32,7 @@ interface DB {
   projects: Project[];
   templates: StoredTemplate[];
   rsvps: StoredRsvp[];
+  orders: Order[];
 }
 
 let queue: Promise<unknown> = Promise.resolve();
@@ -39,9 +40,9 @@ let queue: Promise<unknown> = Promise.resolve();
 async function readDB(): Promise<DB> {
   try {
     const db = JSON.parse(await fs.readFile(DB_FILE, "utf8")) as Partial<DB>;
-    return { users: db.users ?? [], projects: db.projects ?? [], templates: db.templates ?? [], rsvps: db.rsvps ?? [] };
+    return { users: db.users ?? [], projects: db.projects ?? [], templates: db.templates ?? [], rsvps: db.rsvps ?? [], orders: db.orders ?? [] };
   } catch {
-    return { users: [], projects: [], templates: [], rsvps: [] };
+    return { users: [], projects: [], templates: [], rsvps: [], orders: [] };
   }
 }
 
@@ -231,6 +232,8 @@ export const localBackend: Backend = {
       if (!p) return "Proyek tidak ditemukan.";
       p.slug = slug;
       p.published = true;
+      // Waktu terbit pertama tidak diubah saat terbit ulang (dasar masa aktif paket gratis).
+      p.publishedAt ??= new Date().toISOString();
       return null;
     });
   },
@@ -247,7 +250,17 @@ export const localBackend: Backend = {
     const p = db.projects.find((x) => x.slug === slug && x.published);
     if (!p) return null;
     const owner = db.users.find((u) => u.id === p.ownerId);
-    return { slug, kind: p.kind ?? "portfolio", name: p.name, data: p.data, ownerName: owner?.name ?? "" };
+    return {
+      slug,
+      kind: p.kind ?? "portfolio",
+      name: p.name,
+      data: p.data,
+      ownerName: owner?.name ?? "",
+      projectId: p.id,
+      publishedAt: p.publishedAt ?? null,
+      ownerIsAdmin: owner?.role === "admin",
+      paidOrders: paidOf(db, p.ownerId).filter((o) => o.projectId === null || o.projectId === p.id),
+    };
   },
 
   async uploadImage(_userId, file) {
@@ -334,9 +347,97 @@ export const localBackend: Backend = {
       .slice(0, 200)
       .map(({ id, name, attendance, message, createdAt }) => ({ id, name, attendance, message, createdAt }));
   },
+
+  async createOrder(userId, { plan, projectId }) {
+    return mutate((db) => {
+      if (projectId && !db.projects.some((p) => p.id === projectId && p.ownerId === userId)) throw new Error("Proyek tidak ditemukan");
+      const order: Order = {
+        id: randomUUID(),
+        userId,
+        plan,
+        projectId,
+        uniqueCode: pickUniqueCode(db, plan),
+        status: "menunggu",
+        proofUrl: "",
+        senderName: "",
+        note: "",
+        createdAt: new Date().toISOString(),
+        approvedAt: null,
+      };
+      db.orders.push(order);
+      return withNames(db, order);
+    });
+  },
+
+  async getOrder(id, userId) {
+    const db = await readDB();
+    const o = db.orders.find((x) => x.id === id && x.userId === userId);
+    return o ? withNames(db, o) : null;
+  },
+
+  async listOrders(userId) {
+    const db = await readDB();
+    return db.orders
+      .filter((o) => o.userId === userId)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .map((o) => withNames(db, o));
+  },
+
+  async submitOrderProof(id, userId, { proofUrl, senderName }) {
+    return mutate((db) => {
+      const o = db.orders.find((x) => x.id === id && x.userId === userId);
+      if (!o || o.status === "lunas") return false;
+      o.proofUrl = proofUrl;
+      o.senderName = senderName;
+      o.status = "diperiksa";
+      o.note = "";
+      return true;
+    });
+  },
+
+  async paidOrders(userId) {
+    return paidOf(await readDB(), userId);
+  },
+
+  async adminListOrders() {
+    const db = await readDB();
+    return [...db.orders].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).map((o) => withNames(db, o));
+  },
+
+  async setOrderStatus(id, _adminId, status, note) {
+    await mutate((db) => {
+      const o = db.orders.find((x) => x.id === id);
+      if (!o) throw new Error("Pesanan tidak ditemukan");
+      o.status = status;
+      o.note = note.slice(0, 300);
+      o.approvedAt = status === "lunas" ? (o.approvedAt ?? new Date().toISOString()) : null;
+    });
+  },
 };
 
 const MAX_RSVP_PER_PROJECT = 5000;
+
+function paidOf(db: DB, userId: string): PaidOrder[] {
+  return db.orders
+    .filter((o) => o.userId === userId && o.status === "lunas" && o.approvedAt)
+    .map((o) => ({ plan: o.plan, projectId: o.projectId, approvedAt: o.approvedAt! }));
+}
+
+function withNames(db: DB, o: Order): Order {
+  const u = db.users.find((x) => x.id === o.userId);
+  const p = o.projectId ? db.projects.find((x) => x.id === o.projectId) : undefined;
+  return { ...o, userName: u?.name, userEmail: u?.email, projectName: p?.name };
+}
+
+/** Kode unik 1–299 yang belum dipakai pesanan lain yang masih terbuka dengan paket sama. */
+function pickUniqueCode(db: DB, plan: Order["plan"]): number {
+  const used = new Set(db.orders.filter((o) => o.plan === plan && (o.status === "menunggu" || o.status === "diperiksa")).map((o) => o.uniqueCode));
+  for (let i = 0; i < 50; i++) {
+    const c = 1 + Math.floor(Math.random() * 299);
+    if (!used.has(c)) return c;
+  }
+  return 1 + Math.floor(Math.random() * 299);
+}
 
 function toTemplate(t: StoredTemplate): Template {
   const { id, name, category, style, description, tags, kind, theme, sections, pages, published, updatedAt } = t;

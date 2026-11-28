@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createProjectAction } from "@/app/actions";
 import { PreviewFrame } from "@/components/ui/PreviewFrame";
+import { isPremiumTemplate } from "@/lib/billing";
 import { categoryLabel, kindOf, kindSlug, productWord, styleLabel } from "@/lib/templates";
 import { findTemplate } from "@/lib/templates-server";
 
@@ -33,6 +34,11 @@ export default async function TemplatePreviewPage(props: PageProps<"/templates/[
               <span className="chip capitalize">{productWord(kind)}</span>
               <span className="chip">{categoryLabel(t.category)}</span>
               {t.style && <span className="chip">{styleLabel(t.style)}</span>}
+              {isPremiumTemplate(t) && (
+                <a href="/harga" className="chip border-amber-300 bg-amber-50 text-amber-800">
+                  ★ Premium
+                </a>
+              )}
             </div>
           </div>
           <form action={createProjectAction}>
