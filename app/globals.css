@@ -246,3 +246,18 @@ body {
     padding-bottom: 4rem;
   }
 }
+
+/* Baris geser horizontal (chip filter) tanpa bilah gulir */
+@utility scroll-x {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Tepi kanan memudar: tanda bahwa baris masih bisa digeser */
+@utility fade-x {
+  mask-image: linear-gradient(to right, black calc(100% - 40px), transparent);
+}
